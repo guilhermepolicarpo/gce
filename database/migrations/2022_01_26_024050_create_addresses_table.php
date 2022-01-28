@@ -18,7 +18,7 @@ class CreateAddressesTable extends Migration
             $table->unsignedBigInteger('tenant_id')->nullable()->index();
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->unsignedBigInteger('patient_id')->index();
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->string('address');
             $table->string('number');
             $table->string('neighborhood');
