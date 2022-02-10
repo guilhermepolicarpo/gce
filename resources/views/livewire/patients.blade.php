@@ -1,13 +1,25 @@
 <div class="p-6 sm:px-10 bg-white border-b border-gray-200">
     <div class="flex justify-between">
-        <!-- Search form -->
-        <div class="mr-2 w-1/4">
-            <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
-        </div>
         <div class="mr-2">
-            <x-jet-button wire:click="confirmPatientAddition" class="bg-indigo-500 hover:bg-indigo-900">
+            <x-jet-button wire:click="confirmPatientAddition">
                 Adicionar
             </x-jet-button>
+        </div>
+        <!-- Search form -->
+        <div class="mr-2 w-1/4">
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>                       
+                </span>
+                </div>
+                <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
+            </div>
+              
+
+            
         </div>
     </div>
 
@@ -56,8 +68,11 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-base text-gray-900">{{$patient->address->address}}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
-                                        <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
+                                        @if ($patient->address->address !== '')
+                                            <div class="text-base text-gray-900">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
+                                            <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
+                                        @endif
+                                        
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-base text-gray-500">
                                         {{$patient->birth}}
@@ -66,7 +81,7 @@
                                         {{$patient->phone}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                        <button wire:click="confirmPatientEditing({{ $patient->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                 <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
@@ -113,66 +128,76 @@
     </x-jet-confirmation-modal>
 
     <!-- Add Patient Confirmation Modal -->
-    <x-jet-dialog-modal wire:model="confirmingPatientAddition">
+    <x-jet-dialog-modal wire:model="confirmingPatientAddition" maxWidth="xl">
         <x-slot name="title">
-            {{ isset($this->item->id) ? __('Editar paciente') : __('Adicionar paciente') }}
+            {{ ($this->action == 'adding') ? __('Adicionar paciente') : __('Editar paciente') }}
         </x-slot>
 
         <x-slot name="content">
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="name" value="{{ __('Nome') }}" />
-                <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="patient.name" />
-                <x-jet-input-error for="patient.name" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="email" value="{{ __('E-mail') }}" />
-                <x-jet-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="patient.email" />
-                <x-jet-input-error for="patient.email" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="phone" value="{{ __('Telefone') }}" />
-                <x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />
-                <x-jet-input-error for="patient.phone" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="birth" value="{{ __('Nascimento') }}" />
-                <x-jet-input id="birth" type="date" class="mt-1 block w-full" wire:model.defer="patient.birth" />
-                <x-jet-input-error for="patient.birth" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                <x-jet-input id="address" type="text" class="mt-1 block w-full" wire:model.defer="patient.address" />
-                <x-jet-input-error for="patient.address" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="number" value="{{ __('Número') }}" />
-                <x-jet-input id="number" type="text" class="mt-1 block w-full" wire:model.defer="patient.number" />
-                <x-jet-input-error for="patient.number" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
-                <x-jet-input id="neighborhood" type="text" class="mt-1 block w-full" wire:model.defer="patient.neighborhood" />
-                <x-jet-input-error for="patient.neighborhood" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="cep" value="{{ __('CEP') }}" />
-                <x-jet-input id="cep" type="text" class="mt-1 block w-full" wire:model.defer="patient.cep" />
-                <x-jet-input-error for="patient.cep" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="complement" value="{{ __('Complemento') }}" />
-                <x-jet-input id="complement" type="text" class="mt-1 block w-full" wire:model.defer="patient.complement" />
-                <x-jet-input-error for="patient.complement" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="state" value="{{ __('Estado') }}" />
-                <x-jet-input id="state" type="text" class="mt-1 block w-full" wire:model.defer="patient.state" />
-                <x-jet-input-error for="patient.state" class="mt-2" />
-            </div>
-            <div class="col-span-6 sm:col-span-4 mt-4">
-                <x-jet-label for="city" value="{{ __('Cidade') }}" />
-                <x-jet-input id="city" type="text" class="mt-1 block w-full" wire:model.defer="patient.city" />
-                <x-jet-input-error for="patient.city" class="mt-2" />
+            <hr>
+            <div class="mt-10 sm:mt-3">
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <div class="grid grid-cols-6 gap-3">
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="name" value="{{ __('Nome') }}" />
+                            <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="patient.name" />
+                            <x-jet-input-error for="patient.name" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-2">
+                            <x-jet-label for="birth" value="{{ __('Nascimento') }}" />
+                            <x-jet-input id="birth" type="date" class="mt-1 block w-full" wire:model.defer="patient.birth" />
+                            <x-jet-input-error for="patient.birth" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
+                            <x-jet-input id="patient.email" type="email" class="mt-1 block w-full" wire:model.defer="patient.email" />
+                            <x-jet-input-error for="patient.email" class="mt-2" />
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-2">
+                            <x-jet-label for="phone" value="{{ __('Telefone') }}" />
+                            <x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />
+                            <x-jet-input-error for="patient.phone" class="mt-2" />
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-2">
+                            <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
+                            <x-jet-input id="zip_code" type="text" class="mt-1 block w-full" wire:model.defer="patient.zip_code" />
+                            <x-jet-input-error for="patient.zip_code" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-jet-label for="address" value="{{ __('Endereço') }}" />
+                            <x-jet-input id="address" type="text" class="mt-1 block w-full" wire:model.defer="patient.address" />
+                            <x-jet-input-error for="patient.address" class="mt-2" />
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-6 lg:col-span-1">
+                            <x-jet-label for="number" value="{{ __('Número') }}" />
+                            <x-jet-input id="number" type="text" class="mt-1 block w-full" wire:model.defer="patient.number" />
+                            <x-jet-input-error for="patient.number" class="mt-2" />
+                        </div>
+                        <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                            <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
+                            <x-jet-input id="neighborhood" type="text" class="mt-1 block w-full" wire:model.defer="patient.neighborhood" />
+                            <x-jet-input-error for="patient.neighborhood" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                            <x-jet-label for="city" value="{{ __('Cidade') }}" />
+                            <x-jet-input id="city" type="text" class="mt-1 block w-full" wire:model.defer="patient.city" />
+                            <x-jet-input-error for="patient.city" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-3 lg:col-span-1">
+                            <x-jet-label for="state" value="{{ __('Estado') }}" />
+                            <x-jet-input id="state" type="text" class="mt-1 block w-full" wire:model.defer="patient.state" />
+                            <x-jet-input-error for="patient.state" class="mt-2" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </x-slot>
 
@@ -182,7 +207,7 @@
             </x-jet-secondary-button>
 
             <x-jet-button class="ml-3" wire:click="addPatient()" wire:loading.attr="disabled">
-                {{ isset($this->item->id) ? __('Editar') : __('Adicionar') }}
+                {{ ($this->action == 'adding') ? __('Adicionar') : __('Editar') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

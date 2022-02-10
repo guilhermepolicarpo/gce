@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Address;
 use App\Models\Patient;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +15,21 @@ class Patients extends Component
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
-    public $patient;
+    public $action;
+    public $patient = [
+        'id' => null,
+        'addressId' => null,
+        'email' => null,
+        'phone' => null,
+        'birth' => null,
+        'address' => '',
+        'number' => '',
+        'neighborhood' => '',
+        'zip_code' => '',
+        'complement' => '',
+        'state' => '',
+        'city' => ''
+    ];
 
     public $confirmingPatientDeletion = false;
     public $confirmingPatientAddition = false;
@@ -27,7 +42,16 @@ class Patients extends Component
 
     protected $rules = [
         'patient.name' => 'required|string|min:4',
-        'patient.address' => 'required|string|min:4',
+        'patient.email' => 'nullable|email',
+        'patient.phone' => 'nullable|string',
+        'patient.birth' => 'nullable|date',
+        'patient.address' => 'nullable|string|min:4',
+        'patient.number' => 'nullable|integer',
+        'patient.neighborhood' => 'nullable|string',
+        'patient.zip_code' => 'nullable|string',
+        'patient.complement' => 'nullable|string',
+        'patient.state' => 'nullable|string|max:2',
+        'patient.city' => 'nullable|string'        
     ];
 
     public function render()
@@ -45,7 +69,6 @@ class Patients extends Component
 
         return view('livewire.patients', [
             'patients' => $patients
-            //'addresses' => $addresses
         ]);
     }
 
@@ -76,6 +99,29 @@ class Patients extends Component
     public function confirmPatientAddition()
     {
         $this->reset(['patient']);
+        $this->action = 'adding';
+        $this->confirmingPatientAddition = true;
+    }
+
+    public function confirmPatientEditing(Patient $patient)
+    {
+        $this->patient = [
+            'id' => $patient->id,
+            'name' => $patient->name,
+            'email' => $patient->email,
+            'phone' => $patient->phone,
+            'birth' => $patient->birth,
+            'addressId' => $patient->address->id,
+            'address' => $patient->address->address,
+            'number' => $patient->address->number,
+            'neighborhood' => $patient->address->neighborhood,
+            'zip_code' => $patient->address->zip_code,
+            'complement' => $patient->address->complement,
+            'state' => $patient->address->state,
+            'city' => $patient->address->city
+        ];
+        
+        $this->action = 'editing';
         $this->confirmingPatientAddition = true;
     }
 
@@ -84,24 +130,28 @@ class Patients extends Component
         $this->validate();
 
         DB::beginTransaction();
-        
-        $patient = Patient::create([
+
+        $patient = Patient::updateOrCreate([
+            'id' => $this->patient['id'],
+        ],[
             'name' => $this->patient['name'],
             'email' => $this->patient['email'],
             'phone' => $this->patient['phone'],
             'birth' => $this->patient['birth']
         ]);
 
-        $patient->address()->create([
+        $patient->address()->updateOrCreate([
+            'id' => $this->patient['addressId'],
+        ],[
             'address' => $this->patient['address'],
             'number' => $this->patient['number'],
             'neighborhood' => $this->patient['neighborhood'],
-            'cep' => $this->patient['cep'],
+            'zip_code' => $this->patient['zip_code'],
             'complement' => $this->patient['complement'],
             'state' => $this->patient['state'],
             'city' => $this->patient['city']
         ]);
-
+    
         DB::commit();
 
         $this->confirmingPatientAddition = false;

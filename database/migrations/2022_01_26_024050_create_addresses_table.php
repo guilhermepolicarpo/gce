@@ -22,7 +22,7 @@ class CreateAddressesTable extends Migration
             $table->string('address');
             $table->string('number');
             $table->string('neighborhood');
-            $table->string('cep')->nullable();
+            $table->string('zip_code')->nullable();
             $table->string('complement')->nullable();
             $table->char('state', 2);
             $table->string('city');

@@ -19,7 +19,7 @@ class Address extends Model
         'address',
         'number',
         'neighborhood',
-        'cep',
+        'zip_code',
         'complement',
         'state',
         'city'
