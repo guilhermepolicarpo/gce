@@ -19,7 +19,7 @@ class CreatePatientsTable extends Migration
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone', 20)->nullable();
             $table->date('birth')->nullable();
             $table->timestamps();
         });
