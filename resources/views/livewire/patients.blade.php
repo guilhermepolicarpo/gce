@@ -23,7 +23,6 @@
         </div>
     </div>
 
-
     <div class="mt-6 text-gray-500">
         <!-- Table -->
         <div class="flex flex-col">
@@ -72,12 +71,12 @@
                                             <div class="text-base text-gray-900">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
                                         @endif
-                                        
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                        {{$patient->birth}}
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-base text-gray-900">{{ $carbon->parse($patient->birth)->diff(now())->y }} anos</div>
+                                        <div class="text-base text-gray-500">{{ $carbon->parse($patient->birth)->format('d/m/Y') }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
                                         {{$patient->phone}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

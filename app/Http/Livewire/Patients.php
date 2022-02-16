@@ -7,11 +7,13 @@ use App\Models\Patient;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Patients extends Component
 {
     use WithPagination;
 
+    public $carbon;
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
@@ -56,7 +58,9 @@ class Patients extends Component
 
     public function render()
     {
-        //$addresses = Address::all();
+        
+        $this->carbon = Carbon::now();
+
         $patients = Patient::when($this->q, function($query) {
             return $query->where(function($query){
                 $query->where('name', 'like', '%'. $this->q . '%')
@@ -70,7 +74,7 @@ class Patients extends Component
         return view('livewire.patients', [
             'patients' => $patients
         ]);
-    }
+}
 
     public function updatingQ()
     {
