@@ -29,7 +29,7 @@ class Patients extends Component
         'neighborhood' => '',
         'zip_code' => '',
         'complement' => '',
-        'state' => '',
+        'state' => 'MG',
         'city' => ''
     ];
 
@@ -48,12 +48,19 @@ class Patients extends Component
         'patient.phone' => 'nullable|string',
         'patient.birth' => 'nullable|date',
         'patient.address' => 'nullable|string|min:4',
-        'patient.number' => 'nullable|integer',
+        'patient.number' => 'nullable|string',
         'patient.neighborhood' => 'nullable|string',
         'patient.zip_code' => 'nullable|string',
         'patient.complement' => 'nullable|string',
         'patient.state' => 'nullable|string|max:2',
         'patient.city' => 'nullable|string'        
+    ];
+
+    protected $messages = [
+        'patient.name.required' => 'Informe o nome do paciente.',
+        'patient.email.email' => 'Informe um e-mail válido.',
+        'patient.birth.date' => 'Informe uma data válida.',
+        'patient.state.max' => 'O estádo não deve ter mais de 2 caracteres.',
     ];
 
     public function render()
@@ -64,7 +71,8 @@ class Patients extends Component
         $patients = Patient::when($this->q, function($query) {
             return $query->where(function($query){
                 $query->where('name', 'like', '%'. $this->q . '%')
-                ->orWhere('email', 'like', '%' . $this->q . '%');
+                ->orWhere('email', 'like', '%' . $this->q . '%')
+                ->orWhere('phone', 'like', '%' . $this->q . '%');
             });
         })
         ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
