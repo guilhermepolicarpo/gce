@@ -7,6 +7,7 @@ use App\Models\Patient;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 class Patients extends Component
@@ -167,5 +168,22 @@ class Patients extends Component
         DB::commit();
 
         $this->confirmingPatientAddition = false;
+    }
+
+    public function searchZipCode($zipCode)
+    {
+        $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
+
+        $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
+        $response = $response->json();
+        
+        if ($response) {
+            if (empty($response['erro'])) {
+                $this->patient['address'] = $response['logradouro'];
+                $this->patient['neighborhood'] = $response['bairro'];
+                $this->patient['state'] = $response['uf'];
+                $this->patient['city'] = $response['localidade'];
+            }
+        }        
     }
 }

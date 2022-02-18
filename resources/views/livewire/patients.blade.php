@@ -17,9 +17,6 @@
                 </div>
                 <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
             </div>
-              
-
-            
         </div>
     </div>
 
@@ -126,7 +123,7 @@
         </x-slot>
     </x-jet-confirmation-modal>
 
-    <!-- Add Patient Confirmation Modal -->
+    <!-- Add Patient Modal -->
     <x-jet-dialog-modal wire:model="confirmingPatientAddition" maxWidth="xl">
         <x-slot name="title">
             {{ ($this->action == 'adding') ? __('Adicionar paciente') : __('Editar paciente') }}
@@ -137,6 +134,11 @@
             <div class="mt-10 sm:mt-3">
                 <div class="mt-5 md:mt-0 md:col-span-2">
                     <div class="grid grid-cols-6 gap-3">
+
+                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
+                            Informações pessoais
+                        </h6>
+
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="name" value="{{ __('Nome') }}" />
                             <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="patient.name" />
@@ -161,9 +163,12 @@
                             <x-jet-input-error for="patient.phone" class="mt-2" />
                         </div>
 
+                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
+                            Endereço
+                        </h6>
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                            <x-jet-input id="zip_code" type="text" class="mt-1 block w-full" wire:model.defer="patient.zip_code" />
+                            <x-jet-input id="zip_code" type="text" class="mt-1 block w-full" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
                             <x-jet-input-error for="patient.zip_code" class="mt-2" />
                         </div>
             
