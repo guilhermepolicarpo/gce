@@ -1044,11 +1044,11 @@ select {
 .mb-4 {
   margin-bottom: 1rem;
 }
-.-mt-px {
-  margin-top: -1px;
-}
 .mb-2 {
   margin-bottom: 0.5rem;
+}
+.-mt-px {
+  margin-top: -1px;
 }
 .block {
   display: block;
@@ -1967,9 +1967,6 @@ select {
 .disabled\:opacity-25:disabled {
   opacity: 0.25;
 }
-.disabled\:opacity-75:disabled {
-  opacity: 0.75;
-}
 @media (prefers-color-scheme: dark) {
 
   .dark\:border-gray-700 {
@@ -2008,12 +2005,12 @@ select {
     grid-column: span 4 / span 4;
   }
 
-  .sm\:col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
   .sm\:col-span-6 {
     grid-column: span 6 / span 6;
+  }
+
+  .sm\:col-span-2 {
+    grid-column: span 2 / span 2;
   }
 
   .sm\:col-span-3 {
@@ -2118,6 +2115,14 @@ select {
 
   .sm\:max-w-2xl {
     max-width: 42rem;
+  }
+
+  .sm\:max-w-4xl {
+    max-width: 56rem;
+  }
+
+  .sm\:max-w-3xl {
+    max-width: 48rem;
   }
 
   .sm\:flex-1 {
