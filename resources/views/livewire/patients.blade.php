@@ -67,14 +67,24 @@
                                         @if ($patient->address->address !== '')
                                             <div class="text-base text-gray-900">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
+                                        @else
+                                            -
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-base text-gray-900">{{ $carbon->parse($patient->birth)->diff(now())->y }} anos</div>
-                                        <div class="text-base text-gray-500">{{ $carbon->parse($patient->birth)->format('d/m/Y') }}</div>
+                                        @if ($patient->birth)
+                                            <div class="text-base text-gray-900">{{ $carbon->parse($patient->birth)->diff(now())->y }} anos</div>
+                                            <div class="text-base text-gray-500"> {{ $carbon->parse($patient->birth)->format('d/m/Y') }} </div>    
+                                        @else
+                                            -
+                                        @endif 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
-                                        {{$patient->phone}}
+                                        @if ($patient->phone)
+                                            {{ $patient->phone }}
+                                        @else
+                                           - 
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button wire:click="confirmPatientEditing({{ $patient->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
@@ -130,7 +140,6 @@
         </x-slot>
 
         <x-slot name="content">
-            <hr>
             <div class="mt-10 sm:mt-3">
                 <div class="mt-5 md:mt-0 md:col-span-2">
                     <div class="grid grid-cols-6 gap-3">
@@ -159,7 +168,8 @@
 
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="phone" value="{{ __('Telefone') }}" />
-                            <x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />
+                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="h-10 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25 rounded-md shadow-sm mt-1 block w-full"/>
+                            <!--<x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />-->
                             <x-jet-input-error for="patient.phone" class="mt-2" />
                         </div>
 
@@ -197,7 +207,7 @@
             
                         <div class="col-span-6 sm:col-span-3 lg:col-span-1">
                             <x-jet-label for="state" value="{{ __('Estado') }}" />
-                            <select id="state" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
+                            <select id="state" class="mt-1 block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
                                 <option value="AC">AC</option>
                                 <option value="AL">AL</option>
                                 <option value="AP">AP</option>
