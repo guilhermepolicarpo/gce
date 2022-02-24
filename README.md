@@ -21,13 +21,13 @@ O usuário/gestor marca a data dos passes receitados pelo mentor.
 
 #### MVP
 Cadastro de Usuários
-Nome, email e perfil de aceso
+Nome, email e perfil de acesso
 
 Cadastro de Pacientes
 Nome, nascimento e endereço
 
 Atendimentos
-Tipo de atendimento (tratamento, passe)
+Tipo de atendimento: tratamento (presencial ou a distância), passe (presencial ou a distância)
 
 Tipo de passe (A.E, 3 médiuns, sustentação)
 
