@@ -23,12 +23,16 @@
                 />
             </div>
             <!-- Treatment type -->
-            <x-select class="border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
-                label="Tipo de tratamento"
-                placeholder="Selecione"
-                :options="['Active', 'Pending', 'Stuck', 'Done']"
+            <x-select
+                class="w-full border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                label="Select Status"
+                placeholder="Select one status"
                 wire:model.defer="model"
-            />
+            >
+                @foreach ($typesOfTreatment as $typeOfTreatment)
+                <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
+                @endforeach
+            </x-select>
             <!-- Status -->
             <x-select class="border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
                 label="Status"
@@ -77,8 +81,8 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">                                
-                                @foreach ($appointments as $appointment)                                
+                            <tbody class="bg-white divide-y divide-gray-200">       
+                                @forelse ($appointments as $appointment)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -118,14 +122,22 @@
                                                 <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                               </svg>
                                         </button>
-                                        <button wire:click="confirmPatientDeletion()" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
+                                        <button wire:click="confirmSchedulingDeletion({{ $appointment->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
                                     </td>
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td class="px-5">
+                                        <div class="py-5">
+                                            Nenhum agendamento para hoje.
+                                        </div>
+                                    </td>
+                                </tr>                                       
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -137,22 +149,22 @@
         </div>
     </div>
 
-    <!-- Delete Patient Confirmation Modal -->
-    <x-jet-confirmation-modal wire:model="confirmingPatientDeletion">
+    <!-- Delete Scheduling Confirmation Modal -->
+    <x-jet-confirmation-modal wire:model="confirmingSchedulingDeletion">
         <x-slot name="title">
-            {{ __('Deletar paciente') }}
+            {{ __('Deletar agendamento') }}
         </x-slot>
 
         <x-slot name="content">
-            {{ __('Tem certeza de que deseja excluir este paciente?') }}
+            {{ __('Tem certeza de que deseja excluir este agendamento?') }}
         </x-slot>
 
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingPatientDeletion', false)" wire:loading.attr="disabled">
+            <x-jet-secondary-button wire:click="$set('confirmingSchedulingDeletion', false)" wire:loading.attr="disabled">
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-3" wire:click="deletePatient({{ $confirmingAppointmentDeletion }})" wire:loading.attr="disabled">
+            <x-jet-danger-button class="ml-3" wire:click="deleteScheduling({{ $confirmingSchedulingDeletion }})" wire:loading.attr="disabled">
                 {{ __('Deletar') }}
             </x-jet-danger-button>
         </x-slot>
