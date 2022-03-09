@@ -1,22 +1,48 @@
 <div class="p-6 sm:px-10 bg-white border-b border-gray-200">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-end">
+        <div class="flex justify-start items-end w-9/12 space-x-2">
+            <!-- Search form -->
+            <div class="w-5/12">
+                <!--
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500 sm:text-sm"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>                       
+                    </span>
+                    </div>
+                    <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
+                </div>
+                -->
+                <x-input 
+                    class="w-full border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                    icon="search" 
+                    label="Pesquisar" 
+                    placeholder="Digite para pesquisar" 
+                />
+            </div>
+            <!-- Treatment type -->
+            <x-select class="border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                label="Tipo de tratamento"
+                placeholder="Selecione"
+                :options="['Active', 'Pending', 'Stuck', 'Done']"
+                wire:model.defer="model"
+            />
+            <!-- Status -->
+            <x-select class="border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                label="Status"
+                placeholder="Status"
+                :options="['Não atendido', 'Atendido']"
+                wire:model.defer="model"
+                value='Não atendido'
+            />
+        </div>
+        <!-- Add new scheduling -->
         <div class="mr-2">
             <x-jet-button wire:click="confirmPatientAddition">
                 Adicionar
             </x-jet-button>
-        </div>
-        <!-- Search form -->
-        <div class="mr-2 w-1/4">
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span class="text-gray-500 sm:text-sm"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>                       
-                </span>
-                </div>
-                <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
-            </div>
         </div>
     </div>
 
@@ -30,70 +56,69 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
-                                        <button wire:click="sortBy('name')" class="uppercase">Nome</button>
+                                        <button wire:click="sortBy('name')" class="uppercase">Paciente</button>
                                         <x-sort-icon sortField="name" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
-                                    Endereço
+                                        Tipo de Tratamento
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
+                                        Data
+                                    </th>                                    
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Modo de atendimento
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
-                                        <button wire:click="sortBy('birth')" class="uppercase">Idade</button>
+                                        <button wire:click="sortBy('birth')" class="uppercase">Status</button>
                                         <x-sort-icon sortField="birth" :sort-by="$sortBy" :sort-desc="$sortDesc" />
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Telefone
                                     </th>
                                     <th scope="col" class="relative px-6 py-3">
 
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach ($patients as $patient)
+                            <tbody class="bg-white divide-y divide-gray-200">                                
+                                @foreach ($appointments as $appointment)                                
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
-                                                    {{$patient->name}}
+                                                    {{ $appointment->patient->name }}
                                                 </div>
                                                 <div class="text-base text-gray-500">
-                                                    {{$patient->email}}
+                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($patient->address->address !== '')
-                                            <div class="text-base text-gray-900">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
-                                            <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
-                                        @else
-                                            -
-                                        @endif
+                                        <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>                                        
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($patient->birth)
-                                            <div class="text-base text-gray-900">{{ $carbon->parse($patient->birth)->diff(now())->y }} anos</div>
-                                            <div class="text-base text-gray-500"> {{ $carbon->parse($patient->birth)->format('d/m/Y') }} </div>    
-                                        @else
-                                            -
-                                        @endif 
-                                    </td>
+                                        
+                                        <div class="text-base text-gray-900">{{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}</div>
+                                        <div class="text-base text-gray-500">  </div>    
+                                        
+                                    </td>                                     
                                     <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
-                                        @if ($patient->phone)
-                                            {{ $patient->phone }}
-                                        @else
-                                           - 
-                                        @endif
+                                       {{ $appointment->treatment_mode }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if ($appointment->status == 'Não atendido')
+                                            bg-red-100 text-red-800
+                                            @else
+                                            bg-green-100 text-green-800
+                                        @endif"> {{ $appointment->status }} </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button wire:click="confirmPatientEditing({{ $patient->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                        <button wire:click="confirmPatientEditing()" class="text-indigo-600 hover:text-indigo-900 mr-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                 <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                               </svg>
                                         </button>
-                                        <button wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
+                                        <button wire:click="confirmPatientDeletion()" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
@@ -105,7 +130,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $patients->links() }}
+                        {{ $appointments->links() }}
                     </div>
                 </div>
             </div>
@@ -127,7 +152,7 @@
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-3" wire:click="deletePatient({{ $confirmingPatientDeletion }})" wire:loading.attr="disabled">
+            <x-jet-danger-button class="ml-3" wire:click="deletePatient({{ $confirmingAppointmentDeletion }})" wire:loading.attr="disabled">
                 {{ __('Deletar') }}
             </x-jet-danger-button>
         </x-slot>

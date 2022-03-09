@@ -2,34 +2,27 @@
 
 namespace App\Models;
 
-use App\Models\Address;
 use App\Models\Schedule;
 use App\Models\Traits\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Patient extends Model
+class TypeOfTreatment extends Model
 {
     use HasFactory;
     use Tenantable;
 
     protected $guarded = ['id'];
+    protected $table = 'types_of_treatments';
 
     protected $fillable = [
         'name',
-        'email',
-        'phone',
-        'birth'
+        'description',
     ];
 
-    public function address()
+    public function Schedule()
     {
-        return $this->hasOne(Address::class);
-    }
-
-    public function schedule()
-    {
-        return $this->hasMany(Schedule::class);
+        return $this->hasMany(Schedule::class, 'id');
     }
 
 }
