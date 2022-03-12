@@ -3,27 +3,21 @@
         <div class="flex justify-start items-end w-9/12 space-x-2">
             <!-- Search form -->
             <div class="w-5/12">
-                <!--
+                
                 <div class="mt-1 relative rounded-md shadow-sm">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div class=" mt-6 absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <span class="text-gray-500 sm:text-sm"> 
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>                       
                     </span>
                     </div>
-                    <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
-                </div>
-                -->
-                <x-input 
-                    class="w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
-                    icon="search" 
-                    label="Pesquisar" 
-                    placeholder="Digite para pesquisar" 
-                />
+                    <label class="text-gray-500 sm:text-sm">Pesquisar</label>
+                    <input wire:model.debounce.500ms='q' class="border-1 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
+                </div>                
             </div>
             <div>
-                <x-jet-label for="today" value="{{ __('Data') }}" />
+                <x-jet-label for="today" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
                 <x-jet-input wire:model.defer="today" id="today" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7 mt-1 block w-full" />
             </div> 
             <!-- Treatment type 
@@ -223,6 +217,12 @@
                             <x-jet-label for="date" value="{{ __('Data') }}" />
                             <x-jet-input id="date" type="date" wire:model.defer="state.date" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
                             <x-jet-input-error for="state.date" class="mt-2" />
+                            <x-datetime-picker
+                                label="Appointment Date"
+                                placeholder="Appointment Date"
+                                wire:model.defer="normalPicker"
+                                without-time=true
+                            />
                         </div>
 
                         <div class="col-span-6 sm:col-span-6">
