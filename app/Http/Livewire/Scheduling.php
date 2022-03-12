@@ -41,6 +41,13 @@ class Scheduling extends Component
         'state.treatment_mode' => 'required|string',
     ];
 
+    protected $messages = [
+        'state.patient_id.required' => 'Por favor, selecione um paciente',
+        'state.date.required' => 'Por favor, informe uma data de agendamento',
+        'state.treatment_type_id.required' => 'Por favor, selecione um tipo de tratamento',
+        'state.treatment_mode.required' => 'Por favor, selecione um modo de tratamento',
+    ];
+
     public function render()
     {
         //$appointments = Schedule::where('date', $this->today)->paginate();
@@ -76,6 +83,7 @@ class Scheduling extends Component
 
     public function saveScheduling(Schedule $schedule)
     {
+        $this->validate();
         $schedule->create($this->state);
         $this->confirmingSchedulingAddition = false;
     }

@@ -191,17 +191,16 @@
                                 searchable=false
                                 class="mt-1 block w-full"
                                 label="{{ __('Tipo de tratamento') }}"
-                                placeholder="Selecione"
+                                placeholder="Selecione um tipo de tratamento"
                                 wire:model.defer="state.treatment_type_id"
                             >
                                 @forelse ($typesOfTreatment as $typeOfTreatment)
                                     <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
                                 @empty
-                                        <span>Nenhum tipo de tratamento cadastrado</span>
-                                        <a href="#">Cadastrar</a>
+                                    <span>Nenhum tipo de tratamento cadastrado</span>
+                                    <a href="#">Cadastrar</a>
                                 @endforelse
-                            </x-select>                            
-                            <x-jet-input-error for="state.treatment_type_id" class="mt-2" />
+                            </x-select>
                         </div>
 
                         <div class="col-span-6 sm:col-span-6">
@@ -214,11 +213,10 @@
                                 @forelse ($patients as $patient)
                                     <x-select.option label="{{ $patient->name }}" value="{{ $patient->id }}" />
                                 @empty
-                                <span>Nenhum paciente cadastrado</span>
-                                <a href="#">Cadastrar</a>                                
+                                    <span>Nenhum paciente cadastrado</span>
+                                    <a href="#">Cadastrar</a>                                
                                 @endforelse
-                            </x-select>                            
-                            <x-jet-input-error for="state.patient_id" class="mt-2" />
+                            </x-select>
                         </div>
             
                         <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5">
@@ -230,11 +228,10 @@
                         <div class="col-span-6 sm:col-span-6">
                             <x-select
                                 label="{{ __('Modo de tratamento') }}"
-                                placeholder="Selecione"
+                                placeholder="Selecione um modo de tratamento"
                                 :options="['Presencial', 'A distância']"
                                 wire:model.defer="state.treatment_mode"
-                            />                           
-                            <x-jet-input-error for="state.treatment_mode" class="mt-2" />
+                            />
                         </div>
                     </div>
                 </div>
