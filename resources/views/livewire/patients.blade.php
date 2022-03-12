@@ -1,10 +1,5 @@
 <div class="p-6 sm:px-10 bg-white border-b border-gray-200">
-    <div class="flex justify-between">
-        <div class="mr-2">
-            <x-jet-button wire:click="confirmPatientAddition">
-                Adicionar
-            </x-jet-button>
-        </div>
+    <div class="flex justify-between">        
         <!-- Search form -->
         <div class="mr-2 w-1/4">
             <div class="mt-1 relative rounded-md shadow-sm">
@@ -17,6 +12,12 @@
                 </div>
                 <input wire:model.debounce.500ms='q' class="border-2 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Pesquisar">
             </div>
+        </div>
+        <!-- Add Patient -->
+        <div class="mr-2">
+            <x-jet-button wire:click="confirmPatientAddition">
+                Adicionar Paciente
+            </x-jet-button>
         </div>
     </div>
 

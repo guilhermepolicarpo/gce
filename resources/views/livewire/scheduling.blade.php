@@ -16,15 +16,20 @@
                 </div>
                 -->
                 <x-input 
-                    class="w-full border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                    class="w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
                     icon="search" 
                     label="Pesquisar" 
                     placeholder="Digite para pesquisar" 
                 />
             </div>
-            <!-- Treatment type -->
+            <div>
+                <x-jet-label for="today" value="{{ __('Data') }}" />
+                <x-jet-input wire:model.defer="today" id="today" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7 mt-1 block w-full" />
+            </div> 
+            <!-- Treatment type 
             <x-select
-                class="w-full border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+                searchable=false
+                class="w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
                 label="Select Status"
                 placeholder="Select one status"
                 wire:model.defer="model"
@@ -32,19 +37,19 @@
                 @foreach ($typesOfTreatment as $typeOfTreatment)
                 <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
                 @endforeach
-            </x-select>
-            <!-- Status -->
-            <x-select class="border-2 border-gray-300 focus:outline-none focus:border-indigo-500/75"
+            </x-select>-->
+            <!-- Status 
+            <x-select class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
                 label="Status"
                 placeholder="Status"
                 :options="['Não atendido', 'Atendido']"
                 wire:model.defer="model"
                 value='Não atendido'
-            />
+            />-->
         </div>
         <!-- Add new scheduling -->
         <div class="mr-2">
-            <x-jet-button wire:click="confirmPatientAddition">
+            <x-jet-button wire:click="confirmSchedulingAddition">
                 Adicionar
             </x-jet-button>
         </div>
@@ -170,10 +175,10 @@
         </x-slot>
     </x-jet-confirmation-modal>
 
-    <!-- Add Patient Modal -->
-    <x-jet-dialog-modal wire:model="confirmingPatientAddition" maxWidth="3xl">
+    <!-- Add Scheduling Modal -->
+    <x-jet-dialog-modal wire:model="confirmingSchedulingAddition" maxWidth="md">
         <x-slot name="title">
-            {{ ($this->action == 'adding') ? __('Adicionar paciente') : __('Editar paciente') }}
+            {{ ($this->action == 'adding') ? __('Adicionar agendamento') : __('Editar agendamento') }}
         </x-slot>
 
         <x-slot name="content">
@@ -181,99 +186,55 @@
                 <div class="md:col-span-2">
                     <div class="grid grid-cols-6 gap-3">
 
-                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
-                            Informações pessoais
-                        </h6>
-
-                        <div class="col-span-6 sm:col-span-4">
-                            <x-jet-label for="name" value="{{ __('Nome') }}" />
-                            <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="patient.name" />
-                            <x-jet-input-error for="patient.name" class="mt-2" />
-                        </div>
-            
-                        <div class="col-span-6 sm:col-span-2">
-                            <x-jet-label for="birth" value="{{ __('Nascimento') }}" />
-                            <x-jet-input id="birth" type="date" class="mt-1 block w-full" wire:model.defer="patient.birth" />
-                            <x-jet-input-error for="patient.birth" class="mt-2" />
-                        </div>
-            
-                        <div class="col-span-6 sm:col-span-4">
-                            <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
-                            <x-jet-input id="patient.email" type="email" class="mt-1 block w-full" wire:model.defer="patient.email" />
-                            <x-jet-input-error for="patient.email" class="mt-2" />
+                        <div class="col-span-6 sm:col-span-6">                            
+                            <x-select
+                                searchable=false
+                                class="mt-1 block w-full"
+                                label="{{ __('Tipo de tratamento') }}"
+                                placeholder="Selecione"
+                                wire:model.defer="state.treatment_type_id"
+                            >
+                                @forelse ($typesOfTreatment as $typeOfTreatment)
+                                    <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
+                                @empty
+                                        <span>Nenhum tipo de tratamento cadastrado</span>
+                                        <a href="#">Cadastrar</a>
+                                @endforelse
+                            </x-select>                            
+                            <x-jet-input-error for="state.treatment_type_id" class="mt-2" />
                         </div>
 
-                        <div class="col-span-6 sm:col-span-2">
-                            <x-jet-label for="phone" value="{{ __('Telefone') }}" />
-                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="h-10 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25 rounded-md shadow-sm mt-1 block w-full"/>
-                            <!--<x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />-->
-                            <x-jet-input-error for="patient.phone" class="mt-2" />
+                        <div class="col-span-6 sm:col-span-6">
+                            <x-select
+                                class="mt-1 block w-full"
+                                label="{{ __('Paciente') }}"
+                                placeholder="Selecione um paciente"
+                                wire:model.defer="state.patient_id"
+                            >
+                                @forelse ($patients as $patient)
+                                    <x-select.option label="{{ $patient->name }}" value="{{ $patient->id }}" />
+                                @empty
+                                <span>Nenhum paciente cadastrado</span>
+                                <a href="#">Cadastrar</a>                                
+                                @endforelse
+                            </x-select>                            
+                            <x-jet-input-error for="state.patient_id" class="mt-2" />
+                        </div>
+            
+                        <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5">
+                            <x-jet-label for="date" value="{{ __('Data') }}" />
+                            <x-jet-input id="date" type="date" wire:model.defer="state.date" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
+                            <x-jet-input-error for="state.date" class="mt-2" />
                         </div>
 
-                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
-                            Endereço
-                        </h6>
-                        <div class="col-span-6 sm:col-span-2">
-                            <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                            <x-jet-input id="zip_code" type="text" class="mt-1 block w-full" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
-                            <x-jet-input-error for="patient.zip_code" class="mt-2" />
-                        </div>
-            
-                        <div class="col-span-6 sm:col-span-4">
-                            <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                            <x-jet-input id="address" type="text" class="mt-1 block w-full" wire:model.defer="patient.address" />
-                            <x-jet-input-error for="patient.address" class="mt-2" />
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-1">
-                            <x-jet-label for="number" value="{{ __('Número') }}" />
-                            <x-jet-input id="number" type="text" class="mt-1 block w-full" wire:model.defer="patient.number" />
-                            <x-jet-input-error for="patient.number" class="mt-2" />
-                        </div>
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                            <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
-                            <x-jet-input id="neighborhood" type="text" class="mt-1 block w-full" wire:model.defer="patient.neighborhood" />
-                            <x-jet-input-error for="patient.neighborhood" class="mt-2" />
-                        </div>
-            
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                            <x-jet-label for="city" value="{{ __('Cidade') }}" />
-                            <x-jet-input id="city" type="text" class="mt-1 block w-full" wire:model.defer="patient.city" />
-                            <x-jet-input-error for="patient.city" class="mt-2" />
-                        </div>
-            
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-1">
-                            <x-jet-label for="state" value="{{ __('Estado') }}" />
-                            <select id="state" class="mt-1 block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
-                                <option value="AC">AC</option>
-                                <option value="AL">AL</option>
-                                <option value="AP">AP</option>
-                                <option value="AM">AM</option>
-                                <option value="BA">BA</option>
-                                <option value="CE">CE</option>
-                                <option value="DF">DF</option>
-                                <option value="ES">ES</option>
-                                <option value="GO">GO</option>
-                                <option value="MA">MA</option>
-                                <option value="MS">MS</option>
-                                <option value="MT">MT</option>
-                                <option value="MG">MG</option>
-                                <option value="PA">PA</option>
-                                <option value="PB">PB</option>
-                                <option value="PR">PR</option>
-                                <option value="PE">PE</option>
-                                <option value="PI">PI</option>
-                                <option value="RJ">RJ</option>
-                                <option value="RN">RN</option>
-                                <option value="RS">RS</option>
-                                <option value="RO">RO</option>
-                                <option value="RR">RR</option>
-                                <option value="SC">SC</option>
-                                <option value="SP">SP</option>
-                                <option value="SE">SE</option>
-                                <option value="TO">TO</option>
-                            </select>
-                            <x-jet-input-error for="patient.state" class="mt-2" />
+                        <div class="col-span-6 sm:col-span-6">
+                            <x-select
+                                label="{{ __('Modo de tratamento') }}"
+                                placeholder="Selecione"
+                                :options="['Presencial', 'A distância']"
+                                wire:model.defer="state.treatment_mode"
+                            />                           
+                            <x-jet-input-error for="state.treatment_mode" class="mt-2" />
                         </div>
                     </div>
                 </div>
@@ -281,11 +242,11 @@
         </x-slot>
 
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingPatientAddition', false)" wire:loading.attr="disabled">
+            <x-jet-secondary-button wire:click="$set('confirmingSchedulingAddition', false)" wire:loading.attr="disabled">
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-button class="ml-3" wire:click="addPatient()" wire:loading.attr="disabled">
+            <x-jet-button class="ml-3" wire:click="saveScheduling()" wire:loading.attr="disabled">
                 {{ ($this->action == 'adding') ? __('Adicionar') : __('Editar') }}
             </x-jet-button>
         </x-slot>
