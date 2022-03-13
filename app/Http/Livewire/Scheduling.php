@@ -14,25 +14,26 @@ class Scheduling extends Component
     use WithPagination;
 
     public $state = [
+        'id' => '',
         'patient_id' => '',
         'date' => '',
         'treatment_type_id' => '',
         'treatment_mode' => '',
         'statys' => 'Não atendido',
     ];
-    public $sortBy = 'patient_id';
+    public $q;
+    public $sortBy = 'id';
     public $sortDesc = true;
     public $action;
     public $date;
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
-    public $today;
 
     protected $queryString = [
-        'date',
+        'q' => ['except' => ''],
+        'sortBy' => ['except' => 'id'],
+        'sortDesc' => ['except' => true]
     ];
-
-    
 
     protected $rules = [
         'state.patient_id' => 'required|numeric',
@@ -81,10 +82,27 @@ class Scheduling extends Component
         $this->confirmingSchedulingAddition = true;
     }
 
-    public function saveScheduling(Schedule $schedule)
+    public function saveScheduling()
     {
         $this->validate();
-        $schedule->create($this->state);
+
+        Schedule::updateOrCreate([
+            'id' => $this->state['id'],
+        ],[
+            'patient_id' =>  $this->state['patient_id'],
+            'date' => $this->state['date'],
+            'treatment_type_id' => $this->state['treatment_type_id'],
+            'treatment_mode' => $this->state['treatment_mode'],
+            'statys' => 'Não atendido',
+        ]);
+
         $this->confirmingSchedulingAddition = false;
+    }
+
+    public function confirmSchedulingEditing(Schedule $schedule)
+    {
+        $this->state = $schedule;      
+        $this->action = 'editing';
+        $this->confirmingSchedulingAddition = true;
     }
 }
