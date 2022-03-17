@@ -58,26 +58,31 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
-                                        <button wire:click="sortBy('name')" class="uppercase">Paciente</button>
-                                        <x-sort-icon sortField="name" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Paciente
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
                                         Tipo de Tratamento
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
-                                        Data
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider ">
+                                        <div class="flex items-center">
+                                            <button wire:click="sortBy('date')" class="uppercase">Data</button>
+                                            <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                        </div>
                                     </th>                                    
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Modo de atendimento
+                                        <div class="flex items-center">
+                                            <button wire:click="sortBy('treatment_mode')" class="uppercase">Modo de atendimento</button>
+                                            <x-sort-icon sortField="treatment_mode" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                        </div>                                        
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center">
-                                        <button wire:click="sortBy('birth')" class="uppercase">Status</button>
-                                        <x-sort-icon sortField="birth" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">
+                                        <div class="flex items-center">
+                                            <button wire:click="sortBy('status')" class="uppercase">Status</button>
+                                            <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                        </div>
                                     </th>
-                                    <th scope="col" class="relative px-6 py-3">
-
-                                    </th>
+                                    <th scope="col" class="relative px-6 py-3"></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">       

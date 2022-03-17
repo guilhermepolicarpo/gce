@@ -51,8 +51,17 @@ class Scheduling extends Component
 
     public function render()
     {
-        //$appointments = Schedule::where('date', $this->today)->paginate();
-        $appointments = Schedule::paginate();
+        $appointments = Schedule::with(['patient'])
+            ->when($this->q, function($query) {
+                return $query
+                    ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%')
+                    ->orWhereRelation('typeOfTreatment', 'name', 'like', '%'.$this->q.'%')
+                    ->orWhere('treatment_mode', 'like', '%'.$this->q.'%');
+            })
+            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
+
+        $appointments = $appointments->paginate(10);
+
         $typesOfTreatment = TypeOfTreatment::all();
         $patients = Patient::all();
 
@@ -62,6 +71,19 @@ class Scheduling extends Component
             'typesOfTreatment' => $typesOfTreatment,
             'patients' => $patients,
         ]);
+    }
+
+    public function updatingQ()
+    {
+        $this->resetPage();
+    }
+
+    public function sortBy($field)
+    {
+        if ($field == $this->sortBy) {
+            $this->sortDesc = !$this->sortDesc;
+        }
+        $this->sortBy = $field;
     }
 
     public function confirmSchedulingDeletion($id)
@@ -93,7 +115,7 @@ class Scheduling extends Component
             'date' => $this->state['date'],
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
-            'statys' => 'Não atendido',
+            'status' => 'Não atendido',
         ]);
 
         $this->confirmingSchedulingAddition = false;
