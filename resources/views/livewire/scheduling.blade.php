@@ -2,8 +2,7 @@
     <div class="flex justify-between items-end">
         <div class="flex justify-start items-end w-9/12 space-x-2">
             <!-- Search form -->
-            <div class="w-5/12">
-                
+            <div class="w-5/12">                
                 <div class="mt-1 relative rounded-md shadow-sm">
                     <div class=" mt-6 absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <span class="text-gray-500 sm:text-sm"> 
