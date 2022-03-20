@@ -25,14 +25,15 @@ class Scheduling extends Component
     public $sortBy = 'id';
     public $sortDesc = true;
     public $action;
-    public $date;
+    public $date ='';
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
 
     protected $queryString = [
         'q' => ['except' => ''],
         'sortBy' => ['except' => 'id'],
-        'sortDesc' => ['except' => true]
+        'sortDesc' => ['except' => true],
+        'date' => ['except' => ''],
     ];
 
     protected $rules = [
@@ -52,6 +53,10 @@ class Scheduling extends Component
     public function render()
     {
         $appointments = Schedule::with(['patient'])
+            ->when($this->date, function($query) {
+                return $query
+                    ->where('date', '=', $this->date);
+            })
             ->when($this->q, function($query) {
                 return $query
                     ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%')
@@ -62,14 +67,11 @@ class Scheduling extends Component
 
         $appointments = $appointments->paginate(10);
 
-        $typesOfTreatment = TypeOfTreatment::all();
-        $patients = Patient::all();
-
         return view('livewire.scheduling', [
             'appointments' => $appointments,
             'dateFormat' => Carbon::now(),
-            'typesOfTreatment' => $typesOfTreatment,
-            'patients' => $patients,
+            'typesOfTreatment' => TypeOfTreatment::all(),
+            'patients' => Patient::all(),
         ]);
     }
 

@@ -16,8 +16,8 @@
                 </div>                
             </div>
             <div>
-                <x-jet-label for="today" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
-                <x-jet-input wire:model.defer="today" id="today" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7 mt-1 block w-full" />
+                <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
+                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
             </div> 
             <!-- Treatment type 
             <x-select
