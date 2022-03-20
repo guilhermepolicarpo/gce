@@ -1,9 +1,9 @@
 # GCE
-Projeto open source de sistema web para gestão de centros/casas espíritas.
+Projeto open source e gratuito de um sistema web para gestão de centros/casas espíritas.
 
 ## Definindo o projeto
 ### Qual é o projeto?
-O projeto GCE é um projeto de desenvolvimento de um sistema web para contribuir na gestão de Centros Espíritas. Será implementado modelo SaaS, assim cada casa espírita poderá fazer seu cadastro e utilizar o sistema sem a necessidade de instalar em estrutura própria.
+O projeto GCE é um projeto de desenvolvimento de um sistema web para contribuir na gestão de Centros Espíritas. Será implementado modelo SaaS, porém gratuito, assim cada casa espírita poderá fazer seu cadastro e utilizar o sistema sem a necessidade de instalar em estrutura própria.
 
 ### O que é o MVP (Produto Viável Mínimo)?
 Sistema web será criado utilizando Laravel, Jetstream e Livewire que permita cadastro/gestão de usuários, cadastro/gestão de pacientes, agenda e gestão dos atendimentos.
