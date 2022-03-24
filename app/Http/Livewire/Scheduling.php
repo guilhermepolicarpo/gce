@@ -6,7 +6,6 @@ use App\Models\Patient;
 use Livewire\Component;
 use App\Models\Schedule;
 use Livewire\WithPagination;
-use Illuminate\Support\Carbon;
 use App\Models\TypeOfTreatment;
 
 class Scheduling extends Component
@@ -19,13 +18,15 @@ class Scheduling extends Component
         'date' => '',
         'treatment_type_id' => '',
         'treatment_mode' => '',
-        'statys' => 'Não atendido',
+        'status' => 'Não atendido',
     ];
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
     public $action;
-    public $date ='';
+    public $date;
+    public $treatmentType;
+    public $status = 'Não atendido';
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
 
@@ -34,6 +35,8 @@ class Scheduling extends Component
         'sortBy' => ['except' => 'id'],
         'sortDesc' => ['except' => true],
         'date' => ['except' => ''],
+        'status' => ['except' => 'Não atendido'],
+        'treatmentType' => ['except' => ''],
     ];
 
     protected $rules = [
@@ -53,6 +56,14 @@ class Scheduling extends Component
     public function render()
     {
         $appointments = Schedule::with(['patient'])
+            ->when($this->status, function($query) {
+                return $query
+                    ->where('status', '=', $this->status);
+            })
+            ->when($this->treatmentType, function($query) {
+                return $query
+                    ->where('treatment_type_id', '=', $this->treatmentType);
+            })
             ->when($this->date, function($query) {
                 return $query
                     ->where('date', '=', $this->date);
@@ -67,9 +78,11 @@ class Scheduling extends Component
 
         $appointments = $appointments->paginate(10);
 
+       // $this->date = now()->toDateString('Y-m-d');
+
         return view('livewire.scheduling', [
             'appointments' => $appointments,
-            'dateFormat' => Carbon::now(),
+            'dateFormat' => now(),
             'typesOfTreatment' => TypeOfTreatment::all(),
             'patients' => Patient::all(),
         ]);
@@ -117,7 +130,7 @@ class Scheduling extends Component
             'date' => $this->state['date'],
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
-            'status' => 'Não atendido',
+            'status' => $this->state['status']
         ]);
 
         $this->confirmingSchedulingAddition = false;

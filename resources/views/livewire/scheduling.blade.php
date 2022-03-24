@@ -15,35 +15,36 @@
                     <input wire:model.debounce.500ms='q' class="border-1 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
                 </div>                
             </div>
+            <!-- Search date -->
             <div>
                 <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
                 <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
             </div> 
-            <!-- Treatment type 
-            <x-select
-                searchable=false
-                class="w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
-                label="Select Status"
-                placeholder="Select one status"
-                wire:model.defer="model"
-            >
-                @foreach ($typesOfTreatment as $typeOfTreatment)
-                <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
-                @endforeach
-            </x-select>-->
-            <!-- Status 
-            <x-select class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75"
-                label="Status"
-                placeholder="Status"
-                :options="['Não atendido', 'Atendido']"
-                wire:model.defer="model"
-                value='Não atendido'
-            />-->
+            <div>
+                <x-select
+                    label="Status"
+                    placeholder="Selecione um status"
+                    :options="['Não atendido', 'Atendido']"
+                    wire:model="status"
+                />
+            </div>
+            <div class="w-4/12">
+                <x-select
+                    label="Tratamento"
+                    placeholder="Selecione um tratamento"
+                    wire:model="treatmentType"
+                >
+                    @foreach ($typesOfTreatment as $typeOfTreatment)
+                    <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
+                    @endforeach
+    
+                </x-select>
+            </div>
         </div>
         <!-- Add new scheduling -->
         <div class="mr-2">
             <x-jet-button wire:click="confirmSchedulingAddition">
-                Adicionar
+                Novo agendamento
             </x-jet-button>
         </div>
     </div>
@@ -136,7 +137,7 @@
                                 <tr>
                                     <td class="px-5">
                                         <div class="py-5">
-                                            Nenhum agendamento para hoje.
+                                            Nenhum agendamento encontrado.
                                         </div>
                                     </td>
                                 </tr>                                       
@@ -191,6 +192,7 @@
                                 label="{{ __('Tipo de tratamento') }}"
                                 placeholder="Selecione"
                                 wire:model.defer="state.treatment_type_id"
+                                wire:keydown.enter="saveScheduling()"
                             >
                                 @forelse ($typesOfTreatment as $typeOfTreatment)
                                     <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
@@ -207,6 +209,7 @@
                                 placeholder="Selecione"
                                 :options="['Presencial', 'A distância']"
                                 wire:model.defer="state.treatment_mode"
+                                wire:keydown.enter="saveScheduling()"
                             />
                         </div>
 
@@ -216,6 +219,7 @@
                                 label="{{ __('Paciente') }}"
                                 placeholder="Selecione um paciente"
                                 wire:model.defer="state.patient_id"
+                                wire:keydown.enter="saveScheduling()"
                             >
                                 @forelse ($patients as $patient)
                                     <x-select.option label="{{ $patient->name }}" value="{{ $patient->id }}" />
@@ -228,7 +232,7 @@
             
                         <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5">
                             <x-jet-label for="date" value="{{ __('Data') }}" />
-                            <x-jet-input id="date" type="date" wire:model.defer="state.date" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
+                            <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
                             <x-jet-input-error for="state.date" class="mt-2" />
                         </div>
 
