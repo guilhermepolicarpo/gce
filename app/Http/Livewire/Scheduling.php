@@ -78,17 +78,27 @@ class Scheduling extends Component
 
         $appointments = $appointments->paginate(10);
 
-       // $this->date = now()->toDateString('Y-m-d');
-
         return view('livewire.scheduling', [
             'appointments' => $appointments,
             'dateFormat' => now(),
-            'typesOfTreatment' => TypeOfTreatment::all(),
-            'patients' => Patient::all(),
+            'typesOfTreatment' => TypeOfTreatment::all('id', 'name'),
+            'patients' => Patient::all('id', 'name'),
         ]);
     }
 
     public function updatingQ()
+    {
+        $this->resetPage();
+    }
+    public function updatingStatus()
+    {
+        $this->resetPage();
+    }
+    public function updatingDate()
+    {
+        $this->resetPage();
+    }
+    public function updatingtreatmentType()
     {
         $this->resetPage();
     }
