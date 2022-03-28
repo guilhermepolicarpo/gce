@@ -1,6 +1,6 @@
 <div class="p-6 sm:px-10 bg-white border-b border-gray-200">
     <div class="flex justify-between items-end">
-        <div class="flex justify-start items-end w-9/12 space-x-2">
+        <div class="flex justify-start items-end align-middle space-x-2">
             <!-- Search form -->
             <div class="w-6/12">                
                 <div class="mt-1 relative rounded-md shadow-sm">
@@ -12,7 +12,7 @@
                     </span>
                     </div>
                     <label class="text-gray-500 sm:text-sm">Pesquisar</label>
-                    <input wire:model.debounce.500ms='q' class="border-1 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
+                    <input wire:model.debounce.500ms='q' class="border-1 border-gray-300 bg-white w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
                 </div>                
             </div>
             <!-- Search date -->
@@ -21,30 +21,52 @@
                 <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
             </div> 
             <div>
-                <x-select
-                    label="Status"
-                    placeholder="Selecione um status"
-                    :options="['Não atendido', 'Atendido']"
-                    wire:model="status"
-                />
-            </div>
-            <div class="w-4/12">
-                <x-select
-                    label="Tratamento"
-                    placeholder="Selecione um tratamento"
-                    wire:model="treatmentType"
+                <x-dropdown 
+                persistent=true 
+                align=left
                 >
-                    @foreach ($typesOfTreatment as $typeOfTreatment)
-                    <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
-                    @endforeach
+                    <x-slot name="trigger">
+                        <x-button label="Filtros" secondary-outline />                        
+                    </x-slot>
+                
+                    <x-dropdown.item class="w-full">
+                        <x-select
+                            class="w-full"
+                            label="{{ __('Status') }}"
+                            placeholder="Selecione um status"
+                            :options="['Não atendido', 'Atendido']"
+                            wire:model="status"
+                        />
+                    </x-dropdown.item>
     
-                </x-select>
+                    <x-dropdown.item separator>
+                        <x-select
+                        label="{{ __('Tratamento') }}"
+                        placeholder="Selecione um tratamento"
+                        wire:model="treatmentType"
+                        >
+                            @foreach ($typesOfTreatment as $typeOfTreatment)
+                            <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
+                            @endforeach
+            
+                        </x-select>
+                    </x-dropdown.item>
+    
+                    <x-dropdown.item separator>
+                        <x-select
+                            label="{{ __('Modo') }}"
+                            placeholder="Selecione um modo"
+                            :options="['Presencial', 'A distância']"
+                            wire:model="treatmentMode"
+                        />
+                    </x-dropdown.item>
+                </x-dropdown>
             </div>
         </div>
         <!-- Add new scheduling -->
         <div class="mr-2">
             <x-jet-button wire:click="confirmSchedulingAddition">
-                Novo
+                {{ __('Novo') }}
             </x-jet-button>
         </div>
     </div>
@@ -59,14 +81,14 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Paciente
+                                        {{ __('Paciente') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
                                         Tipo de Tratamento
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider ">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('date')" class="uppercase">Data</button>
+                                            <button wire:click="sortBy('date')" class="uppercase">{{ __('Data') }}</button>
                                             <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>                                    

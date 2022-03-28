@@ -25,6 +25,7 @@ class Scheduling extends Component
     public $sortDesc = true;
     public $action;
     public $date;
+    public $treatmentMode;
     public $treatmentType;
     public $status = 'Não atendido';
     public $confirmingSchedulingDeletion = false;
@@ -59,6 +60,10 @@ class Scheduling extends Component
             ->when($this->status, function($query) {
                 return $query
                     ->where('status', '=', $this->status);
+            })
+            ->when($this->treatmentMode, function($query) {
+                return $query
+                    ->where('treatment_mode', '=', $this->treatmentMode);
             })
             ->when($this->treatmentType, function($query) {
                 return $query
