@@ -28,3 +28,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/patients', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/schedule', function () {
     return view('schedule');
 })->name('schedule');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/mentors', function () {
+    return view('mentors');
+})->name('mentors');

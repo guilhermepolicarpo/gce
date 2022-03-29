@@ -66,7 +66,7 @@
         <!-- Add new scheduling -->
         <div class="mr-2">
             <x-jet-button wire:click="confirmSchedulingAddition">
-                {{ __('Novo') }}
+                {{ __('Novo agendamento') }}
             </x-jet-button>
         </div>
     </div>

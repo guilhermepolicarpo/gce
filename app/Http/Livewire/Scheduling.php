@@ -57,13 +57,17 @@ class Scheduling extends Component
     public function render()
     {
         $appointments = Schedule::with(['patient'])
-            ->when($this->status, function($query) {
+            ->when($this->q, function($query) {
                 return $query
-                    ->where('status', '=', $this->status);
+                    ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%');
             })
             ->when($this->treatmentMode, function($query) {
                 return $query
                     ->where('treatment_mode', '=', $this->treatmentMode);
+            })
+            ->when($this->status, function($query) {
+                return $query
+                    ->where('status', '=', $this->status);
             })
             ->when($this->treatmentType, function($query) {
                 return $query
@@ -72,12 +76,6 @@ class Scheduling extends Component
             ->when($this->date, function($query) {
                 return $query
                     ->where('date', '=', $this->date);
-            })
-            ->when($this->q, function($query) {
-                return $query
-                    ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%')
-                    ->orWhereRelation('typeOfTreatment', 'name', 'like', '%'.$this->q.'%')
-                    ->orWhere('treatment_mode', 'like', '%'.$this->q.'%');
             })
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
 
@@ -89,23 +87,6 @@ class Scheduling extends Component
             'typesOfTreatment' => TypeOfTreatment::all('id', 'name'),
             'patients' => Patient::all('id', 'name'),
         ]);
-    }
-
-    public function updatingQ()
-    {
-        $this->resetPage();
-    }
-    public function updatingStatus()
-    {
-        $this->resetPage();
-    }
-    public function updatingDate()
-    {
-        $this->resetPage();
-    }
-    public function updatingtreatmentType()
-    {
-        $this->resetPage();
     }
 
     public function sortBy($field)
@@ -156,5 +137,26 @@ class Scheduling extends Component
         $this->state = $schedule;      
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
+    }
+
+    public function updatingQ()
+    {
+        $this->resetPage();
+    }
+    public function updatingStatus()
+    {
+        $this->resetPage();
+    }
+    public function updatingDate()
+    {
+        $this->resetPage();
+    }
+    public function updatingTreatmentType()
+    {
+        $this->resetPage();
+    }
+    public function updatingTreatmentMode()
+    {
+        $this->resetPage();
     }
 }
