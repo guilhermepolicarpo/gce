@@ -77,9 +77,8 @@ class Scheduling extends Component
                 return $query
                     ->where('date', '=', $this->date);
             })
-            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
-
-        $appointments = $appointments->paginate(10);
+            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
+            ->paginate(10);
 
         return view('livewire.scheduling', [
             'appointments' => $appointments,

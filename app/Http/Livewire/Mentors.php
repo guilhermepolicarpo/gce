@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Mentor;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class Mentors extends Component
 {
@@ -38,10 +39,18 @@ class Mentors extends Component
 
     public function render()
     {
-        $mentors = Mentor::when($this->q, function($query) {
-            $query->where('name', 'like', "%{$this->q}%");
-        })->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
-            ->paginate(10);
+        $mentors = DB::table('mentors')
+        ->when($this->q, function ($query) {
+            return $query->where('name', 'like', "%{$this->q}%");
+        })
+        ->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
+        ->paginate(10);
+
+        
+        // $mentors = Mentor::when($this->q, function($query) {
+        //     $query->where('name', 'like', "%{$this->q}%");
+        // })->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
+        //     ->paginate(10);
         
         return view('livewire.mentors', [
             'mentors' => $mentors,
@@ -85,6 +94,14 @@ class Mentors extends Component
         $mentor->delete();
 
         $this->confirmingMentorDeletion = false;
+    }
+
+    public function sortBy($field)
+    {
+        if ($field == $this->sortBy) {
+            $this->sortDesc = !$this->sortDesc;
+        }
+        $this->sortBy = $field;
     }
 
     public function updatingQ()

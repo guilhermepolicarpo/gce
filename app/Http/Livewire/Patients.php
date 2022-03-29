@@ -67,7 +67,7 @@ class Patients extends Component
     public function render()
     {
         
-        $this->carbon = Carbon::now();
+        $this->carbon = Carbon::now();       
 
         $patients = Patient::when($this->q, function($query) {
             return $query->where(function($query){
