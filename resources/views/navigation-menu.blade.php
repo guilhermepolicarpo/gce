@@ -44,7 +44,7 @@
                                 {{ __('Gerenciar Centro') }}
                             </div>
     
-                            <x-jet-dropdown-link href="#">
+                            <x-jet-dropdown-link href="{{ route('spiritistCenter') }}">
                                 {{ __('Centro Espírita') }}
                             </x-jet-dropdown-link>
     
@@ -189,6 +189,21 @@
                 {{ __('Pacientes') }}
             </x-jet-responsive-nav-link>
         </div>
+        <div class="pb-4 border-t border-gray-200">
+            <div class="block px-3 py-2 text-xs text-gray-400">
+                {{ __('Gerenciar Centro') }}
+            </div>
+            <div class="mt-0 space-y-1">
+                <x-jet-responsive-nav-link href="{{ route('spiritistCenter') }}" :active="request()->routeIs('spiritistCenter')">
+                    {{ __('Centro Espírita') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('mentors') }}" :active="request()->routeIs('mentors')">
+                    {{ __('Mentores') }}
+                </x-jet-responsive-nav-link>
+            </div>
+        </div>
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

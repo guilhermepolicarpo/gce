@@ -32,3 +32,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/schedule', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/mentors', function () {
     return view('mentors');
 })->name('mentors');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/spiritist-center', function () {
+    return view('spiritist-center');
+})->name('spiritistCenter');
