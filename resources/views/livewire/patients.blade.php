@@ -136,7 +136,7 @@
     </x-jet-confirmation-modal>
 
     <!-- Add Patient Modal -->
-    <x-jet-dialog-modal wire:model="confirmingPatientAddition" maxWidth="3xl">
+    <x-jet-dialog-modal wire:model="confirmingPatientAddition" maxWidth="3xl" >
         <x-slot name="title">
             {{ ($this->action == 'adding') ? __('Adicionar paciente') : __('Editar paciente') }}
         </x-slot>

@@ -197,7 +197,7 @@
     </x-jet-confirmation-modal>
 
     <!-- Add Scheduling Modal -->
-    <x-jet-dialog-modal wire:model="confirmingSchedulingAddition" maxWidth="lg">
+    <x-jet-dialog-modal wire:model="confirmingSchedulingAddition" maxWidth="lg" >
         <x-slot name="title">
             {{ ($this->action == 'adding') ? __('Adicionar agendamento') : __('Editar agendamento') }}
         </x-slot>

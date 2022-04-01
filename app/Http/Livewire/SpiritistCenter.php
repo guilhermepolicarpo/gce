@@ -17,12 +17,13 @@ class SpiritistCenter extends Component
     ];
 
     protected $rules = [
-        'state.name' => 'required|string|min:4',
+        'state.name' => 'required|string|min:4|max:255',
     ];
 
     protected $messages = [
         'state.name.required' => 'Por favor, informe o nome do Centro Espírita',
         'state.name.min' => 'O nome do Centro deve ter no mínimo 4 caracteres',
+        'state.name.max' => 'O nome do Centro deve ter no máximo 255 caracteres',
     ];
 
     public function mount() 
