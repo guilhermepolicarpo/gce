@@ -17,8 +17,16 @@
             </div>
             <!-- Search date -->
             <div>
-                <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
-                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
+                <x-datetime-picker
+                    label="{{ __('Data') }}"
+                    placeholder="Escolha uma data"
+                    wire:model.debounce.500ms="date"
+                    without-time
+                    without-timezone
+                    parse-format="YYYY-MM-DD"
+                />
+                {{-- <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
+                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" /> --}}
             </div> 
             <div>
                 <x-dropdown 
@@ -253,9 +261,16 @@
                         </div>
             
                         <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5">
-                            <x-jet-label for="date" value="{{ __('Data') }}" />
+                            <x-datetime-picker
+                                label="{{ __('Data') }}"
+                                placeholder="Data"
+                                wire:model.defer="state.date"
+                                without-time
+                                without-timezone
+                            />
+                            {{-- <x-jet-label for="date" value="{{ __('Data') }}" />
                             <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
-                            <x-jet-input-error for="state.date" class="mt-2" />
+                            <x-jet-input-error for="state.date" class="mt-2" /> --}}
                         </div>
 
                         

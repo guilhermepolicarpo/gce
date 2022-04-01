@@ -54,6 +54,11 @@ class Scheduling extends Component
         'state.treatment_mode.required' => 'Por favor, selecione um modo de tratamento',
     ];
 
+    public function mount()
+    {
+        $this->date = date('Y-m-d');
+    }
+
     public function render()
     {
         $appointments = Schedule::with(['patient'])
