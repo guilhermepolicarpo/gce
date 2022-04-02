@@ -1151,17 +1151,23 @@ select {
 .col-span-6 {
   grid-column: span 6 / span 6;
 }
+.float-right {
+  float: right;
+}
+.float-left {
+  float: left;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
 .my-auto {
   margin-top: auto;
   margin-bottom: auto;
+}
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .-my-2 {
   margin-top: -0.5rem;
@@ -1414,6 +1420,9 @@ select {
 .w-10 {
   width: 2.5rem;
 }
+.w-1\/2 {
+  width: 50%;
+}
 .w-20 {
   width: 5rem;
 }
@@ -1434,9 +1443,6 @@ select {
 }
 .w-1\/4 {
   width: 25%;
-}
-.w-1\/2 {
-  width: 50%;
 }
 .w-4\/12 {
   width: 33.333333%;
@@ -1712,9 +1718,6 @@ select {
 .self-center {
   align-self: center;
 }
-.overflow-auto {
-  overflow: auto;
-}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1732,9 +1735,6 @@ select {
 }
 .overflow-y-hidden {
   overflow-y: hidden;
-}
-.overflow-x-visible {
-  overflow-x: visible;
 }
 .overflow-y-visible {
   overflow-y: visible;
@@ -1798,10 +1798,6 @@ select {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-.rounded-b {
-  border-bottom-right-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
 .rounded-b-lg {
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -1864,13 +1860,13 @@ select {
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
-.border-secondary-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(203 213 225 / var(--tw-border-opacity));
-}
 .border-secondary-200 {
   --tw-border-opacity: 1;
   border-color: rgb(226 232 240 / var(--tw-border-opacity));
+}
+.border-secondary-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(203 213 225 / var(--tw-border-opacity));
 }
 .border-primary-600 {
   --tw-border-opacity: 1;
@@ -2064,10 +2060,6 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity));
 }
-.bg-slate-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-}
 .bg-secondary-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(148 163 184 / var(--tw-bg-opacity));
@@ -2075,6 +2067,10 @@ select {
 .bg-primary-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+}
+.bg-slate-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
 }
 .bg-primary-500 {
   --tw-bg-opacity: 1;
@@ -2404,14 +2400,14 @@ select {
 .pr-2 {
   padding-right: 0.5rem;
 }
+.pr-9 {
+  padding-right: 2.25rem;
+}
 .pr-8 {
   padding-right: 2rem;
 }
 .pr-2\.5 {
   padding-right: 0.625rem;
-}
-.pr-9 {
-  padding-right: 2.25rem;
 }
 .pl-2\.5 {
   padding-left: 0.625rem;
@@ -3932,12 +3928,12 @@ select {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
 }
-.focus\:ring-transparent:focus {
-  --tw-ring-color: transparent;
-}
 .focus\:ring-primary-600:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(79 70 229 / var(--tw-ring-opacity));
+}
+.focus\:ring-transparent:focus {
+  --tw-ring-color: transparent;
 }
 .focus\:ring-negative-500:focus {
   --tw-ring-opacity: 1;
@@ -4121,13 +4117,13 @@ select {
   --tw-border-opacity: 1;
   border-color: rgb(100 116 139 / var(--tw-border-opacity));
 }
-.dark .dark\:bg-secondary-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
-}
 .dark .dark\:bg-secondary-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+}
+.dark .dark\:bg-secondary-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 .dark .dark\:bg-primary-700 {
   --tw-bg-opacity: 1;
@@ -4255,13 +4251,13 @@ select {
 .dark .dark\:bg-opacity-60 {
   --tw-bg-opacity: 0.6;
 }
-.dark .dark\:text-secondary-400 {
-  --tw-text-opacity: 1;
-  color: rgb(148 163 184 / var(--tw-text-opacity));
-}
 .dark .dark\:text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.dark .dark\:text-secondary-400 {
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity));
 }
 .dark .dark\:text-secondary-500 {
   --tw-text-opacity: 1;

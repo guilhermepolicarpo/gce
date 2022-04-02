@@ -52,6 +52,10 @@
                             <x-jet-dropdown-link href="{{ route('mentors') }}">
                                 {{ __('Mentores') }}
                             </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('typesOfTreatment') }}">
+                                {{ __('Tipos de Tratamento') }}
+                            </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
@@ -200,6 +204,10 @@
 
                 <x-jet-responsive-nav-link href="{{ route('mentors') }}" :active="request()->routeIs('mentors')">
                     {{ __('Mentores') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}" :active="request()->routeIs('typesOfTreatment')">
+                    {{ __('Tipos de Tratamento') }}
                 </x-jet-responsive-nav-link>
             </div>
         </div>

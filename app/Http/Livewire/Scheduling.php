@@ -55,8 +55,10 @@ class Scheduling extends Component
     ];
 
     public function mount()
-    {
-        $this->date = date('Y-m-d');
+    {   
+        if (!isset($this->date)) {
+            $this->date = date('Y-m-d');
+        }        
     }
 
     public function render()

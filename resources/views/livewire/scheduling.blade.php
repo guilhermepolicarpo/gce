@@ -1,4 +1,4 @@
-<div class="p-6 sm:px-10 bg-white border-b border-gray-200">
+<div class="p-6 sm:px-10 bg-white border-b border-gray-200 sm:rounded-lg">
     <div class="flex justify-between items-end">
         <div class="flex justify-start items-end align-middle space-x-2">
             <!-- Search form -->

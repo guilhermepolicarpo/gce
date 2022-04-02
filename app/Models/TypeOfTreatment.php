@@ -20,7 +20,7 @@ class TypeOfTreatment extends Model
         'description',
     ];
 
-    public function Schedule()
+    public function schedule()
     {
         return $this->hasMany(Schedule::class, 'id');
     }
