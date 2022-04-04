@@ -15,11 +15,13 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Painel') }}
                     </x-jet-nav-link>
-
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')">
                         {{ __('Agenda') }}
                     </x-jet-nav-link>
-
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('patients') }}" :active="request()->routeIs('patients')">
                         {{ __('Pacientes') }}
                     </x-jet-nav-link>
@@ -43,11 +45,14 @@
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 {{ __('Gerenciar Centro') }}
                             </div>
-    
+
                             <x-jet-dropdown-link href="{{ route('spiritistCenter') }}">
                                 {{ __('Centro Espírita') }}
                             </x-jet-dropdown-link>
     
+                            <x-jet-dropdown-link href="{{ route('users') }}">
+                                {{ __('Usuários') }}
+                            </x-jet-dropdown-link>
     
                             <x-jet-dropdown-link href="{{ route('mentors') }}">
                                 {{ __('Mentores') }}
@@ -140,7 +145,7 @@
                             </div>
 
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                {{ __('Perfil') }}
                             </x-jet-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -158,7 +163,7 @@
                                 <x-jet-dropdown-link href="{{ route('logout') }}"
                                          onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Sair') }}
                                 </x-jet-dropdown-link>
                             </form>
                         </x-slot>
@@ -202,6 +207,10 @@
                     {{ __('Centro Espírita') }}
                 </x-jet-responsive-nav-link>
 
+                <x-jet-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
+                    {{ __('Usuários') }}
+                </x-jet-responsive-nav-link>
+
                 <x-jet-responsive-nav-link href="{{ route('mentors') }}" :active="request()->routeIs('mentors')">
                     {{ __('Mentores') }}
                 </x-jet-responsive-nav-link>
@@ -231,7 +240,7 @@
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-jet-responsive-nav-link>
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -247,7 +256,7 @@
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                     this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Sair') }}
                     </x-jet-responsive-nav-link>
                 </form>
 

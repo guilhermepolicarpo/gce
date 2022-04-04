@@ -40,3 +40,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/spiritist-center', functi
 Route::middleware(['auth:sanctum', 'verified'])->get('/types-of-treatment', function () {
     return view('types-of-treatment');
 })->name('typesOfTreatment');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
+    return view('users');
+})->name('users');
