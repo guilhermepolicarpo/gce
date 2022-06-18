@@ -17,16 +17,17 @@
             </div>
             <!-- Search date -->
             <div>
-                <x-datetime-picker
+                
+                {{-- <x-datetime-picker
                     label="{{ __('Data') }}"
                     placeholder="Escolha uma data"
                     wire:model.debounce.500ms="date"
                     without-time
                     without-timezone
                     parse-format="YYYY-MM-DD"
-                />
-                {{-- <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
-                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" /> --}}
+                /> --}}
+                <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
+                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
             </div> 
             <div>
                 <x-dropdown 
@@ -36,19 +37,27 @@
                     <x-slot name="trigger">
                         <x-button label="Filtros" secondary-outline />                        
                     </x-slot>
-                
+                    
                     <x-dropdown.item class="w-full">
-                        <x-select
+                        {{-- <x-select
                             class="w-full"
                             label="{{ __('Status') }}"
                             placeholder="Selecione um status"
                             :options="['Não atendido', 'Atendido']"
                             wire:model="status"
-                        />
+                        /> --}}
+                        <div class="w-full">
+                            <label for="status">{{ __('Status') }}</label>
+                            <select name="status" id="status" wire:model="status" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
+                                <option value="">Todos</option>
+                                <option value="Não atendido">Não atendido</option>
+                                <option value="Atendido">Atendido</option>
+                            </select>
+                        </div>
                     </x-dropdown.item>
     
                     <x-dropdown.item separator>
-                        <x-select
+                        {{-- <x-select
                         label="{{ __('Tratamento') }}"
                         placeholder="Selecione um tratamento"
                         wire:model="treatmentType"
@@ -57,16 +66,33 @@
                             <x-select.option label="{{ $typeOfTreatment->name }}" value="{{ $typeOfTreatment->id }}" />
                             @endforeach
             
-                        </x-select>
+                        </x-select> --}}
+                        <div class="w-full">
+                            <label for="tratamento">{{ __('Tratamento') }}</label>
+                            <select name="tratamento" id="tratamento" wire:model="treatmentType" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
+                                <option value="">Todos</option>
+                                @foreach ($typesOfTreatment as $typeOfTreatment)
+                                    <option value="{{ $typeOfTreatment->id }}">{{ $typeOfTreatment->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </x-dropdown.item>
     
                     <x-dropdown.item separator>
-                        <x-select
+                        {{-- <x-select
                             label="{{ __('Modo') }}"
                             placeholder="Selecione um modo"
                             :options="['Presencial', 'A distância']"
                             wire:model="treatmentMode"
-                        />
+                        /> --}}
+                        <div class="w-full">
+                            <label for="modo">{{ __('Modo') }}</label>
+                            <select name="modo" id="modo" wire:model="treatmentMode" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
+                                <option value="">Todos</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="A distância">A distância</option>
+                            </select>
+                        </div>
                     </x-dropdown.item>
                 </x-dropdown>
             </div>
@@ -216,7 +242,7 @@
                     <div class="grid grid-cols-6 gap-3">
 
                         <div class="col-span-6 sm:col-span-4">                            
-                            <x-select
+                            {{-- <x-select
                                 searchable=false
                                 class="mt-1 block w-full"
                                 label="{{ __('Tipo de tratamento') }}"
@@ -230,17 +256,32 @@
                                     <span>Nenhum tipo de tratamento cadastrado</span>
                                     <a href="#">Cadastrar</a>
                                 @endforelse
-                            </x-select>
+                            </x-select> --}}
+                            <label for="modo">{{ __('Tratamento') }}</label>
+                            <select name="modo" id="modo" wire:model.defer="state.treatment_type_id" wire:keydown.enter="saveScheduling()" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
+                                <option value="">Selecione</option>
+                                @foreach ($typesOfTreatment as $typeOfTreatment)
+                                    <option value="{{ $typeOfTreatment->id }}">{{ $typeOfTreatment->name }}</option>
+                                @endforeach
+                            </select>
+                            <x-jet-input-error for="state.treatment_type_id" class="mt-2" />
                         </div>
 
                         <div class="col-span-6 sm:col-span-2">
-                            <x-select
+                            {{-- <x-select
                                 label="{{ __('Modo') }}"
                                 placeholder="Selecione"
                                 :options="['Presencial', 'A distância']"
                                 wire:model.defer="state.treatment_mode"
                                 wire:keydown.enter="saveScheduling()"
-                            />
+                            /> --}}
+                            <label for="modo">{{ __('Modo') }}</label>
+                            <select name="modo" id="modo" wire:model.defer="state.treatment_mode" wire:keydown.enter="saveScheduling()" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
+                                <option value="">Selecione</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="A distância">A distância</option>
+                            </select>
+                            <x-jet-input-error for="state.treatment_mode" class="mt-2" />
                         </div>
 
                         <div class="col-span-6 sm:col-span-6">
@@ -258,22 +299,29 @@
                                     <a href="#">Cadastrar</a>                                
                                 @endforelse
                             </x-select>
+                            {{-- <label for="paciente">{{ __('Paciente') }}</label>
+                            <select name="paciente" id="paciente" wire:model.defer="state.patient_id" wire:keydown.enter="saveScheduling()" class="w-full">
+                                <option value="">Selecione</option>
+                                @foreach ($patients as $patient)
+                                    <option value="{{ $patient->id }}">{{ $patient->name }} {{ ($patient->birth) ? "- ".$dateFormat->parse($patient->birth)->format('d/m/Y') : '' }}</option>
+                                @endforeach
+                            </select>
+                            <x-jet-input-error for="state.patient_id" class="mt-2" /> --}}
                         </div>
             
-                        <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5">
-                            <x-datetime-picker
+                        <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5 rounded-lg">
+                            {{-- <x-datetime-picker
                                 label="{{ __('Data') }}"
                                 placeholder="Data"
                                 wire:model.defer="state.date"
                                 without-time
                                 without-timezone
-                            />
-                            {{-- <x-jet-label for="date" value="{{ __('Data') }}" />
-                            <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
-                            <x-jet-input-error for="state.date" class="mt-2" /> --}}
-                        </div>
+                            /> --}}
 
-                        
+                            <x-jet-label for="date" value="{{ __('Data') }}" />
+                            <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="mt-1 block w-full text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/7" />
+                            <x-jet-input-error for="state.date" class="mt-2" />
+                        </div>
                     </div>
                 </div>
             </div>

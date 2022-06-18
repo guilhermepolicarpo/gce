@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Schedule;
 use Livewire\WithPagination;
 use App\Models\TypeOfTreatment;
+use Illuminate\Support\Facades\Cache;
 
 class Scheduling extends Component
 {
@@ -17,7 +18,7 @@ class Scheduling extends Component
         'patient_id' => '',
         'date' => '',
         'treatment_type_id' => '',
-        'treatment_mode' => '',
+        'treatment_mode' => 'Presencial',
         'status' => 'Não atendido',
     ];
     public $q;
@@ -30,6 +31,7 @@ class Scheduling extends Component
     public $status = 'Não atendido';
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
+    public $dateFormat;
 
     protected $queryString = [
         'q' => ['except' => ''],
@@ -56,14 +58,16 @@ class Scheduling extends Component
 
     public function mount()
     {   
+        $this->dateFormat = now();
+
         if (!isset($this->date)) {
             $this->date = date('Y-m-d');
-        }        
+        }  
     }
 
     public function render()
     {
-        $appointments = Schedule::with(['patient'])
+        $appointments = Schedule::with(['patient:id,name', 'typeOfTreatment:id,name'])
             ->when($this->q, function($query) {
                 return $query
                     ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%');
@@ -89,9 +93,8 @@ class Scheduling extends Component
 
         return view('livewire.scheduling', [
             'appointments' => $appointments,
-            'dateFormat' => now(),
-            'typesOfTreatment' => TypeOfTreatment::all('id', 'name'),
-            'patients' => Patient::all('id', 'name'),
+            'typesOfTreatment' => TypeOfTreatment::orderBy('name', 'asc')->get(),
+            'patients' => Patient::orderBy('name', 'asc')->get(),	
         ]);
     }
 
@@ -117,6 +120,7 @@ class Scheduling extends Component
     public function confirmSchedulingAddition()
     {
         $this->reset(['state']);
+        $this->resetValidation();
         $this->action = 'adding';
         $this->confirmingSchedulingAddition = true;
     }
@@ -143,6 +147,7 @@ class Scheduling extends Component
         $this->state = $schedule;      
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
+        $this->resetValidation();
     }
 
     public function updatingQ()

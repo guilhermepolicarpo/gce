@@ -69,14 +69,17 @@ class Patients extends Component
         
         $this->carbon = Carbon::now();       
 
-        $patients = Patient::when($this->q, function($query) {
-            return $query->where(function($query){
-                $query->where('name', 'like', '%'. $this->q . '%')
-                ->orWhere('email', 'like', '%' . $this->q . '%')
-                ->orWhere('phone', 'like', '%' . $this->q . '%');
-            });
-        })
-        ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
+        $patients = Patient::with('address')
+            ->when($this->q, function($query) {
+                return $query
+                    ->whereRelation('address', 'address', 'like', '%'.$this->q.'%')
+                    ->orWhere(function($query){
+                        $query->where('name', 'like', '%'. $this->q . '%')
+                        ->orWhere('email', 'like', '%' . $this->q . '%')
+                        ->orWhere('phone', 'like', '%' . $this->q . '%');
+                    });
+            })
+            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
 
         $patients = $patients->paginate(10);
 
