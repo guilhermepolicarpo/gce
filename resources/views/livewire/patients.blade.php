@@ -174,7 +174,7 @@
             
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
-                            <x-jet-input id="patient.email" type="email" class="mt-1 block w-full" wire:model.defer="patient.email" />
+                            <x-jet-input id="patient.email" type="email" class="mt-1 block w-full h-10" wire:model.defer="patient.email" />
                             <x-jet-input-error for="patient.email" class="mt-2" />
                         </div>
 

@@ -47,7 +47,7 @@
                             wire:model="status"
                         /> --}}
                         <div class="w-full">
-                            <label for="status">{{ __('Status') }}</label>
+                            <label for="status">{{ __('Status') }}</label><br/>
                             <select name="status" id="status" wire:model="status" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Todos</option>
                                 <option value="Não atendido">Não atendido</option>
@@ -68,7 +68,7 @@
             
                         </x-select> --}}
                         <div class="w-full">
-                            <label for="tratamento">{{ __('Tratamento') }}</label>
+                            <label for="tratamento">{{ __('Tratamento') }}</label><br/>
                             <select name="tratamento" id="tratamento" wire:model="treatmentType" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Todos</option>
                                 @foreach ($typesOfTreatment as $typeOfTreatment)
@@ -86,7 +86,7 @@
                             wire:model="treatmentMode"
                         /> --}}
                         <div class="w-full">
-                            <label for="modo">{{ __('Modo') }}</label>
+                            <label for="modo">{{ __('Modo') }}</label><br/>
                             <select name="modo" id="modo" wire:model="treatmentMode" class="border-1 border-gray-300 bg-white w-full rounded-lg text-sm focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Todos</option>
                                 <option value="Presencial">Presencial</option>
@@ -285,28 +285,34 @@
                         </div>
 
                         <div class="col-span-6 sm:col-span-6">
+                            <select name="" id="" wire:model='state.patient_id'>
+                                @foreach ($patients as $patient)
+                                    <option value="{{ $patient->id }}">{{ $patient->name }}</option>
+                                @endforeach
+                            </select>
                             <x-select
                                 class="mt-1 block w-full"
                                 label="{{ __('Paciente') }}"
                                 placeholder="Selecione um paciente"
                                 wire:model.defer="state.patient_id"
-                                wire:keydown.enter="saveScheduling()"
+                                {{-- wire:keydown.enter="saveScheduling()" --}}
+                                option-label="patients"
+                                option-value="patients"
                             >
-                                @forelse ($patients as $patient)
-                                    <x-select.option label="{{ $patient->name }}" value="{{ $patient->id }}" />
-                                @empty
-                                    <span>Nenhum paciente cadastrado</span>
-                                    <a href="#">Cadastrar</a>                                
-                                @endforelse
-                            </x-select>
-                            {{-- <label for="paciente">{{ __('Paciente') }}</label>
-                            <select name="paciente" id="paciente" wire:model.defer="state.patient_id" wire:keydown.enter="saveScheduling()" class="w-full">
-                                <option value="">Selecione</option>
                                 @foreach ($patients as $patient)
-                                    <option value="{{ $patient->id }}">{{ $patient->name }} {{ ($patient->birth) ? "- ".$dateFormat->parse($patient->birth)->format('d/m/Y') : '' }}</option>
+                                    <x-select.option 
+                                        label="{{ $patient->name }}" 
+                                        value="{{ $patient->id }}" 
+                                        description="
+                                            {{ $patient->address->address }} -  
+                                            {{ $patient->address->number }},  
+                                            {{ $patient->address->neighborhood }}, 
+                                            {{ $patient->address->city }}
+                                            {{ $patient->address->state }}
+                                        "
+                                    />
                                 @endforeach
-                            </select>
-                            <x-jet-input-error for="state.patient_id" class="mt-2" /> --}}
+                            </x-select> 
                         </div>
             
                         <div class="col-span-6 sm:col-span-6 bg-gray-50 p-5 rounded-lg">

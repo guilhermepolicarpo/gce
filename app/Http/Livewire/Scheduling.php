@@ -32,6 +32,8 @@ class Scheduling extends Component
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $dateFormat;
+    public $patients;
+    public $typesOfTreatment;
 
     protected $queryString = [
         'q' => ['except' => ''],
@@ -58,11 +60,13 @@ class Scheduling extends Component
 
     public function mount()
     {   
+        $this->patients = Patient::with("address")->orderBy('name', 'asc')->get('id', 'name');
+        $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get('id', 'name');
         $this->dateFormat = now();
 
         if (!isset($this->date)) {
             $this->date = date('Y-m-d');
-        }  
+        }
     }
 
     public function render()
@@ -93,8 +97,6 @@ class Scheduling extends Component
 
         return view('livewire.scheduling', [
             'appointments' => $appointments,
-            'typesOfTreatment' => TypeOfTreatment::orderBy('name', 'asc')->get(),
-            'patients' => Patient::orderBy('name', 'asc')->get(),	
         ]);
     }
 
@@ -144,6 +146,7 @@ class Scheduling extends Component
 
     public function confirmSchedulingEditing(Schedule $schedule)
     {
+        $this->reset(['state']);
         $this->state = $schedule;      
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
