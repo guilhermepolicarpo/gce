@@ -19,6 +19,7 @@ class CreateTypesOfTreatmentsTable extends Migration
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('is_the_healing_touch')->default(false);
             $table->timestamps();
         });
     }

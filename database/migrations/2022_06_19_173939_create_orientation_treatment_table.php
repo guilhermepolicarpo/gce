@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMentorsTable extends Migration
+class CreateOrientationTreatmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateMentorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mentors', function (Blueprint $table) {
+        Schema::create('orientation_treatment', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('orientation_id')->constrained('orientations');
+            $table->foreignId('treatment_id')->constrained('treatments');
             $table->unsignedBigInteger('tenant_id')->nullable()->index();
             $table->foreign('tenant_id')->references('id')->on('tenants');
-            $table->string('name');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateMentorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mentors');
+        Schema::dropIfExists('orientation_treatment');
     }
 }
