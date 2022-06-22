@@ -137,6 +137,12 @@
                             <x-textarea wire:model.defer="state.description" label="{{ __('Descrição') }}" placeholder="Descreva aqui esse tipo de tratamento" />
                         </div>
 
+                        <div class="col-span-6 sm:col-span-6">
+                            <div class="flex justify-left items-center">
+                                <x-toggle id="healing-touch" wire:model.defer="state.is_the_healing_touch" class="pt-2" />
+                                <label for="healing-touch" class="ml-3">Este tratamento é um passe</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

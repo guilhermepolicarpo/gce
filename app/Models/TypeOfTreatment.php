@@ -18,6 +18,7 @@ class TypeOfTreatment extends Model
     protected $fillable = [
         'name',
         'description',
+        'is_the_healing_touch',
     ];
 
     public function appointment()
