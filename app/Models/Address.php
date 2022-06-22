@@ -15,7 +15,6 @@ class Address extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'patient_id',
         'address',
         'number',
         'neighborhood',
@@ -27,7 +26,7 @@ class Address extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->hasOne(Patient::class);
     }
 
 }

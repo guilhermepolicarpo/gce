@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Address;
-use App\Models\Schedule;
+use App\Models\Appointment;
 use App\Models\Traits\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +16,7 @@ class Patient extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'address_id',
         'name',
         'email',
         'phone',
@@ -24,12 +25,12 @@ class Patient extends Model
 
     public function address()
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
-    public function schedule()
+    public function appointment()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->hasMany(Appointment::class);
     }
 
 }

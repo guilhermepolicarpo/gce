@@ -4,12 +4,12 @@ namespace App\Http\Livewire;
 
 use App\Models\Patient;
 use Livewire\Component;
-use App\Models\Schedule;
+use App\Models\Appointment;
 use Livewire\WithPagination;
 use App\Models\TypeOfTreatment;
 use Illuminate\Support\Facades\Cache;
 
-class Scheduling extends Component
+class Appointments extends Component
 {
     use WithPagination;
 
@@ -19,16 +19,16 @@ class Scheduling extends Component
         'date' => '',
         'treatment_type_id' => '',
         'treatment_mode' => 'Presencial',
-        'status' => 'Não atendido',
+        'treatment_id' => '',
     ];
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
     public $action;
     public $date;
+    public $status;
     public $treatmentMode;
     public $treatmentType;
-    public $status = 'Não atendido';
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $dateFormat;
@@ -40,7 +40,7 @@ class Scheduling extends Component
         'sortBy' => ['except' => 'id'],
         'sortDesc' => ['except' => true],
         'date' => ['except' => ''],
-        'status' => ['except' => 'Não atendido'],
+        'status' => ['except' => 'false'],
         'treatmentType' => ['except' => ''],
     ];
 
@@ -60,8 +60,8 @@ class Scheduling extends Component
 
     public function mount()
     {   
-        $this->patients = Patient::with("address")->orderBy('name', 'asc')->get('id', 'name');
-        $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get('id', 'name');
+        $this->patients = Patient::with('address')->orderBy('name', 'asc')->get();
+        $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get();
         $this->dateFormat = now();
 
         if (!isset($this->date)) {
@@ -71,7 +71,7 @@ class Scheduling extends Component
 
     public function render()
     {
-        $appointments = Schedule::with(['patient:id,name', 'typeOfTreatment:id,name'])
+        $appointments = Appointment::with(['patient:id,name', 'typeOfTreatment:id,name'])
             ->when($this->q, function($query) {
                 return $query
                     ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%');
@@ -81,8 +81,13 @@ class Scheduling extends Component
                     ->where('treatment_mode', '=', $this->treatmentMode);
             })
             ->when($this->status, function($query) {
-                return $query
-                    ->where('status', '=', $this->status);
+                if ($this->status == "Não atendido") {
+                    return $query
+                        ->whereNull('treatment_id');
+                } else {
+                    return $query
+                        ->whereNotNull('treatment_id');
+                }
             })
             ->when($this->treatmentType, function($query) {
                 return $query
@@ -113,9 +118,9 @@ class Scheduling extends Component
         $this->confirmingSchedulingDeletion = $id;
     }
 
-    public function deleteScheduling(Schedule $schedule)
+    public function deleteScheduling(Appointment $appointment)
     {
-        $schedule->delete();
+        $appointment->delete();
         $this->confirmingSchedulingDeletion = false;
     }
 
@@ -131,23 +136,22 @@ class Scheduling extends Component
     {
         $this->validate();
 
-        Schedule::updateOrCreate([
+        Appointment::updateOrCreate([
             'id' => $this->state['id'],
         ],[
             'patient_id' =>  $this->state['patient_id'],
             'date' => $this->state['date'],
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
-            'status' => $this->state['status']
         ]);
 
         $this->confirmingSchedulingAddition = false;
     }
 
-    public function confirmSchedulingEditing(Schedule $schedule)
+    public function confirmSchedulingEditing(Appointment $appointment)
     {
         $this->reset(['state']);
-        $this->state = $schedule;      
+        $this->state = $appointment;      
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
         $this->resetValidation();

@@ -135,7 +135,7 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('status')" class="uppercase">Status</button>
-                                            <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                            <x-sort-icon sortField="treatment_id" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col" class="relative px-6 py-3"></th>
@@ -169,11 +169,11 @@
                                        {{ $appointment->treatment_mode }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @if ($appointment->status == 'Não atendido')
-                                            bg-red-100 text-red-800
-                                            @else
-                                            bg-green-100 text-green-800
-                                        @endif"> {{ $appointment->status }} </span>
+                                        @isset($appointment->status)
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"> Atendido </span>
+                                        @else
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"> Não atendido </span>
+                                        @endisset
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">

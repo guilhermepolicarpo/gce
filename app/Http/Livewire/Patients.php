@@ -21,10 +21,10 @@ class Patients extends Component
     public $action;
     public $patient = [
         'id' => null,
-        'addressId' => null,
         'email' => null,
         'phone' => null,
         'birth' => null,
+        'address_id' => null,
         'address' => '',
         'number' => '',
         'neighborhood' => '',
@@ -127,7 +127,7 @@ class Patients extends Component
             'email' => $patient->email,
             'phone' => $patient->phone,
             'birth' => $patient->birth,
-            'addressId' => $patient->address->id,
+            'address_id' => $patient->address_id,
             'address' => $patient->address->address,
             'number' => $patient->address->number,
             'neighborhood' => $patient->address->neighborhood,
@@ -147,26 +147,33 @@ class Patients extends Component
 
         DB::beginTransaction();
 
-        $patient = Patient::updateOrCreate([
-            'id' => $this->patient['id'],
-        ],[
-            'name' => $this->patient['name'],
-            'email' => $this->patient['email'],
-            'phone' => $this->patient['phone'],
-            'birth' => $this->patient['birth']
-        ]);
+        $address = Address::updateOrCreate(
+            [
+                'id' => $this->patient['address_id']
+            ],
+            [
+                'address' => $this->patient['address'],
+                'number' => $this->patient['number'],
+                'neighborhood' => $this->patient['neighborhood'],
+                'zip_code' => $this->patient['zip_code'],
+                'complement' => $this->patient['complement'],
+                'state' => $this->patient['state'],
+                'city' => $this->patient['city']
+            ]
+            );
 
-        $patient->address()->updateOrCreate([
-            'id' => $this->patient['addressId'],
-        ],[
-            'address' => $this->patient['address'],
-            'number' => $this->patient['number'],
-            'neighborhood' => $this->patient['neighborhood'],
-            'zip_code' => $this->patient['zip_code'],
-            'complement' => $this->patient['complement'],
-            'state' => $this->patient['state'],
-            'city' => $this->patient['city']
-        ]);
+        Patient::updateOrCreate(
+            [
+                'id' => $this->patient['id']
+            ],
+            [
+                'address_id' => $address->id,
+                'name' => $this->patient['name'],
+                'email' => $this->patient['email'],
+                'phone' => $this->patient['phone'],
+                'birth' => $this->patient['birth']
+            ]
+        );
     
         DB::commit();
 

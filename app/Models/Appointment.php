@@ -8,7 +8,7 @@ use App\Models\Traits\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Schedule extends Model
+class Appointment extends Model
 {
     use HasFactory;
     use Tenantable;
@@ -19,7 +19,7 @@ class Schedule extends Model
         'patient_id',
         'treatment_type_id',
         'date',
-        'status',
+        'treatment_id',
         'treatment_mode',
     ];
 
@@ -31,5 +31,10 @@ class Schedule extends Model
     public function typeOfTreatment()
     {
         return $this->belongsTo(TypeOfTreatment::class, 'treatment_type_id');
+    }
+
+    public function treatment()
+    {
+        return $this->belongsTo(Treatment::class);
     }
 }
