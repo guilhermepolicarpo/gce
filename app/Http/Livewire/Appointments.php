@@ -26,7 +26,7 @@ class Appointments extends Component
     public $sortDesc = true;
     public $action;
     public $date;
-    public $status;
+    public $status = "Não atendido";
     public $treatmentMode;
     public $treatmentType;
     public $confirmingSchedulingDeletion = false;
@@ -40,7 +40,7 @@ class Appointments extends Component
         'sortBy' => ['except' => 'id'],
         'sortDesc' => ['except' => true],
         'date' => ['except' => ''],
-        'status' => ['except' => 'false'],
+        'status' => ['except' => ''],
         'treatmentType' => ['except' => ''],
     ];
 

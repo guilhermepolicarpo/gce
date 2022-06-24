@@ -74,17 +74,10 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div>
-                                                    <div class="text-base font-medium text-gray-500">
-                                                        Nenhum Tipo de Tratamento encontrado.
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <td class="p-5">
+                                            Nenhum tipo de tratamento encontrado.
                                         </td>
                                     </tr>
-                                    <tr><td></td></tr>
                                 @endforelse                                
                             </tbody>
                         </table>

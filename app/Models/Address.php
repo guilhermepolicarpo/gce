@@ -29,4 +29,9 @@ class Address extends Model
         return $this->hasOne(Patient::class);
     }
 
+    public function tenantInformation()
+    {
+        return $this->hasOne(TenantInformation::class);
+    }
+
 }
