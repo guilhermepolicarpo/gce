@@ -100,6 +100,15 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                            </svg>                                              
+                                        </button>
+                                        {{-- <div id="tooltip-default" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                            Tooltip content
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div> --}}
                                         <button wire:click="confirmPatientEditing({{ $patient->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -197,13 +206,13 @@
                         </h6>
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                            <x-jet-input id="zip_code" type="text" class="mt-1 block w-full" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
+                            <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="mt-1 block w-full h-10" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
                             <x-jet-input-error for="patient.zip_code" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                            <x-jet-input id="address" type="text" class="mt-1 block w-full" wire:model.defer="patient.address" />
+                            <x-jet-input id="address" type="text" class="mt-1 block w-full h-10" wire:model.defer="patient.address" />
                             <x-jet-input-error for="patient.address" class="mt-2" />
                         </div>
 

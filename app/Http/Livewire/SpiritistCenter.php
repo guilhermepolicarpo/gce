@@ -6,6 +6,7 @@ use App\Models\Tenant;
 use App\Models\Address;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use App\Models\TenantInformation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Http;
 class SpiritistCenter extends Component
 {
     use WithPagination;
+    use WithFileUploads;
     
+    public $logo;
     public $state = [];
     public $information = [
         'address' => [
@@ -28,6 +31,7 @@ class SpiritistCenter extends Component
 
     protected $rules = [
         'state.name' => 'required|string|min:4|max:255',
+        'state.logo_path' => 'nullable|image|max:2048',
         'information.address.id' => 'nullable|exists:addresses,id',
         'information.address.address' => 'required|string|min:4|max:255',
         'information.address.number' => 'required|string',
@@ -59,9 +63,11 @@ class SpiritistCenter extends Component
     {
         $this->validate([
             'state.name' => 'required|string|max:255',
+            'state.logo_path' => 'nullable|image|max:2048',
         ]);
 
         $this->state->update();
+        $this->state->logo_path = $this->logo->store('public/logos');
     }
 
     public function updateSpiritistCenterAddress()
