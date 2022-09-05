@@ -22,8 +22,8 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedBigInteger('treatment_type_id')->nullable()->index();
             $table->foreign('treatment_type_id')->references('id')->on('types_of_treatments');
             $table->date('date');
-            $table->unsignedBigInteger('treatment_id')->nullable()->index();
-            $table->foreign('treatment_id')->references('id')->on('treatments');
+            $table->unsignedBigInteger('status')->nullable()->index();
+            $table->foreign('status')->references('id')->on('treatments');
             $table->enum('treatment_mode', ['Presencial', 'A distância']);
             $table->timestamps();
         });

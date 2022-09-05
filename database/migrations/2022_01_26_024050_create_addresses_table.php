@@ -18,11 +18,11 @@ class CreateAddressesTable extends Migration
             $table->unsignedBigInteger('tenant_id')->nullable()->index();
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->string('address');
-            $table->string('number');
-            $table->string('neighborhood');
+            $table->string('number')->nullable();
+            $table->string('neighborhood')->nullable();
             $table->string('zip_code')->nullable();
-            $table->char('state', 2);
-            $table->string('city');
+            $table->char('state', 2)->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
         });
     }
