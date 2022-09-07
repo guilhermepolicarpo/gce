@@ -19,7 +19,7 @@ class Appointments extends Component
         'date' => '',
         'treatment_type_id' => '',
         'treatment_mode' => 'Presencial',
-        'treatment_id' => '',
+        'status' => '',
     ];
     public $q;
     public $sortBy = 'id';
@@ -32,7 +32,7 @@ class Appointments extends Component
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $dateFormat;
-    public $patients;
+    //public $patients;
     public $typesOfTreatment;
 
     protected $queryString = [
@@ -60,7 +60,7 @@ class Appointments extends Component
 
     public function mount()
     {   
-        $this->patients = Patient::with('address')->orderBy('name', 'asc')->get();
+        //$this->patients = Patient::with('address')->orderBy('name', 'asc')->get();
         $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get();
         $this->dateFormat = now();
 
@@ -70,8 +70,8 @@ class Appointments extends Component
     }
 
     public function render()
-    {
-        $appointments = Appointment::with(['patient:id,name', 'typeOfTreatment:id,name'])
+    {        
+        $appointments = Appointment::with(['patient', 'typeOfTreatment'])
             ->when($this->q, function($query) {
                 return $query
                     ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%');
@@ -83,10 +83,10 @@ class Appointments extends Component
             ->when($this->status, function($query) {
                 if ($this->status == "Não atendido") {
                     return $query
-                        ->whereNull('treatment_id');
+                        ->whereNull('status');
                 } else {
                     return $query
-                        ->whereNotNull('treatment_id');
+                        ->whereNotNull('status');
                 }
             })
             ->when($this->treatmentType, function($query) {
@@ -100,8 +100,11 @@ class Appointments extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
             ->paginate(10);
 
+        $patients = Patient::with('address')->orderBy('name', 'asc')->get();
+
         return view('livewire.scheduling', [
             'appointments' => $appointments,
+            'patients' => $patients,
         ]);
     }
 
@@ -151,7 +154,7 @@ class Appointments extends Component
     public function confirmSchedulingEditing(Appointment $appointment)
     {
         $this->reset(['state']);
-        $this->state = $appointment;      
+        $this->state = $appointment;
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
         $this->resetValidation();

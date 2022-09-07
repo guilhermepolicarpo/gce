@@ -13,7 +13,7 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
-        @wireUiScripts
+        <wireui:scripts />
         @livewireStyles
 
         <!-- Scripts -->
@@ -42,6 +42,7 @@
 
         @stack('modals')
 
+        
         @livewireScripts
     </body>
 </html>

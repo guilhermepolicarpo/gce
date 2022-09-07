@@ -27,11 +27,12 @@ class SpiritistCenter extends Component
             'state' => '',
             'city' => ''
         ],
+        'logo_path' => null,
     ];
 
     protected $rules = [
         'state.name' => 'required|string|min:4|max:255',
-        'state.logo_path' => 'nullable|image|max:2048',
+        'logo' => 'nullable|image',
         'information.address.id' => 'nullable|exists:addresses,id',
         'information.address.address' => 'required|string|min:4|max:255',
         'information.address.number' => 'required|string',
@@ -63,11 +64,12 @@ class SpiritistCenter extends Component
     {
         $this->validate([
             'state.name' => 'required|string|max:255',
-            'state.logo_path' => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|max:2048',
         ]);
 
+        
+        $this->information['logo_path'] = $this->logo->store('public/logos');
         $this->state->update();
-        $this->state->logo_path = $this->logo->store('public/logos');
     }
 
     public function updateSpiritistCenterAddress()

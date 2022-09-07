@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SearchPatient;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +45,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/types-of-treatment', func
 Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
     return view('users');
 })->name('users');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/search-patient', SearchPatient::class)->name('searchPatient');
+

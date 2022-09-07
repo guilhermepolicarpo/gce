@@ -29,7 +29,6 @@ class Patients extends Component
         'number' => '',
         'neighborhood' => '',
         'zip_code' => '',
-        'complement' => '',
         'state' => 'MG',
         'city' => ''
     ];
@@ -52,7 +51,6 @@ class Patients extends Component
         'patient.number' => 'nullable|string',
         'patient.neighborhood' => 'nullable|string',
         'patient.zip_code' => 'nullable|string',
-        'patient.complement' => 'nullable|string',
         'patient.state' => 'nullable|string|max:2',
         'patient.city' => 'nullable|string'        
     ];
@@ -132,7 +130,6 @@ class Patients extends Component
             'number' => $patient->address->number,
             'neighborhood' => $patient->address->neighborhood,
             'zip_code' => $patient->address->zip_code,
-            'complement' => $patient->address->complement,
             'state' => $patient->address->state,
             'city' => $patient->address->city
         ];
@@ -156,7 +153,6 @@ class Patients extends Component
                 'number' => $this->patient['number'],
                 'neighborhood' => $this->patient['neighborhood'],
                 'zip_code' => $this->patient['zip_code'],
-                'complement' => $this->patient['complement'],
                 'state' => $this->patient['state'],
                 'city' => $this->patient['city']
             ]

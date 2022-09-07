@@ -22,11 +22,13 @@
                                 <img src="{{ $logo->temporaryUrl() }}" alt="" class="h-20 w-52 object-cover">
                             </span>
                         </div>      
-                    @else
+                    @elseif(isset($information->logo_path))
                         <!-- Current Profile Photo -->
                         <div class="mt-2" >
-                            <img src="{{ Storage::url($state->logo_path) }}" alt="" class="h-20 w-52 object-cover">
-                        </div>        
+                            <img src="{{ Storage::url($information->logo_path) }}" alt="" class="h-20 w-52 object-cover">
+                        </div>
+                    @else
+                        nenhuma logo
                     @endif
                                         
                     {{-- 
