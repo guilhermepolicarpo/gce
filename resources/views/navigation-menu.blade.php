@@ -57,6 +57,14 @@
                                 {{ __('Mentores') }}
                             </x-jet-dropdown-link>
 
+                            <x-jet-dropdown-link href="{{ route('orientatios') }}">
+                                {{ __('Orientações') }}
+                            </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('medicines') }}">
+                                {{ __('Medicamentos') }}
+                            </x-jet-dropdown-link>
+
                             <x-jet-dropdown-link href="{{ route('typesOfTreatment') }}">
                                 {{ __('Tipos de Tratamento') }}
                             </x-jet-dropdown-link>
@@ -212,6 +220,14 @@
 
                 <x-jet-responsive-nav-link href="{{ route('mentors') }}" :active="request()->routeIs('mentors')">
                     {{ __('Mentores') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('orientatios') }}" :active="request()->routeIs('orientatios')">
+                    {{ __('Orientações') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('medicines') }}" :active="request()->routeIs('medicines')">
+                    {{ __('Medicamentos') }}
                 </x-jet-responsive-nav-link>
 
                 <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}" :active="request()->routeIs('typesOfTreatment')">

@@ -46,5 +46,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
     return view('users');
 })->name('users');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/orientatios', function () {
+    return view('orientatios');
+})->name('orientatios');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/medicines', function () {
+    return view('medicines');
+})->name('medicines');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/search-patient', SearchPatient::class)->name('searchPatient');
 

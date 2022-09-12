@@ -32,7 +32,6 @@ class Appointments extends Component
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $dateFormat;
-    //public $patients;
     public $typesOfTreatment;
 
     protected $queryString = [
@@ -60,7 +59,6 @@ class Appointments extends Component
 
     public function mount()
     {   
-        //$this->patients = Patient::with('address')->orderBy('name', 'asc')->get();
         $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get();
         $this->dateFormat = now();
 
@@ -100,11 +98,8 @@ class Appointments extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
             ->paginate(10);
 
-        $patients = Patient::with('address')->orderBy('name', 'asc')->get();
-
         return view('livewire.scheduling', [
             'appointments' => $appointments,
-            'patients' => $patients,
         ]);
     }
 

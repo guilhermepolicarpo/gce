@@ -237,6 +237,7 @@
                                 :async-data="route('searchPatient')" 
                                 option-label="name" 
                                 option-value="id" 
+                                option-description="full_address"
                                 wire:model.defer="state.patient_id" 
                                 class="mt-1 block w-full"
                             />                       
