@@ -15,7 +15,20 @@ class Attachment extends Model
 
     protected $fillable = [
         'treatment_id', 
-        'path'
+        'path',
+        'tenant_id'
     ];
+
+    /**
+     * Get the treatment associated with the Attachment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function treatment(): HasOne
+    {
+        return $this->hasOne(Treatment::class);
+    }
+
+
 
 }

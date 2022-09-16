@@ -15,4 +15,14 @@ class Mentor extends Model
 
     protected $fillable = ['name'];
 
+    /**
+     * Get the treatment that owns the Mentor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function treatment(): BelongsTo
+    {
+        return $this->belongsTo(Treatment::class);
+    }
+
 }

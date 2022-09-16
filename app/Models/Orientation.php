@@ -15,7 +15,18 @@ class Orientation extends Model
 
     protected $fillable = [
         'name', 
-        'description'
+        'description',
+        'tenant_id'
     ];
+
+    /**
+     * The treatments that belong to the Orientation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function treatments(): BelongsToMany
+    {
+        return $this->belongsToMany(Treatment::class);
+    }
 
 }
