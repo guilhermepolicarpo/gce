@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchPatient;
+use App\Http\Controllers\SearchMentorController;
+use App\Http\Controllers\SearchMedicinesController;
+use App\Http\Controllers\SearchOrientationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +57,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/medicines', function () {
     return view('medicines');
 })->name('medicines');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/search-patient', SearchPatient::class)->name('searchPatient');
 
+// Async Search
+Route::middleware(['auth:sanctum', 'verified'])->get('/search-patient', SearchPatient::class)->name('searchPatient');
+Route::middleware(['auth:sanctum', 'verified'])->get('/search-mentor', SearchMentorController::class)->name('searchMentor');
+Route::middleware(['auth:sanctum', 'verified'])->get('/search-medicine', SearchMedicinesController::class)->name('searchMedicine');
+Route::middleware(['auth:sanctum', 'verified'])->get('/search-orientation', SearchOrientationsController::class)->name('searchOrientation');

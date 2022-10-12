@@ -24,9 +24,9 @@ class Orientation extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function treatments(): BelongsToMany
+    public function treatments()
     {
-        return $this->belongsToMany(Treatment::class);
+        return $this->belongsToMany(Treatment::class)->withPivot(['tenant_id'])->withTimestamps();
     }
 
 }

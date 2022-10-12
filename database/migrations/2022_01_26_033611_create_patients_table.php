@@ -20,7 +20,7 @@ class CreatePatientsTable extends Migration
             $table->unsignedBigInteger('address_id')->nullable()->index();
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->string('name');
-            $table->string('email')->nullable()->unique();
+            $table->string('email')->nullable();
             $table->string('phone', 20)->nullable();
             $table->date('birth')->nullable();
             $table->timestamps();

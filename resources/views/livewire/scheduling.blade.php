@@ -21,10 +21,7 @@
                 <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="text-gray-500 sm:text-sm border-gray-300 focus:outline-none focus:border-indigo-500/75 mt-1 block w-full" />
             </div> 
             <div>
-                <x-dropdown 
-                persistent=true 
-                align=left
-                >
+                <x-dropdown persistent=true align=left>
                     <x-slot name="trigger">                        
                         <x-button label="Filtros" icon="filter" secondary-outline />  
                     </x-slot>
@@ -143,23 +140,29 @@
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"> Não atendido </span>
                                         @endisset
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <button class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                                            </svg>
-                                        </button>                                      
-                                        <button wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                              </svg>
+                                    <td class="px-6 py-4 whitespace-nowrap flex flex-row content-center items-center justify-end"> 
+                                        
+                                      @isset($appointment->status)
+                                        <button class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                          {{ __('Ver atend.') }}
                                         </button>
-                                        <button wire:click="confirmSchedulingDeletion({{ $appointment->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                            </svg>
+                                      @else
+                                        <button wire:click="confirmTreatmentAddition({{ $appointment->id }})" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                            {{ __('Atender') }}
+                                        </button>                                       
+                                      @endisset
+                                        
+                                        <button wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="mr-3 ml-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                            </svg>                                                                                           
                                         </button>
+                                        <button wire:click="confirmSchedulingDeletion({{ $appointment->id }})" wire:loading.attr='disabled'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600 stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>                                              
+                                        </button>
+
                                     </td>
                                 </tr>
                                 @empty
@@ -269,4 +272,182 @@
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
+
+
+    <!-- Add Treatment Modal -->
+    <x-jet-dialog-modal wire:model="confirmingTreatmentAddition" maxWidth="4xl" >
+        <x-slot name="title">
+            {{ __('Atender paciente') }}
+        </x-slot>
+
+        <x-slot name="content">
+                          
+            <div class="bg-gray-50 px-4 py-5 sm:p-6 rounded shadow md:grid md:grid-cols-2 md:gap-6">
+                <div class="md:col-span-1">
+                    <p class="text-lg font-semibold">
+                        @isset($treatment->patient->name)
+                            {{ $treatment->patient->name }}
+                        @endisset 
+                    </p>
+                    
+                    @isset($treatment->patient->birth)
+                        <p>{{ "Idade: ".$dateFormat->parse($treatment->patient->birth)->diff(now())->y." anos" }} </p>
+                    @endisset 
+                    
+                    @isset($treatment->patient->address->address)
+                        <p>{{ $treatment->patient->address->address.", ".$treatment->patient->address->number." - ".$treatment->patient->address->neighborhood}}</p>
+                    @endisset
+                    @isset($treatment->patient->address->city)
+                        <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
+                    @endisset
+                    @isset($treatment->patient->phone)
+                        <p>{{ $treatment->patient->phone}}</p>
+                    @endisset
+                </div>
+                <div class="mt-5 md:col-span-1 md:mt-7">
+                    @isset($treatment->typeOfTreatment->name)
+                        <p>{{ 'Atendimento: '.$treatment->typeOfTreatment->name }}</p>
+                    @endisset
+                    @isset($treatment->treatment_mode)
+                        <p>{{ 'Modo: '.$treatment->treatment_mode }}</p>
+                    @endisset
+                    @isset($treatment->treatment_mode)
+                        <p>{{ 'Data do atendimento: '.$dateFormat->parse($treatment->date)->format('d/m/Y') }}</p>
+                    @endisset
+                </div>
+            </div>
+              
+            <div class="mt-10">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Atendimento') }}</h3>
+                            <p class="mt-1 text-sm text-gray-600">Insira os medicamentos, orientações e o mentor que realizou o atendimento.</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 md:col-span-2 md:mt-0">
+                        <div class="shadow sm:rounded-md">
+                            <div class="bg-gray-50 px-4 py-5 sm:p-6">
+                                <div class="grid grid-cols-6 gap-6">
+                                    <div class="col-span-6 sm:col-span-6">
+                                        <x-select 
+                                          label="{{ __('Fluídicos') }}" 
+                                          placeholder="Selecione um ou mais fluídicos" 
+                                          :async-data="route('searchMedicine')" 
+                                          option-label="name" 
+                                          option-value="id" 
+                                          wire:model.defer="treatmentState.medicines" 
+                                          multiselect="true" 
+                                          class="mt-1 block w-full"
+                                        />
+
+                                        <div class="col-span-6 sm:col-span-6 mt-3">
+                                            <x-select 
+                                              label="{{ __('Orientações') }}" 
+                                              placeholder="Selecione uma ou mais orientações" 
+                                              :async-data="route('searchOrientation')" 
+                                              option-label="name" 
+                                              option-value="id" 
+                                              wire:model.defer="treatmentState.orientations" 
+                                              multiselect="true" 
+                                              class="mt-1 block w-full"
+                                            />
+                                        </div>
+
+                                        <div class="col-span-6 sm:col-span-6 mt-3">
+                                            <x-select 
+                                                label="{{ __('Mentor') }}" 
+                                                placeholder="Selecione um mentor" 
+                                                :async-data="route('searchMentor')" 
+                                                option-label="name" 
+                                                option-value="id"
+                                                wire:model.defer="treatmentState.mentor_id" 
+                                                class="mt-1 block w-full"
+                                            />
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                     </div>
+                </div>
+            </div>
+
+            <div class="hidden sm:block" aria-hidden="true">
+                <div class="py-8">
+                    <div class="border-t border-gray-200"></div>
+                </div>
+            </div>
+              
+            <div class="mt-10 sm:mt-0">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Outras anotações') }}</h3>
+                            <p class="mt-1 text-sm text-gray-600">Insira outras orientações ou observações</p>
+                        </div>
+                    </div>
+                  <div class="mt-5 md:col-span-2 md:mt-0">
+                    <div class="shadow sm:rounded-md">
+                      <div class="bg-gray-50 px-4 py-5 sm:p-6">
+                        <div class="grid grid-cols-6 gap-6">
+                          <div class="col-span-6 sm:col-span-6">
+                            <x-textarea label="Anotações" placeholder="Digite aqui as observações" wire:model.defer="treatmentState.notes" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="hidden sm:block" aria-hidden="true">
+                <div class="py-8">
+                    <div class="border-t border-gray-200"></div>
+                </div>
+            </div>
+                            
+            <div class="mt-10 sm:mt-0 mb-10">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Imagens e anexos') }}</h3>
+                            <p class="mt-1 text-sm text-gray-600">Insira a receita ou outros anexos referente a este atendimento</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 md:col-span-2 md:mt-0">
+                        <div class="shadow sm:rounded-md">
+                            <div class="bg-gray-50 px-4 py-5 sm:p-6">
+                                <div class="grid grid-cols-6 gap-6">
+                                    <div class="col-span-6 sm:col-span-6">
+                                        <label for="attachment" class="text-sm text-gray-700">Anexos</label><br>
+                                        <input id="attachment" type="file">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('confirmingTreatmentAddition', false)" wire:loading.attr="disabled" class="border-0 bg-transparent shadow-inherit">
+                {{ __('Cancelar') }}
+            </x-jet-secondary-button>
+            
+            <x-jet-secondary-button>
+                {{ __('Salvar') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-3" wire:click="saveTreatment()" wire:loading.attr="disabled">
+                {{ __('Salvar e Finalizar') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    
+        
 </div>

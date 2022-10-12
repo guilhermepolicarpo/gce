@@ -10,7 +10,11 @@ class Orientations extends Component
 {
     use WithPagination;
 
-    public $state = ['id' => ''];
+    public $state = [
+        'id' => null,
+        'name' => null,
+        'description' => null,
+    ];
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;

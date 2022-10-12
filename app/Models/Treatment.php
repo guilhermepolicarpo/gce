@@ -16,7 +16,6 @@ class Treatment extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'tenant_id',
         'patient_id',
         'treatment_type_id',
         'mentor_id',
@@ -25,41 +24,24 @@ class Treatment extends Model
         'notes',
     ];
     
-    /**
-     * The orientations that belong to the Treatment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function orientations(): BelongsToMany
+    
+    public function orientations()
     {
-        return $this->belongsToMany(Orientation::class);
-    }
-
-    /**
-     * The medicines that belong to the Treatment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function medicines(): BelongsToMany
-    {
-        return $this->belongsToMany(Medicine::class);
+        return $this->belongsToMany(Orientation::class)->withPivot(['tenant_id'])->withTimestamps();
     }
     
-    /**
-     * Get the mentor associated with the Treatment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
+    public function medicines()
+    {
+        return $this->belongsToMany(Medicine::class)->withPivot(['tenant_id'])->withTimestamps();
+    }
+    
+    
     public function mentor(): HasOne
     {
         return $this->hasOne(Mentor::class);
     }
 
-    /**
-     * Get the attachment that owns the Treatment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
     public function attachment(): BelongsTo
     {
         return $this->belongsTo(Attachment::class);

@@ -10,7 +10,11 @@ class Medicines extends Component
 {
     use WithPagination;
 
-    public $state = ['id' => ''];
+    public $state = [
+        'id' => '',
+        'name' => null,
+        'description' => null
+    ];
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;

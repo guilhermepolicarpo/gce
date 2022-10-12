@@ -4,10 +4,14 @@ namespace App\Http\Livewire;
 
 use App\Models\Patient;
 use Livewire\Component;
+use App\Models\Treatment;
 use App\Models\Appointment;
+use Illuminate\Support\Arr;
 use Livewire\WithPagination;
 use App\Models\TypeOfTreatment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Livewire\TypesOfTreatment;
 
 class Appointments extends Component
 {
@@ -21,6 +25,18 @@ class Appointments extends Component
         'treatment_mode' => 'Presencial',
         'status' => '',
     ];
+    public $treatmentState = [
+        'patient_id' => null,
+        'treatment_type_id' => null,
+        'mentor_id' => null,
+        'date' => null,
+        'treatment_mode' => null,
+        'notes' => null,
+        'orientations' => [],
+        'medicines' => [],
+    ];
+    public $treatment;
+    public $patient;
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
@@ -31,6 +47,7 @@ class Appointments extends Component
     public $treatmentType;
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
+    public $confirmingTreatmentAddition = false;
     public $dateFormat;
     public $typesOfTreatment;
 
@@ -153,6 +170,86 @@ class Appointments extends Component
         $this->action = 'editing';
         $this->confirmingSchedulingAddition = true;
         $this->resetValidation();
+    }
+
+
+
+    // Treatment
+    public function confirmTreatmentAddition(Appointment $appointment)
+    {
+        $this->reset(['treatmentState']);
+        $this->resetValidation();
+
+        $treatmentType = TypeOfTreatment::where('id', $appointment->treatment_type_id)->first();
+        
+        if (!$appointment->status) {
+            
+            if($treatmentType->is_the_healing_touch) {
+    
+                DB::beginTransaction();
+    
+                $treatment = Treatment::create([
+                    'patient_id' => $appointment->patient_id,
+                    'treatment_type_id' => $appointment->treatment_type_id,
+                    'treatment_mode' => $appointment->treatment_mode,
+                    'date' => $appointment->date,
+                ]);
+                
+                $appointment->status = $treatment->id;
+                $appointment->save();
+                
+                DB::commit();
+    
+            } else {
+    
+                $this->reset(['treatment']);
+                $this->treatment = Appointment::with(['patient.address', 'typeOfTreatment'])->where('id', $appointment->id)->first();                
+                $this->confirmingTreatmentAddition = true;         
+            }
+        }
+    }
+
+    public function saveTreatment()
+    {
+        $this->treatmentState['tenant_id'] = $this->treatment->tenant_id;
+        $this->treatmentState['patient_id'] = $this->treatment->patient_id;
+        $this->treatmentState['treatment_type_id'] = $this->treatment->treatment_type_id;
+        $this->treatmentState['date'] = $this->treatment->date;
+        $this->treatmentState['treatment_mode'] = $this->treatment->treatment_mode;
+        
+        $this->validate([
+            'treatmentState.patient_id' => 'required|numeric',
+            'treatmentState.treatment_type_id' => 'required|numeric',
+            'treatmentState.mentor_id' => 'required|numeric',
+            'treatmentState.date' => 'required|date',
+            'treatmentState.treatment_mode' => 'required|string',
+            'treatmentState.notes' => 'nullable|string',
+            'treatmentState.orientations' => 'required',
+            'treatmentState.medicines' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        
+        $treatment = Treatment::create([
+            'patient_id' => $this->treatmentState['patient_id'],
+            'treatment_type_id' => $this->treatmentState['treatment_type_id'],
+            'mentor_id' => $this->treatmentState['mentor_id'],
+            'treatment_mode' => $this->treatmentState['treatment_mode'],
+            'date' => $this->treatmentState['date'],
+            'notes' => $this->treatmentState['notes'],
+        ]);
+
+        $treatment->orientations()->attach($this->treatmentState['orientations'], ['tenant_id' => $treatment->tenant_id]);
+        $treatment->medicines()->attach($this->treatmentState['medicines'], ['tenant_id' => $treatment->tenant_id]);
+
+        $appointment = Appointment::where('id', $this->treatment->id)->first();
+        $appointment->status = $treatment->id;
+        $appointment->save();
+
+        DB::commit();
+
+        $this->confirmingTreatmentAddition = false;         
+
     }
 
     public function updatingQ()
