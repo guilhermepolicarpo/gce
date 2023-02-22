@@ -170,99 +170,100 @@
         <x-slot name="content">
             <div class="mb-10 sm:mb-3">
                 <div class="md:col-span-2">
-                    <div class="grid grid-cols-6 gap-3">
+                    <div class="grid grid-cols-12 gap-3">
 
-                        <h6 class="col-span-6 mt-3 mb-2 text-sm font-bold text-gray-400 uppercase sm:col-span-6">
+                        <h6 class="col-span-12 mt-3 mb-2 text-sm font-bold text-gray-400 uppercase sm:col-span-12">
                             Informações pessoais
                         </h6>
 
-                        <div class="col-span-6 sm:col-span-4">
+                        <div class="col-span-12 sm:col-span-8">
                             <x-jet-label for="name" value="{{ __('Nome') }}" />
                             <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="patient.name" />
                             <x-jet-input-error for="patient.name" class="mt-2" />
                         </div>
             
-                        <div class="col-span-6 sm:col-span-2">
+                        <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="birth" value="{{ __('Nascimento') }}" />
                             <x-jet-input id="birth" type="date" class="block w-full mt-1" wire:model.defer="patient.birth" />
                             <x-jet-input-error for="patient.birth" class="mt-2" />
                         </div>
             
-                        <div class="col-span-6 sm:col-span-4">
+                        <div class="col-span-6 sm:col-span-8">
                             <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
                             <x-jet-input id="patient.email" type="email" class="block w-full h-10 mt-1" wire:model.defer="patient.email" />
                             <x-jet-input-error for="patient.email" class="mt-2" />
                         </div>
 
-                        <div class="col-span-6 sm:col-span-2">
+                        <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="phone" value="{{ __('Telefone') }}" />
                             <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25"/>
                             <!--<x-jet-input id="phone" type="text" class="block w-full mt-1" wire:model.defer="patient.phone" />-->
                             <x-jet-input-error for="patient.phone" class="mt-2" />
                         </div>
 
-                        <h6 class="col-span-6 mt-3 mb-2 text-sm font-bold text-gray-400 uppercase sm:col-span-6">
+                        <h6 class="col-span-12 mt-5 mb-2 text-sm font-bold text-gray-400 uppercase">
                             Endereço
                         </h6>
-                        <div class="col-span-6 sm:col-span-2">
+                        <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
                             <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
                             <x-jet-input-error for="patient.zip_code" class="mt-2" />
                         </div>
             
-                        <div class="col-span-6 sm:col-span-4">
+                        <div class="col-span-6 sm:col-span-8">
                             <x-jet-label for="address" value="{{ __('Endereço') }}" />
                             <x-jet-input id="address" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.address" />
                             <x-jet-input-error for="patient.address" class="mt-2" />
                         </div>
 
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-1">
+                        <div class="col-span-6 sm:col-span-2 lg:col-span-2">
                             <x-jet-label for="number" value="{{ __('Número') }}" />
                             <x-jet-input id="number" type="text" class="block w-full mt-1" wire:model.defer="patient.number" />
                             <x-jet-input-error for="patient.number" class="mt-2" />
                         </div>
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                             <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
                             <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="patient.neighborhood" />
                             <x-jet-input-error for="patient.neighborhood" class="mt-2" />
                         </div>
             
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <div class="col-span-6 sm:col-span-3 lg:col-span-4">
                             <x-jet-label for="city" value="{{ __('Cidade') }}" />
                             <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="patient.city" />
                             <x-jet-input-error for="patient.city" class="mt-2" />
                         </div>
             
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-1">
+                        <div class="col-span-6 sm:col-span-2 lg:col-span-3">
                             <x-jet-label for="state" value="{{ __('Estado') }}" />
-                            <select id="state" class="block w-full h-10 px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
-                                <option value="AC">AC</option>
-                                <option value="AL">AL</option>
-                                <option value="AP">AP</option>
-                                <option value="AM">AM</option>
-                                <option value="BA">BA</option>
-                                <option value="CE">CE</option>
-                                <option value="DF">DF</option>
-                                <option value="ES">ES</option>
-                                <option value="GO">GO</option>
-                                <option value="MA">MA</option>
-                                <option value="MS">MS</option>
-                                <option value="MT">MT</option>
-                                <option value="MG">MG</option>
-                                <option value="PA">PA</option>
-                                <option value="PB">PB</option>
-                                <option value="PR">PR</option>
-                                <option value="PE">PE</option>
-                                <option value="PI">PI</option>
-                                <option value="RJ">RJ</option>
-                                <option value="RN">RN</option>
-                                <option value="RS">RS</option>
-                                <option value="RO">RO</option>
-                                <option value="RR">RR</option>
-                                <option value="SC">SC</option>
-                                <option value="SP">SP</option>
-                                <option value="SE">SE</option>
-                                <option value="TO">TO</option>
+                            <select id="state" class="block w-full h-10 px-3 py-2 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                                <option value="EX">Estrangeiro</option>
                             </select>
                             <x-jet-input-error for="patient.state" class="mt-2" />
                         </div>

@@ -42,9 +42,7 @@
                         </div>
                     @endif
                                         
-                    <a href="#" 
-                        data-te-toggle="tooltip"
-                        title="Hi! I'm tooltip">teste</a>
+                    
                         
                     {{-- 
                     <x-jet-secondary-button class="mt-2 mr-2" type="button">
