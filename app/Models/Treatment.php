@@ -24,27 +24,34 @@ class Treatment extends Model
         'notes',
     ];
     
-    
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
     public function orientations()
     {
-        return $this->belongsToMany(Orientation::class)->withPivot(['tenant_id'])->withTimestamps();
+        return $this->belongsToMany(Orientation::class)->withPivot(['orientation_treatment_tenant_id'])->withTimestamps();
     }
     
     public function medicines()
     {
-        return $this->belongsToMany(Medicine::class)->withPivot(['tenant_id'])->withTimestamps();
+        return $this->belongsToMany(Medicine::class)->withPivot(['medicine_treatment_tenant_id'])->withTimestamps();
     }
     
-    
-    public function mentor(): HasOne
+    public function mentor()
     {
-        return $this->hasOne(Mentor::class);
+        return $this->belongsTo(Mentor::class);
+    }
+    
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
     }
 
-    
-    public function attachment(): BelongsTo
+    public function treatmentType()
     {
-        return $this->belongsTo(Attachment::class);
+        return $this->belongsTo(TypeOfTreatment::class);
     }
 
 }

@@ -51,8 +51,11 @@ class SpiritistCenter extends Component
     public function mount() 
     {
         $this->state = Tenant::find(auth()->user()->tenant_id);
-        $this->information = TenantInformation::with('address')->first();
-       
+        $information = TenantInformation::with('address')->first();
+
+        if($information) {
+            $this->information = $information;
+        }
     }
 
     public function render()
@@ -111,9 +114,9 @@ class SpiritistCenter extends Component
         $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
 
         $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
-        $response = $response->json();
         
         if ($response) {
+            $response = $response->json();
             if (empty($response['erro'])) {
                 $this->information['address']['address'] = $response['logradouro'];
                 $this->information['address']['neighborhood'] = $response['bairro'];

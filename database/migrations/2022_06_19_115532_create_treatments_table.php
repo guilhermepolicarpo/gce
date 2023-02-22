@@ -23,7 +23,7 @@ class CreateTreatmentsTable extends Migration
             $table->foreign('treatment_type_id')->references('id')->on('types_of_treatments');
             $table->unsignedBigInteger('mentor_id')->nullable()->index();
             $table->foreign('mentor_id')->references('id')->on('mentors');
-            $table->date('date');
+            $table->datetime('date');
             $table->enum('treatment_mode', ['Presencial', 'A distância']);
             $table->text('notes')->nullable();
             $table->timestamps();

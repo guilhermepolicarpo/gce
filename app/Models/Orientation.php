@@ -16,7 +16,6 @@ class Orientation extends Model
     protected $fillable = [
         'name', 
         'description',
-        'tenant_id'
     ];
 
     /**
@@ -26,7 +25,7 @@ class Orientation extends Model
      */
     public function treatments()
     {
-        return $this->belongsToMany(Treatment::class)->withPivot(['tenant_id'])->withTimestamps();
+        return $this->belongsToMany(Treatment::class);
     }
 
 }

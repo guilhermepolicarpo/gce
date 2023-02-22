@@ -2,16 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Patient;
 use Livewire\Component;
 use App\Models\Treatment;
 use App\Models\Appointment;
-use Illuminate\Support\Arr;
 use Livewire\WithPagination;
 use App\Models\TypeOfTreatment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use App\Http\Livewire\TypesOfTreatment;
 
 class Appointments extends Component
 {
@@ -239,8 +235,8 @@ class Appointments extends Component
             'notes' => $this->treatmentState['notes'],
         ]);
 
-        $treatment->orientations()->attach($this->treatmentState['orientations'], ['tenant_id' => $treatment->tenant_id]);
-        $treatment->medicines()->attach($this->treatmentState['medicines'], ['tenant_id' => $treatment->tenant_id]);
+        $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
+        $treatment->medicines()->attach($this->treatmentState['medicines'], ['medicine_treatment_tenant_id' => $treatment->tenant_id]);
 
         $appointment = Appointment::where('id', $this->treatment->id)->first();
         $appointment->status = $treatment->id;

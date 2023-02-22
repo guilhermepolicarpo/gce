@@ -26,4 +26,9 @@ class TypeOfTreatment extends Model
         return $this->hasMany(Appointment::class, 'id');
     }
 
+    public function treatment()
+    {
+        return $this->hasOne(Treatment::class);
+    }
+
 }

@@ -1,17 +1,17 @@
-<div class="p-6 sm:px-10 bg-white border-b border-gray-200">
-    <div class="flex justify-between items-end">   
+<div class="p-6 bg-white border-b border-gray-200 sm:px-10">
+    <div class="flex items-end justify-between">   
         <!-- Search form -->
         <div class="w-4/12">                
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div class=" mt-6 absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div class="relative mt-1 rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 mt-6 pointer-events-none ">
                 <span class="text-gray-500 sm:text-sm"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>                       
                 </span>
                 </div>
                 <label class="text-gray-500 sm:text-sm">Pesquisar</label>
-                <input wire:model.debounce.500ms='q' class="border-1 border-gray-300 bg-white h-10 w-full px-5 pl-9 rounded-lg text-sm focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
+                <input wire:model.debounce.500ms='q' class="w-full h-10 px-5 text-sm bg-white border-gray-300 rounded-lg border-1 pl-9 focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
             </div>                
         </div>
         <!-- Add Patient -->
@@ -26,30 +26,30 @@
         <!-- Table -->
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('name')" class="uppercase">{{ __('Nome') }}</button>
                                             <x-sort-icon sortField="name" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
                                         <div class="flex items-center">
                                             <button  class="uppercase">{{ __('Endereço') }}</button>
-                                            <x-sort-icon sortField="patient.address" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                            <x-sort-icon sortField="address" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('birth')" class="uppercase">{{ __('Idade') }}</button>
                                             <x-sort-icon sortField="birth" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('phone')" class="uppercase">{{ __('Telefone') }}</button>
                                             <x-sort-icon sortField="phone" :sort-by="$sortBy" :sort-desc="$sortDesc" />
@@ -92,31 +92,31 @@
                                             -
                                         @endif 
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
+                                    <td class="px-6 py-4 text-base text-gray-900 whitespace-nowrap">
                                         @if ($patient->phone)
                                             {{ $patient->phone }}
                                         @else
                                            - 
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                                        <button title="Prontuário do paciente" wire:click='openTreatmentsModal({{ $patient->id }})' class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>                                              
                                         </button>
-                                        {{-- <div id="tooltip-default" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                                        {{-- <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                             Tooltip content
                                             <div class="tooltip-arrow" data-popper-arrow></div>
                                         </div> --}}
-                                        <button wire:click="confirmPatientEditing({{ $patient->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <button title='Editar' wire:click="confirmPatientEditing({{ $patient->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                 <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                               </svg>
                                         </button>
-                                        <button wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <button title="Excluir" wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
@@ -172,70 +172,70 @@
                 <div class="md:col-span-2">
                     <div class="grid grid-cols-6 gap-3">
 
-                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
+                        <h6 class="col-span-6 mt-3 mb-2 text-sm font-bold text-gray-400 uppercase sm:col-span-6">
                             Informações pessoais
                         </h6>
 
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="name" value="{{ __('Nome') }}" />
-                            <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="patient.name" />
+                            <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="patient.name" />
                             <x-jet-input-error for="patient.name" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="birth" value="{{ __('Nascimento') }}" />
-                            <x-jet-input id="birth" type="date" class="mt-1 block w-full" wire:model.defer="patient.birth" />
+                            <x-jet-input id="birth" type="date" class="block w-full mt-1" wire:model.defer="patient.birth" />
                             <x-jet-input-error for="patient.birth" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
-                            <x-jet-input id="patient.email" type="email" class="mt-1 block w-full h-10" wire:model.defer="patient.email" />
+                            <x-jet-input id="patient.email" type="email" class="block w-full h-10 mt-1" wire:model.defer="patient.email" />
                             <x-jet-input-error for="patient.email" class="mt-2" />
                         </div>
 
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="phone" value="{{ __('Telefone') }}" />
-                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="h-10 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25 rounded-md shadow-sm mt-1 block w-full"/>
-                            <!--<x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="patient.phone" />-->
+                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25"/>
+                            <!--<x-jet-input id="phone" type="text" class="block w-full mt-1" wire:model.defer="patient.phone" />-->
                             <x-jet-input-error for="patient.phone" class="mt-2" />
                         </div>
 
-                        <h6 class="col-span-6 sm:col-span-6 text-gray-400 text-sm mt-3 mb-2 font-bold uppercase">
+                        <h6 class="col-span-6 mt-3 mb-2 text-sm font-bold text-gray-400 uppercase sm:col-span-6">
                             Endereço
                         </h6>
                         <div class="col-span-6 sm:col-span-2">
                             <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                            <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="mt-1 block w-full h-10" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
+                            <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
                             <x-jet-input-error for="patient.zip_code" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                            <x-jet-input id="address" type="text" class="mt-1 block w-full h-10" wire:model.defer="patient.address" />
+                            <x-jet-input id="address" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.address" />
                             <x-jet-input-error for="patient.address" class="mt-2" />
                         </div>
 
                         <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                             <x-jet-label for="number" value="{{ __('Número') }}" />
-                            <x-jet-input id="number" type="text" class="mt-1 block w-full" wire:model.defer="patient.number" />
+                            <x-jet-input id="number" type="text" class="block w-full mt-1" wire:model.defer="patient.number" />
                             <x-jet-input-error for="patient.number" class="mt-2" />
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                             <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
-                            <x-jet-input id="neighborhood" type="text" class="mt-1 block w-full" wire:model.defer="patient.neighborhood" />
+                            <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="patient.neighborhood" />
                             <x-jet-input-error for="patient.neighborhood" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                             <x-jet-label for="city" value="{{ __('Cidade') }}" />
-                            <x-jet-input id="city" type="text" class="mt-1 block w-full" wire:model.defer="patient.city" />
+                            <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="patient.city" />
                             <x-jet-input-error for="patient.city" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-3 lg:col-span-1">
                             <x-jet-label for="state" value="{{ __('Estado') }}" />
-                            <select id="state" class="mt-1 block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
+                            <select id="state" class="block w-full h-10 px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="patient.state" />
                                 <option value="AC">AC</option>
                                 <option value="AL">AL</option>
                                 <option value="AP">AP</option>
@@ -278,6 +278,100 @@
 
             <x-jet-button class="ml-3" wire:click="addPatient()" wire:loading.attr="disabled">
                 {{ ($this->action == 'adding') ? __('Adicionar') : __('Editar') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
+        <x-slot name="title">
+            {{ __('Prontuário do paciente') }}
+        </x-slot>
+        
+        <x-slot name="content">
+            <div class="mb-10 sm:mb-3">
+                <div class="md:col-span-2">
+                    <div class="grid grid-cols-6 gap-3">
+
+
+                        <div class="col-span-6 px-4 py-5 rounded shadow bg-gray-50 sm:p-6">
+                            
+                                <p class="text-lg font-semibold">
+                                    @isset($patientOfTheTreatment->name)
+                                        {{ $patientOfTheTreatment->name }}
+                                    @endisset 
+                                </p>
+                                
+                                @isset($patientOfTheTreatment->birth)
+                                    <p>{{ "Idade: ".$dateFormat->parse($patientOfTheTreatment->birth)->diff(now())->y." anos" }} </p>
+                                @endisset 
+                                
+                                @isset($patientOfTheTreatment->address->address)
+                                    <p>{{ $patientOfTheTreatment->address->address.", ".$patientOfTheTreatment->address->number." - ".$patientOfTheTreatment->address->neighborhood}}</p>
+                                @endisset
+                                @isset($patientOfTheTreatment->address->city)
+                                    <p>{{ $patientOfTheTreatment->address->city." - ".$patientOfTheTreatment->address->state}}</p>
+                                @endisset
+                                @isset($patientOfTheTreatment->phone)
+                                    <p>{{ $patientOfTheTreatment->phone}}</p>
+                                @endisset
+                            
+                        </div>
+
+                        <div class="col-span-6 p-10">
+                            @foreach ($treatments as $treatment)                            
+                                <ol class="relative border-l border-gray-200 dark:border-gray-700">
+                                    <li class="pb-12 ml-12">
+                                        <span class="absolute flex flex-col items-center justify-center text-white bg-indigo-400 rounded -left-7 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                                            <div class="px-2 pt-2 text-lg">{{ $dateFormat->parse($treatment->date)->day }}</div>
+                                            <div class="px-2 pb-1 text-sm uppercase">{{ $dateFormat->parse($treatment->date)->locale('pt-br')->shortMonthName }}</div>
+                                            <div class="px-2 pt-1 pb-2 text-sm border-t border-white">{{ $dateFormat->parse($treatment->date)->year }}</div>
+                                        </span>
+                                        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                                            <div class="items-center justify-between mb-5 sm:flex">
+                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">2 hours ago</time>
+                                                <div class="text-lg font-semibold text-black dark:text-gray-300">{{ $treatment->treatmentType->name }} <span class="text-sm font-normal">({{ $treatment->treatment_mode }})</span></div>
+                                            </div>
+                                            @if (!$treatment->treatmentType->is_the_healing_touch)                                                
+                                                <h6 class="text-black">Fluídicos</h6>
+                                                <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    @foreach ($treatment->medicines as $medicine)
+                                                        {{ $medicine->name.', ' }}
+                                                    @endforeach
+                                                </div>
+                                                <h6 class="text-black">Orientações</h6>
+                                                <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    @foreach ($treatment->orientations as $orientation)
+                                                        {{ '- '.$orientation->name }}<br/>
+                                                    @endforeach
+                                                </div>
+
+                                                @if ($treatment->notes)                                                    
+                                                <h6 class="text-black">Anotações</h6>
+                                                <div class="p-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    {{ $treatment->notes }}
+                                                </div>
+                                                @endif
+
+                                                @isset($treatment->mentor->name )
+                                                    <div class="mt-5">
+                                                        Mentor: {{ $treatment->mentor->name }}
+                                                    </div>
+                                                @endisset
+                                            @endif
+                                        </div>
+                                    </li>
+                                </ol>
+                            @endforeach
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">            
+            <x-jet-button class="ml-3" wire:click="$set('openingTreatmentsModal', false)" wire:loading.attr="disabled">
+                {{ __('Fechar') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

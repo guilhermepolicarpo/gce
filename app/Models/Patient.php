@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\Traits\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
@@ -31,6 +32,11 @@ class Patient extends Model
     public function appointment()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function treatments()
+    {
+        return $this->hasMany(Treatment::class);
     }
 
 }

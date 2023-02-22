@@ -16,8 +16,8 @@ class CreateOrientationTreatmentTable extends Migration
         Schema::create('orientation_treatment', function (Blueprint $table) {
             $table->foreignId('orientation_id')->constrained('orientations');
             $table->foreignId('treatment_id')->constrained('treatments');
-            $table->unsignedBigInteger('tenant_id')->nullable()->index();
-            $table->foreign('tenant_id')->references('id')->on('tenants');
+            $table->unsignedBigInteger('orientation_treatment_tenant_id')->nullable()->index();
+            $table->foreign('orientation_treatment_tenant_id')->references('id')->on('tenants');
             $table->timestamps();
         });
     }

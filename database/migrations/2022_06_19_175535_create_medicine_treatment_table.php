@@ -16,8 +16,8 @@ class CreateMedicineTreatmentTable extends Migration
         Schema::create('medicine_treatment', function (Blueprint $table) {
             $table->foreignId('medicine_id')->constrained('medicines');
             $table->foreignId('treatment_id')->constrained('treatments');
-            $table->unsignedBigInteger('tenant_id')->nullable()->index();
-            $table->foreign('tenant_id')->references('id')->on('tenants');
+            $table->unsignedBigInteger('medicine_treatment_tenant_id')->nullable()->index();
+            $table->foreign('medicine_treatment_tenant_id')->references('id')->on('tenants');
             $table->timestamps();
         });
     }

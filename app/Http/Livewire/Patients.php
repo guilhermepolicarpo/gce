@@ -2,19 +2,21 @@
 
 namespace App\Http\Livewire;
 
+use Carbon\Carbon;
 use App\Models\Address;
 use App\Models\Patient;
 use Livewire\Component;
+use App\Models\Treatment;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Carbon\Carbon;
 
 class Patients extends Component
 {
     use WithPagination;
 
     public $carbon;
+    public $dateFormat;
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
@@ -32,9 +34,11 @@ class Patients extends Component
         'state' => 'MG',
         'city' => ''
     ];
-
+    public $treatments = [];
+    public $patientOfTheTreatment;
     public $confirmingPatientDeletion = false;
     public $confirmingPatientAddition = false;
+    public $openingTreatmentsModal = false;
 
     protected $queryString = [
         'q' => ['except' => ''],
@@ -61,6 +65,11 @@ class Patients extends Component
         'patient.birth.date' => 'Informe uma data válida.',
         'patient.state.max' => 'O estádo não deve ter mais de 2 caracteres.',
     ];
+
+    public function mount()
+    {   
+        $this->dateFormat = now();
+    }
 
     public function render()
     {
@@ -181,9 +190,9 @@ class Patients extends Component
         $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
 
         $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
-        $response = $response->json();
         
         if ($response) {
+            $response = $response->json();
             if (empty($response['erro'])) {
                 $this->patient['address'] = $response['logradouro'];
                 $this->patient['neighborhood'] = $response['bairro'];
@@ -191,5 +200,21 @@ class Patients extends Component
                 $this->patient['city'] = $response['localidade'];
             }
         }        
+    }
+
+    public function openTreatmentsModal($patient)
+    {
+        $this->openingTreatmentsModal = true;
+        $this->getTreatments($patient);
+    }
+
+    public function getTreatments($patient)
+    {
+        $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'] )
+            ->where('treatments.patient_id', $patient)
+            ->orderBy('date', 'DESC')
+        ->get();
+
+        $this->patientOfTheTreatment = Patient::where('id', $patient)->first();
     }
 }

@@ -16,17 +16,12 @@ class Attachment extends Model
     protected $fillable = [
         'treatment_id', 
         'path',
-        'tenant_id'
     ];
 
-    /**
-     * Get the treatment associated with the Attachment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function treatment(): HasOne
+    
+    public function treatment()
     {
-        return $this->hasOne(Treatment::class);
+        return $this->belongsTo(Treatment::class);
     }
 
 

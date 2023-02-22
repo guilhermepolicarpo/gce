@@ -50,7 +50,7 @@ class Medicines extends Component
             'medicines' => $medicines,
         ]);
     }
-
+    
     public function confirmMedicineAddition()
     {
         $this->reset(['state']);
