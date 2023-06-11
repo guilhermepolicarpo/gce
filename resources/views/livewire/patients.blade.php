@@ -330,7 +330,7 @@
                                         </span>
                                         <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                             <div class="items-center justify-between mb-5 sm:flex">
-                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ $carbon->parse($treatment->date)->locale('pt-br')->diffForHumans(now()) }}</time>
+                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ str_replace('antes', 'atrás', $carbon->parse($treatment->date)->locale('pt-br')->diffForHumans(now())) }}</time>
                                                 <div class="text-lg font-semibold text-black dark:text-gray-300">{{ $treatment->treatmentType->name }} <span class="text-sm font-normal">({{ $treatment->treatment_mode }})</span></div>
                                             </div>
                                             @if (!$treatment->treatmentType->is_the_healing_touch)                                                
