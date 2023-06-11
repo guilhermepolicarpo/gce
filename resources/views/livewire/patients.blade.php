@@ -282,7 +282,8 @@
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
-
+    
+    {{-- Patient's chart --}}
     <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
         <x-slot name="title">
             {{ __('Prontuário do paciente') }}
@@ -291,7 +292,7 @@
         <x-slot name="content">
             <div class="mb-10 sm:mb-3">
                 <div class="md:col-span-2">
-                    <div class="grid grid-cols-6 gap-3">
+                    <div class="grid max-h-[600px] grid-cols-6 gap-3 overflow-y-scroll ">
 
 
                         <div class="col-span-6 px-4 py-5 rounded shadow bg-gray-50 sm:p-6">
@@ -329,7 +330,7 @@
                                         </span>
                                         <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                             <div class="items-center justify-between mb-5 sm:flex">
-                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">2 hours ago</time>
+                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ $carbon->parse($treatment->date)->locale('pt-br')->diffForHumans(now()) }}</time>
                                                 <div class="text-lg font-semibold text-black dark:text-gray-300">{{ $treatment->treatmentType->name }} <span class="text-sm font-normal">({{ $treatment->treatment_mode }})</span></div>
                                             </div>
                                             @if (!$treatment->treatmentType->is_the_healing_touch)                                                

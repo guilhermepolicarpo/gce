@@ -63,6 +63,8 @@ class SpiritistCenter extends Component
         return view('livewire.spiritist-center');
     }
 
+
+
     public function updateSpiritistCenterInformation()
     {
         $this->validate([
