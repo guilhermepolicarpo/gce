@@ -21,6 +21,7 @@ class Appointment extends Model
         'date',
         'treatment_id',
         'treatment_mode',
+        'tenant_id',
     ];
 
     public function patient()

@@ -21,7 +21,8 @@ class Patient extends Model
         'name',
         'email',
         'phone',
-        'birth'
+        'birth',
+        'tenant_id',
     ];
 
     public function address()

@@ -17,6 +17,7 @@ class TenantInformation extends Model
     protected $fillable = [
         'address_id',
         'logo_path',
+        'tenant_id',
     ];
 
     public function address()

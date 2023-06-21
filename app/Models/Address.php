@@ -21,7 +21,8 @@ class Address extends Model
         'zip_code',
         'complement',
         'state',
-        'city'
+        'city',
+        'tenant_id',
     ];
 
     public function patient()

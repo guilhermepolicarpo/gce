@@ -16,6 +16,7 @@ class Attachment extends Model
     protected $fillable = [
         'treatment_id', 
         'path',
+        'tenant_id',
     ];
 
     

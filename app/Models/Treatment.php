@@ -22,6 +22,7 @@ class Treatment extends Model
         'date',
         'treatment_mode',
         'notes',
+        'tenant_id',
     ];
     
     public function patient()

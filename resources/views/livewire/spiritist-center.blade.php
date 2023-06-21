@@ -15,7 +15,7 @@
 
                     <x-jet-label for="photo" value="{{ __('Logo') }}" />
 
-                    @if ($logo)
+                    @if($logo)
                         <!-- New Profile Photo Preview -->
                         <div class="mt-2">
                             <span class="block h-20 bg-center bg-no-repeat bg-cover w-52">
@@ -23,10 +23,10 @@
                             </span>
                         </div>      
                         
-                    @elseif(isset($information->logo_path))
+                    @elseif($state['logo_path'])
                         <!-- Current Profile Photo -->
                         <div class="mt-2" >
-                            <img src="{{ Storage::url($information->logo_path) }}" alt="" class="object-cover h-20 w-52">
+                            <img src="{{ Storage::url($state['logo_path']) }}" alt="" class="object-cover w-52">
                         </div>
                         
                     @else
@@ -61,69 +61,43 @@
 
                     <x-jet-input-error for="photo" class="mt-2" />
                 </div>
-            
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <x-jet-label for="name" value="{{ __('Nome') }}" />
-                <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="state.name" autocomplete="name" placeholder="Digite o nome" />
-                <x-jet-input-error for="state.name" class="mt-2" />
+                <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="state.tenant.name" autocomplete="name" placeholder="Digite o nome" />
+                <x-jet-input-error for="state.tenant.name" class="mt-2" />
             </div>
-        </x-slot>
-
-        <x-slot name="actions">
-            <x-jet-action-message class="mr-3" on="saved">
-                {{ __('Salvo.') }}
-            </x-jet-action-message>
-
-            <x-jet-button wire:loading.attr="disabled" wire:target="state.name">
-                {{ __('Salvar') }}
-            </x-jet-button>
-        </x-slot>
-    </x-jet-form-section>
-
-    <hr>
-
-    <x-jet-form-section submit="updateSpiritistCenterAddress" class="mt-10">
-        <x-slot name="title">
-            {{ __('Endereço') }}
-        </x-slot>
-
-        <x-slot name="description">
-            {{ __('Atualize o endereço do Centro Espírita.') }}
-        </x-slot>
-
-        <x-slot name="form">
-            
+            <br/>
             <div class="col-span-2 sm:col-span-2">
                 <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full mt-1" wire:model.defer="information.address.zip_code" wire:change='searchZipCode($event.target.value)' autocomplete="zip_code" placeholder="Digite o CEP" />
-                <x-jet-input-error for="information.address.zip_code" class="mt-2" />
+                <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full mt-1" wire:model.defer="state.address.zip_code" wire:change='searchZipCode($event.target.value)' autocomplete="zip_code" placeholder="Digite o CEP" />
+                {{-- <x-jet-input-error for="state.address.zip_code" class="mt-2" /> --}}
             </div>
             <div class="col-span-6 sm:col-span-4">
 
                 <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                <x-jet-input id="address" type="text" class="block w-full mt-1" wire:model.defer="information.address.address" autocomplete="address" placeholder="Digite o endereço" />
-                <x-jet-input-error for="information.address.address" class="mt-2" />
+                <x-jet-input id="address" type="text" class="block w-full mt-1" wire:model.defer="state.address.address" autocomplete="address" placeholder="Digite o endereço" />
+                <x-jet-input-error for="state.address.address" class="mt-2" />
             </div>
             <div class="col-span-2 sm:col-span-1">
                 <x-jet-label for="number" value="{{ __('Número') }}" />
-                <x-jet-input id="number" type="text" class="block w-full mt-1" wire:model.defer="information.address.number" autocomplete="number" placeholder="Digite o nº" />
-                <x-jet-input-error for="information.address.number" class="mt-2" />
+                <x-jet-input id="number" type="text" class="block w-full mt-1" wire:model.defer="state.address.number" autocomplete="number" placeholder="Digite o nº" />
+                <x-jet-input-error for="state.address.number" class="mt-2" />
             </div>
             <div class="col-span-4 sm:col-span-2">
                 <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
-                <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="information.address.neighborhood" autocomplete="neighborhood" placeholder="Digite o bairro" />
-                <x-jet-input-error for="information.address.neighborhood" class="mt-2" />
+                <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="state.address.neighborhood" autocomplete="neighborhood" placeholder="Digite o bairro" />
+                <x-jet-input-error for="state.address.neighborhood" class="mt-2" />
             </div>
             <div class="col-span-4 sm:col-span-2">
                 <x-jet-label for="city" value="{{ __('Cidade') }}" />
-                <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="information.address.city" autocomplete="city" placeholder="Digite a cidade" />
-                <x-jet-input-error for="information.address.city" class="mt-2" />
+                <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="state.address.city" autocomplete="city" placeholder="Digite a cidade" />
+                <x-jet-input-error for="state.address.city" class="mt-2" />
             </div>
             <div class="col-span-2 sm:col-span-1">
                 <x-jet-label for="state" value="{{ __('Estado') }}" />
-                <select id="state" class="block w-full h-10 px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="information.address.state" />
+                <select id="state" class="block w-full h-10 px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model.defer="state.address.state" />
                     <option value="AC">AC</option>
                     <option value="AL">AL</option>
                     <option value="AP">AP</option>
@@ -152,9 +126,9 @@
                     <option value="SE">SE</option>
                     <option value="TO">TO</option>
                 </select>
-                <x-jet-input-error for="information.address.state" class="mt-2" />
+                <x-jet-input-error for="state.address.state" class="mt-2" />
             </div>
-
+            
         </x-slot>
 
         <x-slot name="actions">
@@ -162,9 +136,11 @@
                 {{ __('Salvo.') }}
             </x-jet-action-message>
 
-            <x-jet-button wire:loading.attr="disabled" wire:target="state.name">
+            <x-jet-button wire:loading.attr="disabled" wire:target="state.tenant.name">
                 {{ __('Salvar') }}
             </x-jet-button>
         </x-slot>
     </x-jet-form-section>
+
+
 </div>

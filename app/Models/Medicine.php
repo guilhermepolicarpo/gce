@@ -16,6 +16,7 @@ class Medicine extends Model
     protected $fillable = [
         'name', 
         'description',
+        'tenant_id',
     ];
 
     /**
