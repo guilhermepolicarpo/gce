@@ -25,7 +25,7 @@
             @if (Route::has('login'))
                 <div class="fixed top-0 right-0 hidden px-6 py-4 sm:block">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 underline dark:text-gray-500">Dashboard</a>
+                        <a href="{{ url('/painel') }}" class="text-sm text-gray-700 underline dark:text-gray-500">Painel</a>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline dark:text-gray-500">Entrar</a>
 
@@ -37,7 +37,7 @@
             @endif
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <a href="/dashboard" class="ml-4 text-gray-700 underline text-md dark:text-gray-500">Acessar Painel</a>
+                <a href="/painel" class="ml-4 text-gray-700 underline text-md dark:text-gray-500">Acessar Painel</a>
             </div>
         </div>
     </body>
