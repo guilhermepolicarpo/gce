@@ -28,9 +28,9 @@ class Medicines extends Component
     ];
 
     protected $messages = [
-        'state.name.required' => 'Por favor, informe o nome do medicamento',
-        'state.name.min' => 'O nome do medicamento deve ter no mínimo 2 caracteres',
-        'state.description.min' => 'A descrição deve ter no mínimo 2 caracteres',
+        'state.name.required' => 'Por favor, informe o nome do fluídico',
+        'state.name.min' => 'O nome do fluídico deve ter no mínimo 2 caracteres',
+        'state.description.min' => 'A descrição deve ter no mínimo 3 caracteres',
     ];
 
     protected $queryString = [

@@ -21,39 +21,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/painel', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/patients', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/assistidos', function () {
     return view('patients');
 })->name('patients');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/schedule', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/agendamento', function () {
     return view('schedule');
 })->name('schedule');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/mentors', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/mentores', function () {
     return view('mentors');
 })->name('mentors');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/spiritist-center', function () {
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/centro-espirita', function () {
     return view('spiritist-center');
 })->name('spiritistCenter');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/types-of-treatment', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/tipos-de-tratamento', function () {
     return view('types-of-treatment');
 })->name('typesOfTreatment');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/usuarios', function () {
     return view('users');
 })->name('users');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/orientatios', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/orientacoes', function () {
     return view('orientatios');
 })->name('orientatios');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/medicines', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/aguas-magnetizadas', function () {
     return view('medicines');
 })->name('medicines');
 

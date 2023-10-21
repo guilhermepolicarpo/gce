@@ -60,7 +60,7 @@ class Patients extends Component
     ];
 
     protected $messages = [
-        'patient.name.required' => 'Informe o nome do paciente.',
+        'patient.name.required' => 'Informe o nome do assistido.',
         'patient.email.email' => 'Informe um e-mail válido.',
         'patient.birth.date' => 'Informe uma data válida.',
         'patient.state.max' => 'O estádo não deve ter mais de 2 caracteres.',

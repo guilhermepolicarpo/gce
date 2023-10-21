@@ -64,7 +64,7 @@ class Appointments extends Component
     ];
 
     protected $messages = [
-        'state.patient_id.required' => 'Por favor, selecione um paciente',
+        'state.patient_id.required' => 'Por favor, selecione um assistido',
         'state.date.required' => 'Por favor, informe uma data de agendamento',
         'state.treatment_type_id.required' => 'Por favor, selecione um tipo de tratamento',
         'state.treatment_mode.required' => 'Por favor, selecione um modo de tratamento',

@@ -80,10 +80,10 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        {{ __('Paciente') }}
+                                        {{ __('Assistido') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
-                                        Tipo de Tratamento
+                                        {{ __('Tipo de Tratamento') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
@@ -147,7 +147,7 @@
                                           {{ __('Ver atend.') }}
                                         </button>
                                       @else
-                                        <button title="Atender paciente" wire:click="confirmTreatmentAddition({{ $appointment->id }})" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                        <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
                                             {{ __('Atender') }}
                                         </button>                                       
                                       @endisset
@@ -240,8 +240,8 @@
                         
                         <div class="col-span-6 sm:col-span-6">     
                             <x-select 
-                                label="{{ __('Paciente') }}" 
-                                placeholder="Selecione um paciente" 
+                                label="{{ __('Assistido') }}" 
+                                placeholder="Selecione um assistido" 
                                 :async-data="route('searchPatient')" 
                                 option-label="name" 
                                 option-value="id" 
@@ -277,7 +277,7 @@
     <!-- Add Treatment Modal -->
     <x-jet-dialog-modal wire:model="confirmingTreatmentAddition" maxWidth="4xl" >
         <x-slot name="title">
-            {{ __('Atender paciente') }}
+            {{ __('Atender assistido') }}
         </x-slot>
 
         <x-slot name="content">
