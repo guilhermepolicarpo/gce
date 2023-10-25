@@ -90,7 +90,7 @@ class Patients extends Component
             })
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
 
-        $patients = $patients->paginate(10);
+        $patients = $patients->paginate(1);
 
         return view('livewire.patients', [
             'patients' => $patients
