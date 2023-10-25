@@ -197,8 +197,6 @@
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="phone" value="{{ __('Telefone') }}" />
                             <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25"/>
-                            <!--<x-jet-input id="phone" type="text" class="block w-full mt-1" wire:model.defer="patient.phone" />-->
-                            <x-jet-input-error for="patient.phone" class="mt-2" />
                         </div>
 
                         <h6 class="col-span-12 mt-5 mb-2 text-sm font-bold text-gray-400 uppercase">

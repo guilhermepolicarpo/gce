@@ -49,8 +49,8 @@ class Patients extends Component
     protected $rules = [
         'patient.name' => 'required|string|min:4',
         'patient.email' => 'nullable|email',
-        'patient.phone' => 'nullable|string',
-        'patient.birth' => 'nullable|date',
+        'patient.phone' => 'required|string',
+        'patient.birth' => 'required|date',
         'patient.address' => 'nullable|string|min:4',
         'patient.number' => 'nullable|string',
         'patient.neighborhood' => 'nullable|string',
@@ -61,6 +61,8 @@ class Patients extends Component
 
     protected $messages = [
         'patient.name.required' => 'Informe o nome do assistido.',
+        'patient.phone.required' => 'Informe o telefone do assistido.',
+        'patient.birth.required' => 'Informe a data de nascimento do assistido.',
         'patient.email.email' => 'Informe um e-mail válido.',
         'patient.birth.date' => 'Informe uma data válida.',
         'patient.state.max' => 'O estádo não deve ter mais de 2 caracteres.',
