@@ -1716,8 +1716,8 @@ select {
 .max-w-sm {
   max-width: 24rem;
 }
-.max-w-\[25ch\] {
-  max-width: 25ch;
+.max-w-\[41ch\] {
+  max-width: 41ch;
 }
 .max-w-6xl {
   max-width: 72rem;

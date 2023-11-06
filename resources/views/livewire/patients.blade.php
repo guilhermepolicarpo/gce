@@ -76,7 +76,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap max-w-[25ch] overflow-hidden">
+                                    <td class="px-6 py-4 whitespace-nowrap max-w-[41ch] overflow-hidden">
                                         @if ($patient->address->address !== '')
                                             <div class="text-base text-gray-900 ">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
