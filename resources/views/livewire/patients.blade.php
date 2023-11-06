@@ -1,7 +1,7 @@
 <div class="p-6 bg-white border-b border-gray-200 sm:px-10">
     <div class="flex items-end justify-between">   
         <!-- Search form -->
-        <div class="w-4/12">                
+        <div class="flex flex-row align-middle">                
             <div class="relative mt-1 rounded-md shadow-sm">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 mt-6 pointer-events-none ">
                 <span class="text-gray-500 sm:text-sm"> 
@@ -12,10 +12,13 @@
                 </div>
                 <label class="text-gray-500 sm:text-sm">Pesquisar</label>
                 <input wire:model.debounce.500ms='q' class="w-full h-10 px-5 text-sm bg-white border-gray-300 rounded-lg border-1 pl-9 focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
-            </div>                
+            </div>
+            <div class="flex items-center mt-6 ml-3">
+                <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q' ></div>
+            </div>
         </div>
         <!-- Add Patient -->
-        <div class="mr-2">
+        <div>
             <x-jet-button wire:click="confirmPatientAddition">
                 {{ __('Adicionar Assistido') }}
             </x-jet-button>
@@ -60,7 +63,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-200 " >
                                 
                                 @forelse ($patients as $patient)
                                 <tr>

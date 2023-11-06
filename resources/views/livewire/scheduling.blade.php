@@ -13,7 +13,7 @@
                     </div>
                     <label class="text-gray-500 sm:text-sm">Pesquisar</label>
                     <input wire:model.debounce.500ms='q' class="w-full px-5 text-sm bg-white border-gray-300 rounded-lg border-1 pl-9 focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
-                </div>                
+                </div>
             </div>
             <!-- Search date -->
             <div>                
@@ -60,6 +60,9 @@
                         </div>
                     </x-dropdown.item>
                 </x-dropdown>
+            </div>
+            <div class="flex items-center mb-2 ml-3">
+                <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q' ></div>
             </div>
         </div>
         <!-- Add new scheduling -->
