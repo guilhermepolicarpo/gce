@@ -95,7 +95,7 @@ class Patients extends Component
         return view('livewire.patients', [
             'patients' => $patients
         ]);
-}
+    }
 
     public function updatingQ()
     {

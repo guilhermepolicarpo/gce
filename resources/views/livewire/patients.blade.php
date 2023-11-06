@@ -37,7 +37,7 @@
                                             <x-sort-icon sortField="name" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         <div class="flex items-center">
                                             <button  class="uppercase">{{ __('Endereço') }}</button>
                                             <x-sort-icon sortField="address" :sort-by="$sortBy" :sort-desc="$sortDesc" />
@@ -76,9 +76,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap max-w-[25ch] overflow-hidden">
                                         @if ($patient->address->address !== '')
-                                            <div class="text-base text-gray-900">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
+                                            <div class="text-base text-gray-900 ">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
                                         @else
                                             -
