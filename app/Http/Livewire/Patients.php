@@ -127,6 +127,7 @@ class Patients extends Component
     public function confirmPatientAddition()
     {
         $this->reset(['patient']);
+        $this->resetValidation();
         $this->action = 'adding';
         $this->confirmingPatientAddition = true;
     }
@@ -149,6 +150,7 @@ class Patients extends Component
         ];
         
         $this->action = 'editing';
+        $this->resetValidation();
         $this->confirmingPatientAddition = true;
     }
 
