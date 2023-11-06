@@ -178,7 +178,7 @@
 
                         <div class="col-span-12 sm:col-span-8">
                             <x-jet-label for="name" value="{{ __('Nome') }}" />
-                            <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="patient.name" />
+                            <x-jet-input id="name" type="text" class="block w-full mt-1" wire:model.defer="patient.name" placeholder="Digite o nome completo" />
                             <x-jet-input-error for="patient.name" class="mt-2" />
                         </div>
             
@@ -190,13 +190,13 @@
             
                         <div class="col-span-6 sm:col-span-8">
                             <x-jet-label for="patient.email" value="{{ __('E-mail') }}" />
-                            <x-jet-input id="patient.email" type="email" class="block w-full h-10 mt-1" wire:model.defer="patient.email" />
+                            <x-jet-input id="patient.email" type="email" class="block w-full h-10 mt-1" wire:model.defer="patient.email" placeholder="Digite o e-mail" />
                             <x-jet-input-error for="patient.email" class="mt-2" />
                         </div>
 
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="phone" value="{{ __('Telefone') }}" />
-                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" class="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25"/>
+                            <x-inputs.phone mask="['(##) ####-####', '(##) #####-####']" wire:model.defer="patient.phone" placeholder="Digite o telefone" class="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-25"/>
                         </div>
 
                         <h6 class="col-span-12 mt-5 mb-2 text-sm font-bold text-gray-400 uppercase">
@@ -204,13 +204,13 @@
                         </h6>
                         <div class="col-span-6 sm:col-span-4">
                             <x-jet-label for="zip_code" value="{{ __('CEP') }}" />
-                            <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" />
-                            <x-jet-input-error for="patient.zip_code" class="mt-2" />
+                            <x-inputs.maskable mask='#####-###' id="zip_code" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.zip_code" wire:change="searchZipCode($event.target.value)" placeholder="Digite o CEP" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-8">
                             <x-jet-label for="address" value="{{ __('Endereço') }}" />
-                            <x-jet-input id="address" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.address" />
+                            <x-jet-input id="address" type="text" class="block w-full h-10 mt-1" wire:model.defer="patient.address" wire:loading.attr='animate-pulse' wire:target="searchZipCode" placeholder="Digite o endereço" />
+                            <div wire:loading wire:target="searchZipCode" class="text-sm font-medium text-gray-700">Carregando endereço...</div>
                             <x-jet-input-error for="patient.address" class="mt-2" />
                         </div>
 
@@ -221,13 +221,13 @@
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                             <x-jet-label for="neighborhood" value="{{ __('Bairro') }}" />
-                            <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="patient.neighborhood" />
+                            <x-jet-input id="neighborhood" type="text" class="block w-full mt-1" wire:model.defer="patient.neighborhood" placeholder="Digite o bairro" />
                             <x-jet-input-error for="patient.neighborhood" class="mt-2" />
                         </div>
             
                         <div class="col-span-6 sm:col-span-3 lg:col-span-4">
                             <x-jet-label for="city" value="{{ __('Cidade') }}" />
-                            <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="patient.city" />
+                            <x-jet-input id="city" type="text" class="block w-full mt-1" wire:model.defer="patient.city" placeholder="Digite a cidade" />
                             <x-jet-input-error for="patient.city" class="mt-2" />
                         </div>
             

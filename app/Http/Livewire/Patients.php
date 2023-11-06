@@ -54,18 +54,21 @@ class Patients extends Component
         'patient.address' => 'nullable|string|min:4',
         'patient.number' => 'nullable|string',
         'patient.neighborhood' => 'nullable|string',
-        'patient.zip_code' => 'nullable|string',
+        'patient.zip_code' => 'nullable|string|min:8',
         'patient.state' => 'nullable|string|max:2',
         'patient.city' => 'nullable|string'        
     ];
 
     protected $messages = [
         'patient.name.required' => 'Informe o nome do assistido.',
+        'patient.name.min' => 'Informe um nome válido',
         'patient.phone.required' => 'Informe o telefone do assistido.',
         'patient.birth.required' => 'Informe a data de nascimento do assistido.',
         'patient.email.email' => 'Informe um e-mail válido.',
         'patient.birth.date' => 'Informe uma data válida.',
         'patient.state.max' => 'O estádo não deve ter mais de 2 caracteres.',
+        'patient.zip_code.min' => 'Informe um CEP válido.',
+        'patient.address.min' => 'Informe um endereço válido.',
     ];
 
     public function mount()
@@ -189,19 +192,21 @@ class Patients extends Component
 
     public function searchZipCode($zipCode)
     {
-        $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
+        if (!empty($zipCode)) {
+            $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
+    
+            $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
 
-        $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
-        
-        if ($response) {
-            $response = $response->json();
-            if (empty($response['erro'])) {
-                $this->patient['address'] = $response['logradouro'];
-                $this->patient['neighborhood'] = $response['bairro'];
-                $this->patient['state'] = $response['uf'];
-                $this->patient['city'] = $response['localidade'];
+            if ($response && $response->status() == 200) {
+                $response = $response->json();
+                if (empty($response['erro'])) {
+                    $this->patient['address'] = $response['logradouro'];
+                    $this->patient['neighborhood'] = $response['bairro'];
+                    $this->patient['state'] = $response['uf'];
+                    $this->patient['city'] = $response['localidade'];
+                }
             }
-        }        
+        }
     }
 
     public function openTreatmentsModal($patient)
