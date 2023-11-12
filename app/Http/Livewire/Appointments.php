@@ -220,8 +220,6 @@ class Appointments extends Component
             'treatmentState.date' => 'required|date',
             'treatmentState.treatment_mode' => 'required|string',
             'treatmentState.notes' => 'nullable|string',
-            'treatmentState.orientations' => 'required',
-            'treatmentState.medicines' => 'required',
         ]);
 
         DB::beginTransaction();

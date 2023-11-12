@@ -334,14 +334,15 @@
                                 <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-6">
                                         <x-select 
-                                          label="{{ __('Fluídicos') }}" 
-                                          placeholder="Selecione um ou mais fluídicos" 
-                                          :async-data="route('searchMedicine')" 
-                                          option-label="name" 
-                                          option-value="id" 
-                                          wire:model.defer="treatmentState.medicines" 
-                                          multiselect="true" 
-                                          class="block w-full mt-1"
+                                            label="{{ __('Fluídicos') }}" 
+                                            placeholder="Selecione um ou mais fluídicos" 
+                                            :async-data="route('searchMedicine')" 
+                                            option-label="name" 
+                                            option-value="id" 
+                                            option-description="description"
+                                            wire:model.defer="treatmentState.medicines" 
+                                            multiselect 
+                                            class="mt-1"
                                         />
 
                                         <div class="col-span-6 mt-3 sm:col-span-6">
@@ -352,7 +353,9 @@
                                               option-label="name" 
                                               option-value="id" 
                                               wire:model.defer="treatmentState.orientations" 
-                                              multiselect="true" 
+                                              multiselect 
+                                              clearable
+                                              always-fetch
                                               class="block w-full mt-1"
                                             />
                                         </div>
