@@ -136,7 +136,7 @@
                 {{ __('Salvo.') }}
             </x-jet-action-message>
 
-            <x-jet-button wire:loading.attr="disabled" wire:target="state.tenant.name">
+            <x-jet-button wire:loading.attr="disabled" wire:target="updateSpiritistCenterInformation">
                 {{ __('Salvar') }}
             </x-jet-button>
         </x-slot>

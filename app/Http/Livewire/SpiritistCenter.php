@@ -72,22 +72,17 @@ class SpiritistCenter extends Component
     public function updateSpiritistCenterInformation()
     {
         $validated = $this->validate();
-
         DB::beginTransaction();
 
-        if($validated['state']['address']['id']) {
-
-            Address::where('id', $validated['state']['address']['id'])->update($validated['state']['address']);
-            
+        if($this->state['address']['id']) {
+            Address::where('id', $this->state['address']['id'])->update($validated['state']['address']);
         } else {
             $addressId = Address::create($validated['state']['address']);
 
-            TenantInformation::where('id', $this->state['id'])->update([                
-                'address_id' => $addressId->id,
-            ]);
+            TenantInformation::where('id', $this->state['id'])->update(['address_id' => $addressId->id]);
         };
         
-        if($validated['state']['tenant']['name']) {
+        if($this->state['tenant']['name']) {
             Tenant::where('id', auth()->user()->tenant_id)->update(['name' => $validated['state']['tenant']['name']]);
         };
 
@@ -96,26 +91,26 @@ class SpiritistCenter extends Component
         };
 
         DB::commit();
+        $this->resetValidation();
     }  
     
     public function searchZipCode($zipCode)
     {
-        $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
-        $response = null;
-        
-        if($zipCode){
+        if (!empty($zipCode)){
+            $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
+            
             $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
-        }
+            
+            if ($response && $response->status() === 200) {
+                $response = $response->json();
+                if (empty($response['erro'])) {
+                    $this->state['address']['address'] = $response['logradouro'];
+                    $this->state['address']['neighborhood'] = $response['bairro'];
+                    $this->state['address']['state'] = $response['uf'];
+                    $this->state['address']['city'] = $response['localidade'];
+                }
+            }        
 
-        
-        if ($response) {
-            $response = $response->json();
-            if (empty($response['erro'])) {
-                $this->state['address']['address'] = $response['logradouro'];
-                $this->state['address']['neighborhood'] = $response['bairro'];
-                $this->state['address']['state'] = $response['uf'];
-                $this->state['address']['city'] = $response['localidade'];
-            }
-        }        
+        }
     }
 }
