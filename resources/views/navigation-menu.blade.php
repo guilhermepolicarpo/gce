@@ -66,7 +66,7 @@
                             </x-jet-dropdown-link>
 
                             <x-jet-dropdown-link href="{{ route('typesOfTreatment') }}">
-                                {{ __('Tipos de Tratamento') }}
+                                {{ __('Tipos de Atendimento') }}
                             </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
@@ -231,7 +231,7 @@
                 </x-jet-responsive-nav-link>
 
                 <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}" :active="request()->routeIs('typesOfTreatment')">
-                    {{ __('Tipos de Tratamento') }}
+                    {{ __('Tipos de Atendimento') }}
                 </x-jet-responsive-nav-link>
             </div>
         </div>

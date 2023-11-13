@@ -39,8 +39,8 @@
     
                     <x-dropdown.item separator>
                         <div class="w-full">
-                            <label for="tratamento">{{ __('Tratamento') }}</label><br/>
-                            <select name="tratamento" id="tratamento" wire:model="treatmentType" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                            <label for="atendimento">{{ __('Tipo de Atendimento') }}</label><br/>
+                            <select name="atendimento" id="atendimento" wire:model="treatmentType" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Todos</option>
                                 @foreach ($typesOfTreatment as $typeOfTreatment)
                                     <option value="{{ $typeOfTreatment->id }}">{{ $typeOfTreatment->name }}</option>
@@ -86,7 +86,7 @@
                                         {{ __('Assistido') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
-                                        {{ __('Tipo de Tratamento') }}
+                                        {{ __('Tipo de Atendimento') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
@@ -221,7 +221,7 @@
                     <div class="grid grid-cols-6 gap-3">
 
                         <div class="col-span-6 sm:col-span-4">
-                            <label for="modo">{{ __('Tratamento') }}</label>
+                            <label for="modo">{{ __('Tipo de Atendimento') }}</label>
                             <select name="modo" id="modo" wire:model.defer="state.treatment_type_id" wire:keydown.enter="saveScheduling()" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Selecione</option>
                                 @foreach ($typesOfTreatment as $typeOfTreatment)
@@ -325,7 +325,7 @@
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Atendimento') }}</h3>
-                            <p class="mt-1 text-sm text-gray-600">Insira os medicamentos, orientações e o mentor que realizou o atendimento.</p>
+                            <p class="mt-1 text-sm text-gray-600">Insira os fluídicos, orientações e o mentor que realizou o atendimento.</p>
                         </div>
                     </div>
                     <div class="mt-5 md:col-span-2 md:mt-0">
