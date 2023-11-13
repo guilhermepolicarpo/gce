@@ -133,7 +133,7 @@
                         <div class="col-span-6 sm:col-span-6">
                             <div class="flex items-center justify-left">
                                 <x-toggle id="healing-touch" wire:model.defer="state.is_the_healing_touch" class="pt-2" />
-                                <label for="healing-touch" class="ml-3">Adicionar formulário para este atendimento?</label>
+                                <label for="healing-touch" class="ml-3">Não adicionar formulário para este atendimento</label>
                             </div>
                         </div>
                     </div>
