@@ -67,7 +67,7 @@
                                 
                                 @forelse ($patients as $patient)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap max-w-[31ch] overflow-hidden">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
