@@ -115,7 +115,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="text-base font-medium text-gray-900">
+                                                <div class="text-base font-medium text-gray-900 max-w-[28ch] overflow-hidden">
                                                     {{ $appointment->patient->name }}
                                                 </div>
                                                 <div class="text-base text-gray-500">

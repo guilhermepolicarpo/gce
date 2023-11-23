@@ -1606,6 +1606,12 @@ select {
 .max-w-\[18rem\] {
   max-width: 18rem;
 }
+.max-w-\[30ch\] {
+  max-width: 30ch;
+}
+.max-w-\[31ch\] {
+  max-width: 31ch;
+}
 .max-w-\[41ch\] {
   max-width: 41ch;
 }
@@ -1618,8 +1624,11 @@ select {
 .max-w-xl {
   max-width: 36rem;
 }
-.max-w-\[31ch\] {
-  max-width: 31ch;
+.max-w-\[29ch\] {
+  max-width: 29ch;
+}
+.max-w-\[28ch\] {
+  max-width: 28ch;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -2007,6 +2016,9 @@ select {
 }
 .border-l-4 {
   border-left-width: 4px;
+}
+.border-r {
+  border-right-width: 1px;
 }
 .border-t {
   border-top-width: 1px;
