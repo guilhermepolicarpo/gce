@@ -10,10 +10,12 @@ use App\Models\Treatment;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Traits\HandleText;
 
 class Patients extends Component
 {
     use WithPagination;
+    use HandleText;
 
     public $carbon;
     public $dateFormat;
@@ -157,7 +159,7 @@ class Patients extends Component
     public function addPatient()
     {
         $this->validate();
-
+        
         DB::beginTransaction();
 
         $address = Address::updateOrCreate(
@@ -165,12 +167,12 @@ class Patients extends Component
                 'id' => $this->patient['address_id']
             ],
             [
-                'address' => $this->patient['address'],
+                'address' => $this->formatName($this->patient['address']),
                 'number' => $this->patient['number'],
-                'neighborhood' => $this->patient['neighborhood'],
+                'neighborhood' => $this->formatName($this->patient['neighborhood']),
                 'zip_code' => $this->patient['zip_code'],
                 'state' => $this->patient['state'],
-                'city' => $this->patient['city']
+                'city' => $this->formatName($this->patient['city'])
             ]
             );
 
@@ -180,8 +182,8 @@ class Patients extends Component
             ],
             [
                 'address_id' => $address->id,
-                'name' => $this->patient['name'],
-                'email' => $this->patient['email'],
+                'name' => $this->formatName($this->patient['name']),
+                'email' => $this->formatEmail($this->patient['email']),
                 'phone' => $this->patient['phone'],
                 'birth' => $this->patient['birth']
             ]
@@ -226,4 +228,8 @@ class Patients extends Component
 
         $this->patientOfTheTreatment = Patient::where('id', $patient)->first();
     }
+
+    
+
+   
 }

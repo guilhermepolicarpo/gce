@@ -42,7 +42,7 @@
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         <div class="flex items-center">
-                                            <button  class="uppercase">{{ __('Endereço') }}</button>
+                                            <button wire:click="sortBy('address')" class="uppercase">{{ __('Endereço') }}</button>
                                             <x-sort-icon sortField="address" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
