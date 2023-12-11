@@ -136,7 +136,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $patients->links() }}
+                        {{ $patients->onEachSide(1)->links() }}
                     </div>
                 </div>
             </div>
