@@ -181,7 +181,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $appointments->links() }}
+                        {{ $appointments->onEachSide(1)->links() }}
                     </div>
                 </div>
             </div>

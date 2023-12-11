@@ -4,22 +4,22 @@ namespace App\Traits;
 
 use Illuminate\Support\Str;
 
-trait HandleText 
+trait HandleText
 {
-    public function formatName($name) 
+    public function formatName($name)
     {
         $formattedName = Str::of($name)->title();
 
-        $particulasMonossilabicas = ['de', 'da', 'e', 'o', 'a', 'em', 'dos', 'das', 'os', 'as'];
+        $exeptions = ['de', 'da', 'do', 'e', 'o', 'a', 'em', 'dos', 'das', 'os', 'as', 'I', 'II', 'III', 'IV'];
 
-        foreach ($particulasMonossilabicas as $particula) {
-            $formattedName = str_replace(' ' . ucfirst($particula) . ' ', ' ' . $particula . ' ', $formattedName);
+        foreach ($exeptions as $exeption) {
+            $formattedName = str_replace(' ' . ucfirst($exeption) . ' ', ' ' . $exeption . ' ', $formattedName);
         }
 
         return $formattedName;
     }
 
-    public function formatEmail($email) 
+    public function formatEmail($email)
     {
         return Str::lower($email);
     }
