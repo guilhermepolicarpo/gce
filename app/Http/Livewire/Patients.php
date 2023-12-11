@@ -96,7 +96,7 @@ class Patients extends Component
                     });
             })
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
-            ->paginate(1);
+            ->paginate(10);
 
         return view('livewire.patients', [
             'patients' => $patients
