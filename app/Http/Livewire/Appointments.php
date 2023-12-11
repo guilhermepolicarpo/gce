@@ -20,6 +20,7 @@ class Appointments extends Component
         'treatment_type_id' => '',
         'treatment_mode' => 'Presencial',
         'status' => '',
+        'notes' => '',
     ];
     public $treatmentState = [
         'patient_id' => null,
@@ -61,6 +62,7 @@ class Appointments extends Component
         'state.date' => 'required|date',
         'state.treatment_type_id' => 'required|numeric',
         'state.treatment_mode' => 'required|string',
+        'state.notes' => 'string',
     ];
 
     protected $messages = [
@@ -71,7 +73,7 @@ class Appointments extends Component
     ];
 
     public function mount()
-    {   
+    {
         $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get();
         $this->dateFormat = now();
 
@@ -81,7 +83,7 @@ class Appointments extends Component
     }
 
     public function render()
-    {        
+    {
         $appointments = Appointment::with(['patient', 'typeOfTreatment'])
             ->when($this->q, function($query) {
                 return $query
@@ -154,6 +156,7 @@ class Appointments extends Component
             'date' => $this->state['date'],
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
+            'notes' => $this->state['notes'],
         ]);
 
         $this->confirmingSchedulingAddition = false;
@@ -177,30 +180,30 @@ class Appointments extends Component
         $this->resetValidation();
 
         $treatmentType = TypeOfTreatment::where('id', $appointment->treatment_type_id)->first();
-        
+
         if (!$appointment->status) {
-            
+
             if($treatmentType->is_the_healing_touch) {
-    
+
                 DB::beginTransaction();
-    
+
                 $treatment = Treatment::create([
                     'patient_id' => $appointment->patient_id,
                     'treatment_type_id' => $appointment->treatment_type_id,
                     'treatment_mode' => $appointment->treatment_mode,
                     'date' => $appointment->date,
                 ]);
-                
+
                 $appointment->status = $treatment->id;
                 $appointment->save();
-                
+
                 DB::commit();
-    
+
             } else {
-    
+
                 $this->reset(['treatment']);
-                $this->treatment = Appointment::with(['patient.address', 'typeOfTreatment'])->where('id', $appointment->id)->first();                
-                $this->confirmingTreatmentAddition = true;         
+                $this->treatment = Appointment::with(['patient.address', 'typeOfTreatment'])->where('id', $appointment->id)->first();
+                $this->confirmingTreatmentAddition = true;
             }
         }
     }
@@ -212,7 +215,7 @@ class Appointments extends Component
         $this->treatmentState['treatment_type_id'] = $this->treatment->treatment_type_id;
         $this->treatmentState['date'] = $this->treatment->date;
         $this->treatmentState['treatment_mode'] = $this->treatment->treatment_mode;
-        
+
         $this->validate([
             'treatmentState.patient_id' => 'required|numeric',
             'treatmentState.treatment_type_id' => 'required|numeric',
@@ -223,7 +226,7 @@ class Appointments extends Component
         ]);
 
         DB::beginTransaction();
-        
+
         $treatment = Treatment::create([
             'patient_id' => $this->treatmentState['patient_id'],
             'treatment_type_id' => $this->treatmentState['treatment_type_id'],
@@ -242,7 +245,7 @@ class Appointments extends Component
 
         DB::commit();
 
-        $this->confirmingTreatmentAddition = false;         
+        $this->confirmingTreatmentAddition = false;
 
     }
 

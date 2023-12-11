@@ -11,6 +11,8 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Traits\HandleText;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class Patients extends Component
 {
@@ -58,7 +60,7 @@ class Patients extends Component
         'patient.neighborhood' => 'nullable|string',
         'patient.zip_code' => 'nullable|string|min:8',
         'patient.state' => 'nullable|string|max:2',
-        'patient.city' => 'nullable|string'        
+        'patient.city' => 'nullable|string'
     ];
 
     protected $messages = [
@@ -74,28 +76,27 @@ class Patients extends Component
     ];
 
     public function mount()
-    {   
+    {
         $this->dateFormat = now();
     }
 
     public function render()
     {
-        
-        $this->carbon = Carbon::now();       
+
+        $this->carbon = Carbon::now();
 
         $patients = Patient::with('address')
-            ->when($this->q, function($query) {
+            ->when($this->q, function ($query) {
                 return $query
-                    ->whereRelation('address', 'address', 'like', '%'.$this->q.'%')
-                    ->orWhere(function($query){
-                        $query->where('name', 'like', '%'. $this->q . '%')
-                        ->orWhere('email', 'like', '%' . $this->q . '%')
-                        ->orWhere('phone', 'like', '%' . $this->q . '%');
+                    ->whereRelation('address', 'address', 'like', '%' . $this->q . '%')
+                    ->orWhere(function ($query) {
+                        $query->where('name', 'like', '%' . $this->q . '%')
+                            ->orWhere('email', 'like', '%' . $this->q . '%')
+                            ->orWhere('phone', 'like', '%' . $this->q . '%');
                     });
             })
-            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC');
-
-        $patients = $patients->paginate(10);
+            ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
+            ->paginate(10);
 
         return view('livewire.patients', [
             'patients' => $patients
@@ -150,7 +151,7 @@ class Patients extends Component
             'state' => $patient->address->state,
             'city' => $patient->address->city
         ];
-        
+
         $this->action = 'editing';
         $this->resetValidation();
         $this->confirmingPatientAddition = true;
@@ -159,7 +160,7 @@ class Patients extends Component
     public function addPatient()
     {
         $this->validate();
-        
+
         DB::beginTransaction();
 
         $address = Address::updateOrCreate(
@@ -174,7 +175,7 @@ class Patients extends Component
                 'state' => $this->patient['state'],
                 'city' => $this->formatName($this->patient['city'])
             ]
-            );
+        );
 
         Patient::updateOrCreate(
             [
@@ -188,7 +189,7 @@ class Patients extends Component
                 'birth' => $this->patient['birth']
             ]
         );
-    
+
         DB::commit();
 
         $this->confirmingPatientAddition = false;
@@ -198,8 +199,8 @@ class Patients extends Component
     {
         if (!empty($zipCode)) {
             $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
-    
-            $response = Http::get('https://viacep.com.br/ws/'. $zipCode .'/json/');
+
+            $response = Http::get('https://viacep.com.br/ws/' . $zipCode . '/json/');
 
             if ($response && $response->status() == 200) {
                 $response = $response->json();
@@ -213,6 +214,34 @@ class Patients extends Component
         }
     }
 
+    private function formatPhoneNumber($phoneNumber)
+    {
+        // Remove non-numeric characters from the phone number
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        // Check if it's a mobile or landline number and apply the appropriate format
+        if (strlen($phoneNumber) == 11) {
+            // Format as (XX) 9XXXX-XXXX for mobile numbers
+            return sprintf(
+                '(%s) %s-%s',
+                substr($phoneNumber, 0, 2),
+                substr($phoneNumber, 2, 5),
+                substr($phoneNumber, 7)
+            );
+        } elseif (strlen($phoneNumber) == 10) {
+            // Format as (XX) XXXX-XXXX for landline numbers
+            return sprintf(
+                '(%s) %s-%s',
+                substr($phoneNumber, 0, 2),
+                substr($phoneNumber, 2, 4),
+                substr($phoneNumber, 6)
+            );
+        }
+
+        // Return the original number if it doesn't match expected lengths
+        return $phoneNumber;
+    }
+
     public function openTreatmentsModal($patient)
     {
         $this->openingTreatmentsModal = true;
@@ -221,15 +250,11 @@ class Patients extends Component
 
     public function getTreatments($patient)
     {
-        $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'] )
+        $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'])
             ->where('treatments.patient_id', $patient)
             ->orderBy('date', 'DESC')
-        ->get();
+            ->get();
 
         $this->patientOfTheTreatment = Patient::where('id', $patient)->first();
     }
-
-    
-
-   
 }

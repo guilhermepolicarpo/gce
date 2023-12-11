@@ -1606,8 +1606,8 @@ select {
 .max-w-\[18rem\] {
   max-width: 18rem;
 }
-.max-w-\[30ch\] {
-  max-width: 30ch;
+.max-w-\[28ch\] {
+  max-width: 28ch;
 }
 .max-w-\[31ch\] {
   max-width: 31ch;
@@ -1623,12 +1623,6 @@ select {
 }
 .max-w-xl {
   max-width: 36rem;
-}
-.max-w-\[29ch\] {
-  max-width: 29ch;
-}
-.max-w-\[28ch\] {
-  max-width: 28ch;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -3178,6 +3172,9 @@ select {
 }
 .underline {
   text-decoration-line: underline;
+}
+.underline-offset-2 {
+  text-underline-offset: 2px;
 }
 .antialiased {
   -webkit-font-smoothing: antialiased;
