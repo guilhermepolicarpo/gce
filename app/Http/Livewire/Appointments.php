@@ -62,7 +62,7 @@ class Appointments extends Component
         'state.date' => 'required|date',
         'state.treatment_type_id' => 'required|numeric',
         'state.treatment_mode' => 'required|string',
-        'state.notes' => 'string',
+        'state.notes' => 'nullable|string',
     ];
 
     protected $messages = [

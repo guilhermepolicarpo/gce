@@ -38,7 +38,7 @@ class Medicines extends Component
         'sortBy' => ['except' => 'id'],
         'sortDesc' => ['except' => true],
     ];
-    
+
     public function render()
     {
         $medicines = Medicine::when($this->q, function($query) {
@@ -50,7 +50,7 @@ class Medicines extends Component
             'medicines' => $medicines,
         ]);
     }
-    
+
     public function confirmMedicineAddition()
     {
         $this->reset(['state']);
@@ -71,7 +71,7 @@ class Medicines extends Component
                 'description' => $this->state['description'],
             ]
         );
-        
+
         $this->reset(['state']);
         $this->confirmingMedicineAddition = false;
     }
@@ -87,7 +87,7 @@ class Medicines extends Component
     {
         $this->confirmingMedicineDeletion = $id;
     }
-    
+
     public function deleteMedicine(Medicine $medicine)
     {
         $medicine->delete();
