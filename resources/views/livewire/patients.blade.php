@@ -284,6 +284,11 @@
         </x-slot>
     </x-jet-dialog-modal>
 
+
+
+
+
+
     {{-- Patient's chart --}}
     <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
         <x-slot name="title">
@@ -338,20 +343,34 @@
                                                 <h6 class="text-black">Fluídicos</h6>
                                                 <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     @foreach ($treatment->medicines as $medicine)
-                                                        {{ $medicine->name.', ' }}
+                                                        @php
+                                                            if ($loop->last) {
+                                                                echo $medicine->name.'.';
+                                                            } else {
+                                                                echo $medicine->name.', ';
+                                                            }
+                                                        @endphp
                                                     @endforeach
                                                 </div>
+
+                                                @if (count($treatment->orientations) !== 0)
                                                 <h6 class="text-black">Orientações</h6>
                                                 <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     @foreach ($treatment->orientations as $orientation)
                                                         {{ '- '.$orientation->name }}<br/>
                                                     @endforeach
                                                 </div>
+                                                @endif
 
                                                 @if ($treatment->notes)
                                                 <h6 class="text-black">Anotações</h6>
                                                 <div class="p-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
-                                                    <p>{{ $treatment->notes }}</p>
+                                                    @php
+                                                        $notes = explode("\n", $treatment->notes);
+                                                    @endphp
+                                                    @foreach ($notes as $note)
+                                                        {{ '- '.$note }}<br />
+                                                    @endforeach
                                                 </div>
                                                 @endif
 
