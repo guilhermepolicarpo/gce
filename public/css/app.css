@@ -1514,6 +1514,28 @@ select {
 .max-h-\[600px\] {
   max-height: 600px;
 }
+.max-h-\[650px\] {
+  max-height: 650px;
+}
+.max-h-fit {
+  max-height: -moz-fit-content;
+  max-height: fit-content;
+}
+.max-h-screen {
+  max-height: 100vh;
+}
+.max-h-full {
+  max-height: 100%;
+}
+.max-h-\[90vh\] {
+  max-height: 90vh;
+}
+.max-h-\[80vh\] {
+  max-height: 80vh;
+}
+.max-h-\[70vh\] {
+  max-height: 70vh;
+}
 .min-h-full {
   min-height: 100%;
 }
@@ -3231,9 +3253,6 @@ select {
 }
 .opacity-75 {
   opacity: 0.75;
-}
-.opacity-5 {
-  opacity: 0.05;
 }
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);

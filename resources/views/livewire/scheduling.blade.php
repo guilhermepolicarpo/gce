@@ -390,202 +390,202 @@
         </x-slot>
 
         <x-slot name="content">
-
-            <div class="px-4 py-5 rounded shadow bg-gray-50 sm:p-6 md:grid md:grid-cols-2 md:gap-6">
-                <div class="md:col-span-1">
-                    <p class="text-lg font-semibold">
-                        @isset($treatment->patient->name)
-                            {{ $treatment->patient->name }}
-                        @endisset
-                    </p>
-
-                    @isset($treatment->patient->birth)
-                        <p>{{ "Idade: ".$dateFormat->parse($treatment->patient->birth)->diff(now())->y." anos" }} </p>
-                    @endisset
-
-                    @isset($treatment->patient->address->address)
-                        <p>{{ $treatment->patient->address->address.", ".$treatment->patient->address->number." - ".$treatment->patient->address->neighborhood}}</p>
-                    @endisset
-                    @isset($treatment->patient->address->city)
-                        <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
-                    @endisset
-                    @isset($treatment->patient->phone)
-                        <p>{{ $treatment->patient->phone}}</p>
-                    @endisset
-                </div>
-                <div class=" md:col-span-1 md:mt-7 sm:mt-0">
-                    @isset($treatment->typeOfTreatment->name)
-                        <p>{{ 'Atendimento: '.$treatment->typeOfTreatment->name }}</p>
-                    @endisset
-                    @isset($treatment->treatment_mode)
-                        <p>{{ 'Modo: '.$treatment->treatment_mode }}</p>
-                    @endisset
-                    @isset($treatment->treatment_mode)
-                        <p>{{ 'Data do atendimento: '.$dateFormat->parse($treatment->date)->format('d/m/Y') }}</p>
-                    @endisset
-                </div>
-
-                @empty($treatment->notes)
-                @else
-                    <div>
-                        <p class="underline underline-offset-2">Observações:</p>
-                        <p>{{ $treatment->notes }}</p>
-                    </div>
-                @endempty
-
-            </div>
-
-            <div class="mt-10">
-                <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="max-h-[70vh] overflow-y-scroll">
+                <div class="px-4 py-5 rounded shadow bg-gray-50 sm:p-6 md:grid md:grid-cols-2 md:gap-6 ">
                     <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Atendimento') }}</h3>
-                            <p class="mt-1 text-sm text-gray-600">Insira os fluídicos, orientações e o mentor que realizou o atendimento.</p>
-                        </div>
+                        <p class="text-lg font-semibold">
+                            @isset($treatment->patient->name)
+                                {{ $treatment->patient->name }}
+                            @endisset
+                        </p>
+
+                        @isset($treatment->patient->birth)
+                            <p>{{ "Idade: ".$dateFormat->parse($treatment->patient->birth)->diff(now())->y." anos" }} </p>
+                        @endisset
+
+                        @isset($treatment->patient->address->address)
+                            <p>{{ $treatment->patient->address->address.", ".$treatment->patient->address->number." - ".$treatment->patient->address->neighborhood}}</p>
+                        @endisset
+                        @isset($treatment->patient->address->city)
+                            <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
+                        @endisset
+                        @isset($treatment->patient->phone)
+                            <p>{{ $treatment->patient->phone}}</p>
+                        @endisset
                     </div>
-                    <div class="mt-5 md:col-span-2 md:mt-0">
-                        <div class="shadow sm:rounded-md">
-                            <div class="px-4 py-5 bg-gray-50 sm:p-6">
-                                <div class="grid grid-cols-6 gap-6">
-                                    <div class="col-span-6 sm:col-span-6">
-                                        <x-select
-                                            label="{{ __('Fluídicos') }}"
-                                            placeholder="Selecione um ou mais fluídicos"
-                                            :async-data="route('searchMedicine')"
-                                            option-label="name"
-                                            option-value="id"
-                                            option-description="description"
-                                            wire:model.defer="treatmentState.medicines"
-                                            multiselect
-                                            class="mt-1"
-                                        />
+                    <div class=" md:col-span-1 md:mt-7 sm:mt-0">
+                        @isset($treatment->typeOfTreatment->name)
+                            <p>{{ 'Atendimento: '.$treatment->typeOfTreatment->name }}</p>
+                        @endisset
+                        @isset($treatment->treatment_mode)
+                            <p>{{ 'Modo: '.$treatment->treatment_mode }}</p>
+                        @endisset
+                        @isset($treatment->treatment_mode)
+                            <p>{{ 'Data do atendimento: '.$dateFormat->parse($treatment->date)->format('d/m/Y') }}</p>
+                        @endisset
+                    </div>
 
-                                        <div class="col-span-6 mt-3 sm:col-span-6">
-                                            <x-select
-                                              label="{{ __('Orientações') }}"
-                                              placeholder="Selecione uma ou mais orientações"
-                                              :async-data="route('searchOrientation')"
-                                              option-label="name"
-                                              option-value="id"
-                                              wire:model.defer="treatmentState.orientations"
-                                              multiselect
-                                              clearable
-                                              always-fetch
-                                              class="block w-full mt-1"
-                                            />
-                                        </div>
+                    @empty($treatment->notes)
+                    @else
+                        <div>
+                            <p class="underline underline-offset-2">Observações:</p>
+                            <p>{{ $treatment->notes }}</p>
+                        </div>
+                    @endempty
 
-                                        <div class="col-span-6 mt-3 sm:col-span-6">
+                </div>
+
+                <div class="mt-10">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Atendimento') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Insira os fluídicos, orientações e o mentor que realizou o atendimento.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                                    <div class="grid grid-cols-6 gap-6">
+                                        <div class="col-span-6 sm:col-span-6">
                                             <x-select
-                                                label="{{ __('Mentor') }}"
-                                                placeholder="Selecione um mentor"
-                                                :async-data="route('searchMentor')"
+                                                label="{{ __('Fluídicos') }}"
+                                                placeholder="Selecione um ou mais fluídicos"
+                                                :async-data="route('searchMedicine')"
                                                 option-label="name"
                                                 option-value="id"
-                                                wire:model.defer="treatmentState.mentor_id"
-                                                class="block w-full mt-1"
+                                                option-description="description"
+                                                wire:model.defer="treatmentState.medicines"
+                                                multiselect
+                                                class="mt-1"
                                             />
+
+                                            <div class="col-span-6 mt-3 sm:col-span-6">
+                                                <x-select
+                                                label="{{ __('Orientações') }}"
+                                                placeholder="Selecione uma ou mais orientações"
+                                                :async-data="route('searchOrientation')"
+                                                option-label="name"
+                                                option-value="id"
+                                                wire:model.defer="treatmentState.orientations"
+                                                multiselect
+                                                clearable
+                                                always-fetch
+                                                class="block w-full mt-1"
+                                                />
+                                            </div>
+
+                                            <div class="col-span-6 mt-3 sm:col-span-6">
+                                                <x-select
+                                                    label="{{ __('Mentor') }}"
+                                                    placeholder="Selecione um mentor"
+                                                    :async-data="route('searchMentor')"
+                                                    option-label="name"
+                                                    option-value="id"
+                                                    wire:model.defer="treatmentState.mentor_id"
+                                                    class="block w-full mt-1"
+                                                />
+                                            </div>
+
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                     </div>
-                </div>
-            </div>
-
-            <div class="hidden sm:block" aria-hidden="true">
-                <div class="py-8">
-                    <div class="border-t border-gray-200"></div>
-                </div>
-            </div>
-
-            <div class="mt-10 sm:mt-0">
-                <div class="md:grid md:grid-cols-3 md:gap-6">
-                    <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Outras anotações') }}</h3>
-                            <p class="mt-1 text-sm text-gray-600">Insira outras orientações ou observações</p>
-                        </div>
                     </div>
-                  <div class="mt-5 md:col-span-2 md:mt-0">
-                    <div class="shadow sm:rounded-md">
-                      <div class="px-4 py-5 bg-gray-50 sm:p-6">
-                        <div class="grid grid-cols-6 gap-6">
-                          <div class="col-span-6 sm:col-span-6">
-                            <x-textarea label="Anotações" placeholder="Digite aqui as observações" wire:model.defer="treatmentState.notes" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-            </div>
 
-            <div class="hidden sm:block" aria-hidden="true">
-                <div class="py-8">
-                    <div class="border-t border-gray-200"></div>
-                </div>
-            </div>
-
-            <div class="mt-10 mb-10">
-                <div class="md:grid md:grid-cols-3 md:gap-6">
-                    <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Retorno') }}</h3>
-                            <p class="mt-1 text-sm text-gray-600">Insira a data de retorno do assistido, caso houver.</p>
-                        </div>
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-8">
+                        <div class="border-t border-gray-200"></div>
                     </div>
+                </div>
+
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Outras anotações') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Insira outras orientações ou observações</p>
+                            </div>
+                        </div>
                     <div class="mt-5 md:col-span-2 md:mt-0">
                         <div class="shadow sm:rounded-md">
-                            <div class="px-4 py-5 bg-gray-50 sm:p-6">
-                                <div class="flex flex-row gap-1">
-                                    <div class="grow">
-                                        <x-jet-label for="return_date" value="{{ __('Data') }}" />
-                                        <x-jet-input id="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
-                                            class="w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
-                                        <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
-                                    </div>
-                                    <div >
-                                        <x-jet-label for="return_mode" value="{{ __('Modo') }}" />
-                                        <select name="return_mode" id="return_mode" wire:model.defer="treatmentState.return_mode"
-                                            class="w-full mt-1 text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
-                                            <option value="Presencial">Presencial</option>
-                                            <option value="A distância">A distância</option>
-                                        </select>
-                                        <x-jet-input-error for="treatmentState.return_mode" class="mt-2" />
+                        <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                            <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-6">
+                                <x-textarea label="Anotações" placeholder="Digite aqui as observações" wire:model.defer="treatmentState.notes" />
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-8">
+                        <div class="border-t border-gray-200"></div>
+                    </div>
+                </div>
+
+                <div class="mt-10 mb-10">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Retorno') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Insira a data de retorno do assistido, caso houver.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                                    <div class="flex flex-row gap-1">
+                                        <div class="grow">
+                                            <x-jet-label for="return_date" value="{{ __('Data') }}" />
+                                            <x-jet-input id="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
+                                                class="w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
+                                            <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
+                                        </div>
+                                        <div >
+                                            <x-jet-label for="return_mode" value="{{ __('Modo') }}" />
+                                            <select name="return_mode" id="return_mode" wire:model.defer="treatmentState.return_mode"
+                                                class="w-full mt-1 text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                                                <option value="Presencial">Presencial</option>
+                                                <option value="A distância">A distância</option>
+                                            </select>
+                                            <x-jet-input-error for="treatmentState.return_mode" class="mt-2" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {{-- <div class="mt-10 mb-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Imagens e anexos') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Insira a receita ou outros anexos referente a este atendimento</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                                    <div class="grid grid-cols-6 gap-6">
+                                        <div class="col-span-6 sm:col-span-6">
+                                            <label for="attachment" class="text-sm text-gray-700">Anexos</label><br/>
+                                            <input id="attachment" type="file">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
             </div>
-
-            {{-- <div class="mt-10 mb-10 sm:mt-0">
-                <div class="md:grid md:grid-cols-3 md:gap-6">
-                    <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Imagens e anexos') }}</h3>
-                            <p class="mt-1 text-sm text-gray-600">Insira a receita ou outros anexos referente a este atendimento</p>
-                        </div>
-                    </div>
-                    <div class="mt-5 md:col-span-2 md:mt-0">
-                        <div class="shadow sm:rounded-md">
-                            <div class="px-4 py-5 bg-gray-50 sm:p-6">
-                                <div class="grid grid-cols-6 gap-6">
-                                    <div class="col-span-6 sm:col-span-6">
-                                        <label for="attachment" class="text-sm text-gray-700">Anexos</label><br/>
-                                        <input id="attachment" type="file">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-
         </x-slot>
 
         <x-slot name="footer" >
