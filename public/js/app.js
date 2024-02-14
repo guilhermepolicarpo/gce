@@ -10,6 +10,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Alpine: () => (/* binding */ src_default),
 /* harmony export */   "default": () => (/* binding */ module_default)
 /* harmony export */ });
 // packages/alpinejs/src/scheduler.js
@@ -98,6 +99,24 @@ function elementBoundEffect(el) {
     cleanup2();
   }];
 }
+function watch(getter, callback) {
+  let firstTime = true;
+  let oldValue;
+  let effectReference = effect(() => {
+    let value = getter();
+    JSON.stringify(value);
+    if (!firstTime) {
+      queueMicrotask(() => {
+        callback(value, oldValue);
+        oldValue = value;
+      });
+    } else {
+      oldValue = value;
+    }
+    firstTime = false;
+  });
+  return () => release(effectReference);
+}
 
 // packages/alpinejs/src/utils/dispatch.js
 function dispatch(el, name, detail = {}) {
@@ -151,7 +170,7 @@ function start() {
     directives(el, attrs).forEach((handle) => handle());
   });
   let outNestedComponents = (el) => !closestRoot(el.parentElement, true);
-  Array.from(document.querySelectorAll(allSelectors())).filter(outNestedComponents).forEach((el) => {
+  Array.from(document.querySelectorAll(allSelectors().join(","))).filter(outNestedComponents).forEach((el) => {
     initTree(el);
   });
   dispatch(document, "alpine:initialized");
@@ -267,21 +286,17 @@ function stopObservingMutations() {
   observer.disconnect();
   currentlyObserving = false;
 }
-var recordQueue = [];
-var willProcessRecordQueue = false;
+var queuedMutations = [];
 function flushObserver() {
-  recordQueue = recordQueue.concat(observer.takeRecords());
-  if (recordQueue.length && !willProcessRecordQueue) {
-    willProcessRecordQueue = true;
-    queueMicrotask(() => {
-      processRecordQueue();
-      willProcessRecordQueue = false;
-    });
-  }
-}
-function processRecordQueue() {
-  onMutate(recordQueue);
-  recordQueue.length = 0;
+  let records = observer.takeRecords();
+  queuedMutations.push(() => records.length > 0 && onMutate(records));
+  let queueLengthWhenTriggered = queuedMutations.length;
+  queueMicrotask(() => {
+    if (queuedMutations.length === queueLengthWhenTriggered) {
+      while (queuedMutations.length > 0)
+        queuedMutations.shift()();
+    }
+  });
 }
 function mutateDom(callback) {
   if (!currentlyObserving)
@@ -306,16 +321,16 @@ function onMutate(mutations) {
     deferredMutations = deferredMutations.concat(mutations);
     return;
   }
-  let addedNodes = [];
-  let removedNodes = [];
+  let addedNodes = /* @__PURE__ */ new Set();
+  let removedNodes = /* @__PURE__ */ new Set();
   let addedAttributes = /* @__PURE__ */ new Map();
   let removedAttributes = /* @__PURE__ */ new Map();
   for (let i = 0; i < mutations.length; i++) {
     if (mutations[i].target._x_ignoreMutationObserver)
       continue;
     if (mutations[i].type === "childList") {
-      mutations[i].addedNodes.forEach((node) => node.nodeType === 1 && addedNodes.push(node));
-      mutations[i].removedNodes.forEach((node) => node.nodeType === 1 && removedNodes.push(node));
+      mutations[i].addedNodes.forEach((node) => node.nodeType === 1 && addedNodes.add(node));
+      mutations[i].removedNodes.forEach((node) => node.nodeType === 1 && removedNodes.add(node));
     }
     if (mutations[i].type === "attributes") {
       let el = mutations[i].target;
@@ -348,7 +363,7 @@ function onMutate(mutations) {
     onAttributeAddeds.forEach((i) => i(el, attrs));
   });
   for (let node of removedNodes) {
-    if (addedNodes.includes(node))
+    if (addedNodes.has(node))
       continue;
     onElRemoveds.forEach((i) => i(node));
     destroyTree(node);
@@ -358,7 +373,7 @@ function onMutate(mutations) {
     node._x_ignore = true;
   });
   for (let node of addedNodes) {
-    if (removedNodes.includes(node))
+    if (removedNodes.has(node))
       continue;
     if (!node.isConnected)
       continue;
@@ -544,7 +559,10 @@ function tryCatch(el, expression, callback, ...args) {
   }
 }
 function handleError(error2, el, expression = void 0) {
-  Object.assign(error2, { el, expression });
+  error2 = Object.assign(
+    error2 ?? { message: "No error message given." },
+    { el, expression }
+  );
   console.warn(`Alpine Expression Error: ${error2.message}
 
 ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
@@ -664,9 +682,7 @@ function directive(name, callback) {
   return {
     before(directive2) {
       if (!directiveHandlers[directive2]) {
-        console.warn(
-          "Cannot find directive `${directive}`. `${name}` will use the default order of execution"
-        );
+        console.warn(String.raw`Cannot find directive \`${directive2}\`. \`${name}\` will use the default order of execution`);
         return;
       }
       const pos = directiveOrder.indexOf(directive2);
@@ -796,6 +812,7 @@ var directiveOrder = [
   "ref",
   "data",
   "id",
+  "anchor",
   "bind",
   "init",
   "for",
@@ -1068,7 +1085,7 @@ window.Element.prototype._x_toggleAndCascadeWithTransitions = function(el, value
   el._x_hidePromise = el._x_transition ? new Promise((resolve, reject) => {
     el._x_transition.out(() => {
     }, () => resolve(hide));
-    el._x_transitioning.beforeCancel(() => reject({ isFromCancelledTransition: true }));
+    el._x_transitioning && el._x_transitioning.beforeCancel(() => reject({ isFromCancelledTransition: true }));
   }) : Promise.resolve(hide);
   queueMicrotask(() => {
     let closest = closestHide(el);
@@ -1222,11 +1239,12 @@ function skipDuringClone(callback, fallback = () => {
 function onlyDuringClone(callback) {
   return (...args) => isCloning && callback(...args);
 }
+var interceptors = [];
+function interceptClone(callback) {
+  interceptors.push(callback);
+}
 function cloneNode(from, to) {
-  if (from._x_dataStack) {
-    to._x_dataStack = from._x_dataStack;
-    to.setAttribute("data-has-alpine-state", true);
-  }
+  interceptors.forEach((i) => i(from, to));
   isCloning = true;
   dontRegisterReactiveSideEffects(() => {
     initTree(to, (el, callback) => {
@@ -1271,13 +1289,6 @@ function dontRegisterReactiveSideEffects(callback) {
   callback();
   overrideEffect(cache);
 }
-function shouldSkipRegisteringDataDuringClone(el) {
-  if (!isCloning)
-    return false;
-  if (isCloningLegacy)
-    return true;
-  return el.hasAttribute("data-has-alpine-state");
-}
 
 // packages/alpinejs/src/utils/bind.js
 function bind(el, name, value, modifiers = []) {
@@ -1310,7 +1321,11 @@ function bindInputValue(el, value) {
       el.value = value;
     }
     if (window.fromModel) {
-      el.checked = checkedAttrLooseCompare(el.value, value);
+      if (typeof value === "boolean") {
+        el.checked = safeParseBoolean(el.value) === value;
+      } else {
+        el.checked = checkedAttrLooseCompare(el.value, value);
+      }
     }
   } else if (el.type === "checkbox") {
     if (Number.isInteger(value)) {
@@ -1378,6 +1393,15 @@ function camelCase(subject) {
 }
 function checkedAttrLooseCompare(valueA, valueB) {
   return valueA == valueB;
+}
+function safeParseBoolean(rawValue) {
+  if ([1, "1", "true", "on", "yes", true].includes(rawValue)) {
+    return true;
+  }
+  if ([0, "0", "false", "off", "no", false].includes(rawValue)) {
+    return false;
+  }
+  return rawValue ? Boolean(rawValue) : null;
 }
 function isBooleanAttr(attrName) {
   const booleanAttributes = [
@@ -1472,25 +1496,25 @@ function throttle(func, limit) {
 function entangle({ get: outerGet, set: outerSet }, { get: innerGet, set: innerSet }) {
   let firstRun = true;
   let outerHash;
+  let innerHash;
   let reference = effect(() => {
-    const outer = outerGet();
-    const inner = innerGet();
+    let outer = outerGet();
+    let inner = innerGet();
     if (firstRun) {
       innerSet(cloneIfObject(outer));
       firstRun = false;
-      outerHash = JSON.stringify(outer);
     } else {
-      const outerHashLatest = JSON.stringify(outer);
+      let outerHashLatest = JSON.stringify(outer);
+      let innerHashLatest = JSON.stringify(inner);
       if (outerHashLatest !== outerHash) {
         innerSet(cloneIfObject(outer));
-        outerHash = outerHashLatest;
-      } else {
+      } else if (outerHashLatest !== innerHashLatest) {
         outerSet(cloneIfObject(inner));
-        outerHash = JSON.stringify(inner);
+      } else {
       }
     }
-    JSON.stringify(innerGet());
-    JSON.stringify(outerGet());
+    outerHash = JSON.stringify(outerGet());
+    innerHash = JSON.stringify(innerGet());
   });
   return () => {
     release(reference);
@@ -1609,7 +1633,7 @@ var Alpine = {
   get raw() {
     return raw;
   },
-  version: "3.13.2",
+  version: "3.13.5",
   flushAndStopDeferringMutations,
   dontAutoEvaluateFunctions,
   disableEffectScheduling,
@@ -1623,6 +1647,7 @@ var Alpine = {
   onlyDuringClone,
   addRootSelector,
   addInitSelector,
+  interceptClone,
   addScopeToNode,
   deferMutations,
   mapAttributes,
@@ -1661,6 +1686,7 @@ var Alpine = {
   // INTERNAL
   bound: getBinding,
   $data: scope,
+  watch,
   walk,
   data,
   bind: bind2
@@ -2382,23 +2408,15 @@ magic("nextTick", () => nextTick);
 magic("dispatch", (el) => dispatch.bind(dispatch, el));
 
 // packages/alpinejs/src/magics/$watch.js
-magic("watch", (el, { evaluateLater: evaluateLater2, effect: effect3 }) => (key, callback) => {
+magic("watch", (el, { evaluateLater: evaluateLater2, cleanup: cleanup2 }) => (key, callback) => {
   let evaluate2 = evaluateLater2(key);
-  let firstTime = true;
-  let oldValue;
-  let effectReference = effect3(() => evaluate2((value) => {
-    JSON.stringify(value);
-    if (!firstTime) {
-      queueMicrotask(() => {
-        callback(value, oldValue);
-        oldValue = value;
-      });
-    } else {
-      oldValue = value;
-    }
-    firstTime = false;
-  }));
-  el._x_effects.delete(effectReference);
+  let getter = () => {
+    let value;
+    evaluate2((i) => value = i);
+    return value;
+  };
+  let unwatch = watch(getter, callback);
+  cleanup2(unwatch);
 });
 
 // packages/alpinejs/src/magics/$store.js
@@ -2449,11 +2467,31 @@ function setIdRoot(el, name) {
 }
 
 // packages/alpinejs/src/magics/$id.js
-magic("id", (el) => (name, key = null) => {
-  let root = closestIdRoot(el, name);
-  let id = root ? root._x_ids[name] : findAndIncrementId(name);
-  return key ? `${name}-${id}-${key}` : `${name}-${id}`;
+magic("id", (el, { cleanup: cleanup2 }) => (name, key = null) => {
+  let cacheKey = `${name}${key ? `-${key}` : ""}`;
+  return cacheIdByNameOnElement(el, cacheKey, cleanup2, () => {
+    let root = closestIdRoot(el, name);
+    let id = root ? root._x_ids[name] : findAndIncrementId(name);
+    return key ? `${name}-${id}-${key}` : `${name}-${id}`;
+  });
 });
+interceptClone((from, to) => {
+  if (from._x_id) {
+    to._x_id = from._x_id;
+  }
+});
+function cacheIdByNameOnElement(el, cacheKey, cleanup2, callback) {
+  if (!el._x_id)
+    el._x_id = {};
+  if (el._x_id[cacheKey])
+    return el._x_id[cacheKey];
+  let output = callback();
+  el._x_id[cacheKey] = output;
+  cleanup2(() => {
+    delete el._x_id[cacheKey];
+  });
+  return output;
+}
 
 // packages/alpinejs/src/magics/$el.js
 magic("el", (el) => el);
@@ -2571,7 +2609,9 @@ handler.inline = (el, { modifiers }, { cleanup: cleanup2 }) => {
 directive("ignore", handler);
 
 // packages/alpinejs/src/directives/x-effect.js
-directive("effect", (el, { expression }, { effect: effect3 }) => effect3(evaluateLater(el, expression)));
+directive("effect", skipDuringClone((el, { expression }, { effect: effect3 }) => {
+  effect3(evaluateLater(el, expression));
+}));
 
 // packages/alpinejs/src/utils/on.js
 function on(el, event, modifiers, callback) {
@@ -2771,7 +2811,7 @@ directive("model", (el, { modifiers, expression }, { effect: effect3, cleanup: c
     setValue(getInputValue(el, modifiers, e, getValue()));
   });
   if (modifiers.includes("fill")) {
-    if ([null, ""].includes(getValue()) || el.type === "checkbox" && Array.isArray(getValue())) {
+    if ([void 0, null, ""].includes(getValue()) || el.type === "checkbox" && Array.isArray(getValue())) {
       el.dispatchEvent(new Event(event, {}));
     }
   }
@@ -2813,21 +2853,40 @@ function getInputValue(el, modifiers, event, currentValue) {
       return event.detail !== null && event.detail !== void 0 ? event.detail : event.target.value;
     else if (el.type === "checkbox") {
       if (Array.isArray(currentValue)) {
-        let newValue = modifiers.includes("number") ? safeParseNumber(event.target.value) : event.target.value;
+        let newValue = null;
+        if (modifiers.includes("number")) {
+          newValue = safeParseNumber(event.target.value);
+        } else if (modifiers.includes("boolean")) {
+          newValue = safeParseBoolean(event.target.value);
+        } else {
+          newValue = event.target.value;
+        }
         return event.target.checked ? currentValue.concat([newValue]) : currentValue.filter((el2) => !checkedAttrLooseCompare2(el2, newValue));
       } else {
         return event.target.checked;
       }
     } else if (el.tagName.toLowerCase() === "select" && el.multiple) {
-      return modifiers.includes("number") ? Array.from(event.target.selectedOptions).map((option) => {
-        let rawValue = option.value || option.text;
-        return safeParseNumber(rawValue);
-      }) : Array.from(event.target.selectedOptions).map((option) => {
+      if (modifiers.includes("number")) {
+        return Array.from(event.target.selectedOptions).map((option) => {
+          let rawValue = option.value || option.text;
+          return safeParseNumber(rawValue);
+        });
+      } else if (modifiers.includes("boolean")) {
+        return Array.from(event.target.selectedOptions).map((option) => {
+          let rawValue = option.value || option.text;
+          return safeParseBoolean(rawValue);
+        });
+      }
+      return Array.from(event.target.selectedOptions).map((option) => {
         return option.value || option.text;
       });
     } else {
-      let rawValue = event.target.value;
-      return modifiers.includes("number") ? safeParseNumber(rawValue) : modifiers.includes("trim") ? rawValue.trim() : rawValue;
+      if (modifiers.includes("number")) {
+        return safeParseNumber(event.target.value);
+      } else if (modifiers.includes("boolean")) {
+        return safeParseBoolean(event.target.value);
+      }
+      return modifiers.includes("trim") ? event.target.value.trim() : event.target.value;
     }
   });
 }
@@ -2944,6 +3003,19 @@ directive("data", (el, { expression }, { cleanup: cleanup2 }) => {
     undo();
   });
 });
+interceptClone((from, to) => {
+  if (from._x_dataStack) {
+    to._x_dataStack = from._x_dataStack;
+    to.setAttribute("data-has-alpine-state", true);
+  }
+});
+function shouldSkipRegisteringDataDuringClone(el) {
+  if (!isCloning)
+    return false;
+  if (isCloningLegacy)
+    return true;
+  return el.hasAttribute("data-has-alpine-state");
+}
 
 // packages/alpinejs/src/directives/x-show.js
 directive("show", (el, { modifiers, expression }, { effect: effect3 }) => {
@@ -3225,6 +3297,11 @@ directive("if", (el, { expression }, { effect: effect3, cleanup: cleanup2 }) => 
 directive("id", (el, { expression }, { evaluate: evaluate2 }) => {
   let names = evaluate2(expression);
   names.forEach((name) => setIdRoot(el, name));
+});
+interceptClone((from, to) => {
+  if (from._x_ids) {
+    to._x_ids = from._x_ids;
+  }
 });
 
 // packages/alpinejs/src/directives/x-on.js
@@ -22797,7 +22874,7 @@ process.umask = function() { return 0; };
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+module.exports = /*#__PURE__*/JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
 
 /***/ })
 

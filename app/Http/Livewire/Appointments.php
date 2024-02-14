@@ -19,7 +19,6 @@ class Appointments extends Component
         'date' => '',
         'treatment_type_id' => '',
         'treatment_mode' => 'Presencial',
-        'status' => '',
         'notes' => '',
     ];
     public $treatmentState = [
@@ -31,6 +30,8 @@ class Appointments extends Component
         'notes' => null,
         'orientations' => [],
         'medicines' => [],
+        'return_date' => null,
+        'return_mode' => 'Presencial',
     ];
     public $treatment;
     public $patient;
@@ -39,12 +40,13 @@ class Appointments extends Component
     public $sortDesc = true;
     public $action;
     public $date;
-    public $status = "Não atendido";
+    public $status = "";
     public $treatmentMode;
     public $treatmentType;
     public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $confirmingTreatmentAddition = false;
+    public $confirmingArrivalOfTheAssisted = false;
     public $dateFormat;
     public $typesOfTreatment;
 
@@ -70,6 +72,8 @@ class Appointments extends Component
         'state.date.required' => 'Por favor, informe uma data de agendamento',
         'state.treatment_type_id.required' => 'Por favor, selecione um tipo de atendimento',
         'state.treatment_mode.required' => 'Por favor, selecione um modo de atendimento',
+        'treatmentState.mentor_id.required' => 'Por favor, informe o mentor que realizou o atendimento',
+        'treatmentState.return_date.after' => 'Por favor, informe uma data maior que a data atual',
     ];
 
     public function mount()
@@ -85,28 +89,23 @@ class Appointments extends Component
     public function render()
     {
         $appointments = Appointment::with(['patient', 'typeOfTreatment'])
-            ->when($this->q, function($query) {
+            ->when($this->q, function ($query) {
                 return $query
-                    ->whereRelation('patient', 'name', 'like', '%'.$this->q.'%');
+                    ->whereRelation('patient', 'name', 'like', '%' . $this->q . '%');
             })
-            ->when($this->treatmentMode, function($query) {
+            ->when($this->treatmentMode, function ($query) {
                 return $query
                     ->where('treatment_mode', '=', $this->treatmentMode);
             })
-            ->when($this->status, function($query) {
-                if ($this->status == "Não atendido") {
-                    return $query
-                        ->whereNull('status');
-                } else {
-                    return $query
-                        ->whereNotNull('status');
-                }
+            ->when($this->status, function ($query) {
+                return $query
+                    ->where('status', '=', $this->status);
             })
-            ->when($this->treatmentType, function($query) {
+            ->when($this->treatmentType, function ($query) {
                 return $query
                     ->where('treatment_type_id', '=', $this->treatmentType);
             })
-            ->when($this->date, function($query) {
+            ->when($this->date, function ($query) {
                 return $query
                     ->where('date', '=', $this->date);
             })
@@ -151,7 +150,7 @@ class Appointments extends Component
 
         Appointment::updateOrCreate([
             'id' => $this->state['id'],
-        ],[
+        ], [
             'patient_id' =>  $this->state['patient_id'],
             'date' => $this->state['date'],
             'treatment_type_id' => $this->state['treatment_type_id'],
@@ -171,6 +170,50 @@ class Appointments extends Component
         $this->resetValidation();
     }
 
+    public function confirmArrivalOfTheAssisted($appointment_id)
+    {
+        $this->confirmingArrivalOfTheAssisted = $appointment_id;
+    }
+
+    public function changeStatusToArrived(Appointment $appointment)
+    {
+        $appointment->status = "Em espera";
+        $this->confirmingArrivalOfTheAssisted = false;
+        $appointment->save();
+    }
+
+
+
+    public function updatingQ()
+    {
+        $this->resetPage();
+    }
+    public function updatingStatus()
+    {
+        $this->resetPage();
+    }
+    public function updatingDate()
+    {
+        $this->resetPage();
+    }
+    public function updatingTreatmentType()
+    {
+        $this->resetPage();
+    }
+    public function updatingTreatmentMode()
+    {
+        $this->resetPage();
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     // Treatment
@@ -181,24 +224,30 @@ class Appointments extends Component
 
         $treatmentType = TypeOfTreatment::where('id', $appointment->treatment_type_id)->first();
 
-        if (!$appointment->status) {
+        if (!$appointment->treatment_id) {
 
-            if($treatmentType->is_the_healing_touch) {
+            if ($treatmentType->is_the_healing_touch) {
 
-                DB::beginTransaction();
+                try {
+                    DB::beginTransaction();
 
-                $treatment = Treatment::create([
-                    'patient_id' => $appointment->patient_id,
-                    'treatment_type_id' => $appointment->treatment_type_id,
-                    'treatment_mode' => $appointment->treatment_mode,
-                    'date' => $appointment->date,
-                ]);
+                    $treatment = Treatment::create([
+                        'patient_id' => $appointment->patient_id,
+                        'treatment_type_id' => $appointment->treatment_type_id,
+                        'treatment_mode' => $appointment->treatment_mode,
+                        'date' => $appointment->date,
+                    ]);
 
-                $appointment->status = $treatment->id;
-                $appointment->save();
+                    $appointment->treatment_id = $treatment->id;
+                    $appointment->status = 'Atendido';
+                    $appointment->save();
 
-                DB::commit();
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollback();
 
+                    return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
+                }
             } else {
 
                 $this->reset(['treatment']);
@@ -223,50 +272,46 @@ class Appointments extends Component
             'treatmentState.date' => 'required|date',
             'treatmentState.treatment_mode' => 'required|string',
             'treatmentState.notes' => 'nullable|string',
+            'treatmentState.return_mode' => 'nullable|string',
+            'treatmentState.return_date' => 'nullable|date|after:today',
         ]);
 
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        $treatment = Treatment::create([
-            'patient_id' => $this->treatmentState['patient_id'],
-            'treatment_type_id' => $this->treatmentState['treatment_type_id'],
-            'mentor_id' => $this->treatmentState['mentor_id'],
-            'treatment_mode' => $this->treatmentState['treatment_mode'],
-            'date' => $this->treatmentState['date'],
-            'notes' => $this->treatmentState['notes'],
-        ]);
+            $treatment = Treatment::create([
+                'patient_id' => $this->treatmentState['patient_id'],
+                'treatment_type_id' => $this->treatmentState['treatment_type_id'],
+                'mentor_id' => $this->treatmentState['mentor_id'],
+                'treatment_mode' => $this->treatmentState['treatment_mode'],
+                'date' => $this->treatmentState['date'],
+                'notes' => $this->treatmentState['notes'],
+            ]);
 
-        $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
-        $treatment->medicines()->attach($this->treatmentState['medicines'], ['medicine_treatment_tenant_id' => $treatment->tenant_id]);
+            $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
+            $treatment->medicines()->attach($this->treatmentState['medicines'], ['medicine_treatment_tenant_id' => $treatment->tenant_id]);
 
-        $appointment = Appointment::where('id', $this->treatment->id)->first();
-        $appointment->status = $treatment->id;
-        $appointment->save();
+            $appointment = Appointment::where('id', $this->treatment->id)->first();
+            $appointment->treatment_id = $treatment->id;
+            $appointment->status = 'Atendido';
+            $appointment->save();
 
-        DB::commit();
+            if ($this->treatmentState['return_date']) {
+                Appointment::create([
+                    'patient_id' => $this->treatmentState['patient_id'],
+                    'date' => $this->treatmentState['return_date'],
+                    'treatment_type_id' => $this->treatmentState['treatment_type_id'],
+                    'treatment_mode' => $this->treatmentState['return_mode'],
+                ]);
+            }
 
-        $this->confirmingTreatmentAddition = false;
+            DB::commit();
 
-    }
+            $this->confirmingTreatmentAddition = false;
+        } catch (\Exception $e) {
+            DB::rollback();
 
-    public function updatingQ()
-    {
-        $this->resetPage();
-    }
-    public function updatingStatus()
-    {
-        $this->resetPage();
-    }
-    public function updatingDate()
-    {
-        $this->resetPage();
-    }
-    public function updatingTreatmentType()
-    {
-        $this->resetPage();
-    }
-    public function updatingTreatmentMode()
-    {
-        $this->resetPage();
+            return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
+        }
     }
 }

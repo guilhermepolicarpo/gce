@@ -32,7 +32,9 @@
                             <select name="status" id="status" wire:model="status" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
                                 <option value="">Todos</option>
                                 <option value="Não atendido">Não atendido</option>
+                                <option value="Em espera">Em espera</option>
                                 <option value="Atendido">Atendido</option>
+                                <option value="Faltou">Faltou</option>
                             </select>
                         </div>
                     </x-dropdown.item>
@@ -103,7 +105,7 @@
                                     <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('status')" class="uppercase">Status</button>
-                                            <x-sort-icon sortField="treatment_id" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                            <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col" class="relative px-6 py-3"></th>
@@ -137,34 +139,98 @@
                                        {{ $appointment->treatment_mode }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @isset($appointment->status)
-                                            <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> Atendido </span>
-                                        @else
-                                            <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full"> Não atendido </span>
-                                        @endisset
+                                        @switch($appointment->status)
+                                            @case('Atendido')
+                                                <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> {{
+                                                    $appointment->status }} </span>
+                                            @break
+
+                                            @case('Não atendido')
+                                            @case('Faltou')
+                                                <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full"> {{ $appointment->status }}
+                                                </span>
+                                            @break
+
+                                            @case('Em espera')
+                                                <span class="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full"> {{
+                                                    $appointment->status }}
+                                                </span>
+
+                                            @break
+                                        @endswitch
                                     </td>
                                     <td class="flex flex-row items-center content-center justify-end px-6 py-4 whitespace-nowrap">
 
-                                      @isset($appointment->status)
+                                      @isset($appointment->treatment_id)
                                         <button title="Ver atendimento" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                          {{ __('Ver atend.') }}
+                                            {{ __('Ver atend.') }}
                                         </button>
+
                                       @else
-                                        <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                            {{ __('Atender') }}
-                                        </button>
+
+                                        @if ($appointment->status === 'Não atendido')
+                                            @if ($appointment->treatment_mode === "Presencial")
+                                                <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                    {{ __('Receber') }}
+                                                </button>
+                                            @else
+                                                <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                    {{ __('Atender') }}
+                                                </button>
+                                            @endif
+                                        @endif
+
+                                        @if ($appointment->status === 'Em espera')
+                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Atender') }}
+                                            </button>
+                                        @endif
+
                                       @endisset
 
-                                        <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="ml-3 mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                            </svg>
-                                        </button>
-                                        <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})" wire:loading.attr='disabled'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600 stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                            </svg>
-                                        </button>
+                                      @if ($appointment->treatment_id)
+                                            <button title="Não é mais possível editar este agendamento" class="ml-3 mr-3 opacity-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                </svg>
+                                            </button>
+                                      @else
+                                            <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="ml-3 mr-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                </svg>
+                                            </button>
+                                      @endif
+
+
+
+                                        @if ($appointment->treatment_id)
+                                            <button title="Não é mais possível excluir este agendamento"  class="opacity-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                            </button>
+
+                                        @else
+                                            <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
+                                                wire:loading.attr='disabled'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                            </button>
+                                        @endif
+
 
                                     </td>
                                 </tr>
@@ -208,6 +274,30 @@
             </x-jet-danger-button>
         </x-slot>
     </x-jet-confirmation-modal>
+
+
+    <!-- Change Status to Oh Hold - confirming that the assisted arrived -->
+    <x-jet-confirmation-modal wire:model="confirmingArrivalOfTheAssisted">
+        <x-slot name="title">
+            {{ __('Confirmar chegada do assistido') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Deseja realmente confirmar a chegada do assistido?') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('confirmingArrivalOfTheAssisted', false)" wire:loading.attr="disabled">
+                {{ __('Cancelar') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-3" wire:click="changeStatusToArrived({{ $confirmingArrivalOfTheAssisted }})"
+                wire:loading.attr="disabled">
+                {{ __('Confirmar') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
+
 
     <!-- Add Scheduling Modal -->
     <x-jet-dialog-modal wire:model="confirmingSchedulingAddition" maxWidth="lg" >
@@ -281,6 +371,18 @@
     </x-jet-dialog-modal>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Add Treatment Modal -->
     <x-jet-dialog-modal wire:model="confirmingTreatmentAddition" maxWidth="4xl" >
         <x-slot name="title">
@@ -322,12 +424,14 @@
                         <p>{{ 'Data do atendimento: '.$dateFormat->parse($treatment->date)->format('d/m/Y') }}</p>
                     @endisset
                 </div>
-                @isset($treatment->notes)
+
+                @empty($treatment->notes)
+                @else
                     <div>
                         <p class="underline underline-offset-2">Observações:</p>
                         <p>{{ $treatment->notes }}</p>
                     </div>
-                @endisset
+                @endempty
 
             </div>
 
@@ -425,7 +529,41 @@
                 </div>
             </div>
 
-            <div class="mt-10 mb-10 sm:mt-0">
+            <div class="mt-10 mb-10">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Retorno') }}</h3>
+                            <p class="mt-1 text-sm text-gray-600">Insira a data de retorno do assistido, caso houver.</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 md:col-span-2 md:mt-0">
+                        <div class="shadow sm:rounded-md">
+                            <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                                <div class="flex flex-row gap-1">
+                                    <div class="grow">
+                                        <x-jet-label for="return_date" value="{{ __('Data') }}" />
+                                        <x-jet-input id="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
+                                            class="w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
+                                        <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
+                                    </div>
+                                    <div >
+                                        <x-jet-label for="return_mode" value="{{ __('Modo') }}" />
+                                        <select name="return_mode" id="return_mode" wire:model.defer="treatmentState.return_mode"
+                                            class="w-full mt-1 text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                                            <option value="Presencial">Presencial</option>
+                                            <option value="A distância">A distância</option>
+                                        </select>
+                                        <x-jet-input-error for="treatmentState.return_mode" class="mt-2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="mt-10 mb-10 sm:mt-0">
                 <div class="md:grid md:grid-cols-3 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
@@ -446,11 +584,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </x-slot>
 
-        <x-slot name="footer">
+        <x-slot name="footer" >
             <x-jet-secondary-button wire:click="$set('confirmingTreatmentAddition', false)" wire:loading.attr="disabled">
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>

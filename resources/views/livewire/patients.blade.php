@@ -351,7 +351,7 @@
                                                 @if ($treatment->notes)
                                                 <h6 class="text-black">Anotações</h6>
                                                 <div class="p-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
-                                                    {{ $treatment->notes }}
+                                                    <p>{{ $treatment->notes }}</p>
                                                 </div>
                                                 @endif
 
