@@ -79,66 +79,87 @@
         <!-- Table -->
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-8">
                     <div class="overflow-visible border-b border-gray-200 shadow sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         {{ __('Assistido') }}
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
+                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
                                         {{ __('Tipo de Atendimento') }}
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
+                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('date')" class="uppercase">{{ __('Data') }}</button>
                                             <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
+                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('treatment_mode')" class="text-left uppercase">Modo de atendimento</button>
                                             <x-sort-icon sortField="treatment_mode" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500">
+                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('status')" class="uppercase">Status</button>
                                             <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="relative px-6 py-3"></th>
+                                    <th scope="col" class="relative px-4 py-3"></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($appointments as $appointment)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-4 whitespace-nowrap ">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="overflow-hidden text-base font-medium text-gray-900">
+                                                <div class="overflow-hidden text-base font-medium text-gray-900 align-middle ">
                                                     {{ Str::words($appointment->patient->name, 5, '...') }}
                                                 </div>
-                                                <div class="text-base text-gray-500">
-
+                                                <div class="text-xs text-gray-500">
+                                                    @php
+                                                        $fullAddress = trim($appointment->patient->address->address);
+                                                        $fullAddress .= ($appointment->patient->address->number) ? ', '.trim($appointment->patient->address->number) : '';
+                                                        $fullAddress .= ($appointment->patient->address->neighborhood) ? ', '.trim($appointment->patient->address->neighborhood) : '';
+                                                        $cityAndState = ($appointment->patient->address->city) ? trim($appointment->patient->address->city) : '';
+                                                        $cityAndState .= ($appointment->patient->address->state) ? ' - ' . trim($appointment->patient->address->state) : '';
+                                                    @endphp
+                                                    @if ($fullAddress)
+                                                    {{ Str::words($fullAddress, 6, '...') }} <br/>
+                                                    @endif
+                                                    @if ($fullAddress)
+                                                    {{ Str::words($cityAndState, 6, '...') }} <br />
+                                                    @endif
+                                                    @if ($appointment->patient->birth)
+                                                        @if (now()->parse($appointment->patient->birth)->diffInYears(now()) == 0)
+                                                            {{ now()->parse($appointment->patient->birth)->diffInMonths(now()) }}
+                                                            {{ (now()->parse($appointment->patient->birth)->diffInMonths(now()) == 1) ? 'mes': 'meses' }}
+                                                        @else
+                                                            {{ now()->parse($appointment->patient->birth)->diffInYears(now()) }} {{
+                                                            (now()->parse($appointment->patient->birth)->diffInYears(now()) == 1) ? "ano" : "anos" }}
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-4 whitespace-nowrap ">
                                         <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-4 whitespace-nowrap ">
 
                                         <div class="text-base text-gray-900">{{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}</div>
                                         <div class="text-base text-gray-500">  </div>
 
                                     </td>
-                                    <td class="px-6 py-4 text-base text-gray-900 whitespace-nowrap ">
+                                    <td class="px-4 py-4 text-base text-gray-900 whitespace-nowrap ">
                                        {{ $appointment->treatment_mode }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-4 whitespace-nowrap ">
                                         @switch($appointment->status)
                                             @case('Atendido')
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> {{
@@ -159,10 +180,11 @@
                                             @break
                                         @endswitch
                                     </td>
-                                    <td class="flex flex-row items-center content-center justify-end px-6 py-4 whitespace-nowrap max-w-[22ch]">
-
-                                        @isset($appointment->treatment_id)
-                                            <button title="Ver atendimento" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                    <td >
+                                        <div class="flex flex-row items-center content-center justify-end pr-4 whitespace-nowrap max-w-[22ch]">
+                                            @isset($appointment->treatment_id)
+                                            <button title="Ver atendimento"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
                                                 {{ __('Ver atend.') }}
                                             </button>
 
@@ -190,27 +212,27 @@
                                                 </svg>
                                             </button>
 
-                                        @else
+                                            @else
 
                                             @if ($appointment->status === 'Não atendido')
-                                                @if ($appointment->treatment_mode === "Presencial")
-                                                    <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
-                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                        {{ __('Receber') }}
-                                                    </button>
-                                                @else
-                                                    <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                        {{ __('Atender') }}
-                                                    </button>
-                                                @endif
+                                            @if ($appointment->treatment_mode === "Presencial")
+                                            <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Receber') }}
+                                            </button>
+                                            @else
+                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Atender') }}
+                                            </button>
+                                            @endif
                                             @endif
 
                                             @if ($appointment->status === 'Em espera')
-                                                <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                    {{ __('Atender') }}
-                                                </button>
+                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Atender') }}
+                                            </button>
                                             @endif
 
                                             @if ($appointment->status === "Não atendido" && $appointment->treatment_mode !== "A distância")
@@ -270,7 +292,9 @@
 
 
 
-                                        @endisset
+                                            @endisset
+                                        </div>
+
                                     </td>
                                 </tr>
                                 @empty

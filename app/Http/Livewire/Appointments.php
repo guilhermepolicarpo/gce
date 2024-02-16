@@ -89,7 +89,7 @@ class Appointments extends Component
 
     public function render()
     {
-        $appointments = Appointment::with(['patient', 'typeOfTreatment'])
+        $appointments = Appointment::with(['patient.address', 'typeOfTreatment'])
             ->when($this->q, function ($query) {
                 return $query
                     ->whereRelation('patient', 'name', 'like', '%' . $this->q . '%');
@@ -151,9 +151,11 @@ class Appointments extends Component
 
         $appointment = Appointment::where('id', $this->state['id'])->first();
 
-        if ($appointment->date !== $this->state['date'] && $appointment->status !== 'Não atendido') {
-            $appointment->status = 'Não atendido';
-            $appointment->save();
+        if (!empty($appointment->date) && !empty($this->state['date'])) {
+            if ($appointment->date !== $this->state['date'] && $appointment->status !== 'Não atendido') {
+                $appointment->status = 'Não atendido';
+                $appointment->save();
+            }
         }
 
         Appointment::updateOrCreate([
