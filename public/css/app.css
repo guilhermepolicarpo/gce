@@ -1514,25 +1514,6 @@ select {
 .max-h-\[600px\] {
   max-height: 600px;
 }
-.max-h-\[650px\] {
-  max-height: 650px;
-}
-.max-h-fit {
-  max-height: -moz-fit-content;
-  max-height: fit-content;
-}
-.max-h-screen {
-  max-height: 100vh;
-}
-.max-h-full {
-  max-height: 100%;
-}
-.max-h-\[90vh\] {
-  max-height: 90vh;
-}
-.max-h-\[80vh\] {
-  max-height: 80vh;
-}
 .max-h-\[70vh\] {
   max-height: 70vh;
 }
@@ -1635,14 +1616,17 @@ select {
 .max-w-\[18rem\] {
   max-width: 18rem;
 }
-.max-w-\[28ch\] {
-  max-width: 28ch;
+.max-w-\[25ch\] {
+  max-width: 25ch;
 }
 .max-w-\[31ch\] {
   max-width: 31ch;
 }
 .max-w-\[41ch\] {
   max-width: 41ch;
+}
+.max-w-\[5ch\] {
+  max-width: 5ch;
 }
 .max-w-screen-xl {
   max-width: 1280px;
@@ -1652,6 +1636,45 @@ select {
 }
 .max-w-xl {
   max-width: 36rem;
+}
+.max-w-\[6ch\] {
+  max-width: 6ch;
+}
+.max-w-\[7ch\] {
+  max-width: 7ch;
+}
+.max-w-\[8ch\] {
+  max-width: 8ch;
+}
+.max-w-\[10ch\] {
+  max-width: 10ch;
+}
+.max-w-\[11ch\] {
+  max-width: 11ch;
+}
+.max-w-\[12ch\] {
+  max-width: 12ch;
+}
+.max-w-\[9ch\] {
+  max-width: 9ch;
+}
+.max-w-\[13ch\] {
+  max-width: 13ch;
+}
+.max-w-\[15ch\] {
+  max-width: 15ch;
+}
+.max-w-\[20ch\] {
+  max-width: 20ch;
+}
+.max-w-\[23ch\] {
+  max-width: 23ch;
+}
+.max-w-\[22ch\] {
+  max-width: 22ch;
+}
+.max-w-\[2ch\] {
+  max-width: 2ch;
 }
 .flex-1 {
   flex: 1 1 0%;

@@ -47,6 +47,7 @@ class Appointments extends Component
     public $confirmingSchedulingAddition = false;
     public $confirmingTreatmentAddition = false;
     public $confirmingArrivalOfTheAssisted = false;
+    public $confirmingAbsentAssisted = false;
     public $dateFormat;
     public $typesOfTreatment;
 
@@ -148,6 +149,13 @@ class Appointments extends Component
     {
         $this->validate();
 
+        $appointment = Appointment::where('id', $this->state['id'])->first();
+
+        if ($appointment->date !== $this->state['date'] && $appointment->status !== 'Não atendido') {
+            $appointment->status = 'Não atendido';
+            $appointment->save();
+        }
+
         Appointment::updateOrCreate([
             'id' => $this->state['id'],
         ], [
@@ -170,15 +178,28 @@ class Appointments extends Component
         $this->resetValidation();
     }
 
-    public function confirmArrivalOfTheAssisted($appointment_id)
+    public function confirmArrivalOfTheAssisted($appointmentId)
     {
-        $this->confirmingArrivalOfTheAssisted = $appointment_id;
+        $this->confirmingArrivalOfTheAssisted = $appointmentId;
     }
 
     public function changeStatusToArrived(Appointment $appointment)
     {
         $appointment->status = "Em espera";
         $this->confirmingArrivalOfTheAssisted = false;
+        $appointment->save();
+    }
+
+
+    public function confirmAbsentAssisted($appointmentId): void
+    {
+        $this->confirmingAbsentAssisted = $appointmentId;
+    }
+
+    public function changeStatusToAbsent(Appointment $appointment)
+    {
+        $appointment->status = "Faltou";
+        $this->confirmingAbsentAssisted = false;
         $appointment->save();
     }
 

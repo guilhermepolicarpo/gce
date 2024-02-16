@@ -22,7 +22,7 @@
             </div>
             <div>
                 <x-dropdown persistent=true align=left>
-                    <x-slot name="trigger">
+                    <x-slot name="trigger" title="Filtrar consulta">
                         <x-button label="Filtros" icon="filter" secondary-outline />
                     </x-slot>
 
@@ -69,7 +69,7 @@
         </div>
         <!-- Add new scheduling -->
         <div class="mr-2">
-            <x-jet-button wire:click="confirmSchedulingAddition">
+            <x-jet-button wire:click="confirmSchedulingAddition" title="Inserir agendamento">
                 {{ __('Novo agendamento') }}
             </x-jet-button>
         </div>
@@ -80,7 +80,7 @@
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                    <div class="overflow-visible border-b border-gray-200 shadow sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -96,9 +96,9 @@
                                             <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('treatment_mode')" class="uppercase">Modo de atendimento</button>
+                                            <button wire:click="sortBy('treatment_mode')" class="text-left uppercase">Modo de atendimento</button>
                                             <x-sort-icon sortField="treatment_mode" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
@@ -114,11 +114,11 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($appointments as $appointment)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap ">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="text-base font-medium text-gray-900 max-w-[28ch] overflow-hidden">
-                                                    {{ $appointment->patient->name }}
+                                                <div class="overflow-hidden text-base font-medium text-gray-900">
+                                                    {{ Str::words($appointment->patient->name, 5, '...') }}
                                                 </div>
                                                 <div class="text-base text-gray-500">
 
@@ -126,19 +126,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap ">
                                         <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap ">
 
                                         <div class="text-base text-gray-900">{{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}</div>
                                         <div class="text-base text-gray-500">  </div>
 
                                     </td>
-                                    <td class="px-6 py-4 text-base text-gray-900 whitespace-nowrap">
+                                    <td class="px-6 py-4 text-base text-gray-900 whitespace-nowrap ">
                                        {{ $appointment->treatment_mode }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap ">
                                         @switch($appointment->status)
                                             @case('Atendido')
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> {{
@@ -159,60 +159,30 @@
                                             @break
                                         @endswitch
                                     </td>
-                                    <td class="flex flex-row items-center content-center justify-end px-6 py-4 whitespace-nowrap">
+                                    <td class="flex flex-row items-center content-center justify-end px-6 py-4 whitespace-nowrap max-w-[22ch]">
 
-                                      @isset($appointment->treatment_id)
-                                        <button title="Ver atendimento" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                            {{ __('Ver atend.') }}
-                                        </button>
-
-                                      @else
-
-                                        @if ($appointment->status === 'Não atendido')
-                                            @if ($appointment->treatment_mode === "Presencial")
-                                                <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
-                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                    {{ __('Receber') }}
-                                                </button>
-                                            @else
-                                                <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                    {{ __('Atender') }}
-                                                </button>
-                                            @endif
-                                        @endif
-
-                                        @if ($appointment->status === 'Em espera')
-                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                {{ __('Atender') }}
+                                        @isset($appointment->treatment_id)
+                                            <button title="Ver atendimento" class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Ver atend.') }}
                                             </button>
-                                        @endif
 
-                                      @endisset
+                                            <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                </svg>
+                                            </button>
 
-                                      @if ($appointment->treatment_id)
-                                            <button title="Não é mais possível editar este agendamento" class="ml-3 mr-3 opacity-50">
+                                            <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                 </svg>
                                             </button>
-                                      @else
-                                            <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="ml-3 mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                </svg>
-                                            </button>
-                                      @endif
 
-
-
-                                        @if ($appointment->treatment_id)
-                                            <button title="Não é mais possível excluir este agendamento"  class="opacity-50">
+                                            <button title="Não é mais possível excluir este agendamento" class="opacity-50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
                                                     stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -221,6 +191,73 @@
                                             </button>
 
                                         @else
+
+                                            @if ($appointment->status === 'Não atendido')
+                                                @if ($appointment->treatment_mode === "Presencial")
+                                                    <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
+                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                        {{ __('Receber') }}
+                                                    </button>
+                                                @else
+                                                    <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                        {{ __('Atender') }}
+                                                    </button>
+                                                @endif
+                                            @endif
+
+                                            @if ($appointment->status === 'Em espera')
+                                                <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                    {{ __('Atender') }}
+                                                </button>
+                                            @endif
+
+                                            @if ($appointment->status === "Não atendido" && $appointment->treatment_mode !== "A distância")
+                                            <button title="Assitido faltou" class="ml-3 mr-3" wire:click='confirmAbsentAssisted({{ $appointment->id }})'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                </svg>
+                                            </button>
+
+                                            @else
+
+                                            <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                </svg>
+                                            </button>
+                                            @endif
+
+                                            @if ($appointment->status === 'Faltou')
+                                            <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                </svg>
+                                            </button>
+                                            <button title="Não é mais possível excluir este agendamento" class="opacity-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                            </button>
+
+                                            @else
+                                            <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="mr-3 ">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                </svg>
+                                            </button>
+
                                             <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
                                                 wire:loading.attr='disabled'>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
@@ -229,9 +266,11 @@
                                                         d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                 </svg>
                                             </button>
-                                        @endif
+                                            @endif
 
 
+
+                                        @endisset
                                     </td>
                                 </tr>
                                 @empty
@@ -292,6 +331,30 @@
             </x-jet-secondary-button>
 
             <x-jet-button class="ml-3" wire:click="changeStatusToArrived({{ $confirmingArrivalOfTheAssisted }})"
+                wire:loading.attr="disabled">
+                {{ __('Confirmar') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
+
+
+
+    <!-- Change Status to Absent - confirming that the assisted was absent -->
+    <x-jet-confirmation-modal wire:model="confirmingAbsentAssisted">
+        <x-slot name="title">
+            {{ __('Confirmar falta do assistido') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Deseja realmente confirmar que o assistido faltou ao atendimento?') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('confirmingAbsentAssisted', false)" wire:loading.attr="disabled">
+                {{ __('Cancelar') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-3" wire:click="changeStatusToAbsent({{ $confirmingAbsentAssisted }})"
                 wire:loading.attr="disabled">
                 {{ __('Confirmar') }}
             </x-jet-button>
