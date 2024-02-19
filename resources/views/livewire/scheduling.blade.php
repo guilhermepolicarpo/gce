@@ -84,43 +84,47 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        {{ __('Assistido') }}
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">
-                                        {{ __('Tipo de Atendimento') }}
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
+                                    <th scope="col" class="px-4 py-3 font-medium tracking-wider text-left text-gray-500">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('date')" class="uppercase">{{ __('Data') }}</button>
+                                            <button class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">{{ __('Assistido') }}</button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-4 py-3 font-medium tracking-wider text-left text-gray-500">
+                                        <div class="flex items-center">
+                                            <button class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{ __('Tipo de Atendimento') }}</button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
+                                        <div class="flex items-center">
+                                            <button wire:click="sortBy('date')" class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{ __('Data') }}</button>
                                             <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('treatment_mode')" class="text-left uppercase">Modo de atendimento</button>
+                                            <button wire:click="sortBy('treatment_mode')" class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase break-words">Modo de atendimento</button>
                                             <x-sort-icon sortField="treatment_mode" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('status')" class="uppercase">Status</button>
+                                            <button wire:click="sortBy('status')" class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase ">Status</button>
                                             <x-sort-icon sortField="status" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="relative px-4 py-3"></th>
+                                    <th scope="col" class="px-4 py-3"></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($appointments as $appointment)
                                 <tr>
-                                    <td class="px-4 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-6 ">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="overflow-hidden text-base font-medium text-gray-900 align-middle ">
+                                                <div class="text-base font-medium text-gray-900 align-middle ">
                                                     {{ Str::words($appointment->patient->name, 5, '...') }}
                                                 </div>
-                                                <div class="text-xs text-gray-500">
+                                                {{-- <div class="text-xs text-gray-500">
                                                     @php
                                                         $fullAddress = trim($appointment->patient->address->address);
                                                         $fullAddress .= ($appointment->patient->address->number) ? ', '.trim($appointment->patient->address->number) : '';
@@ -143,23 +147,23 @@
                                                             (now()->parse($appointment->patient->birth)->diffInYears(now()) == 1) ? "ano" : "anos" }}
                                                         @endif
                                                     @endif
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-6 whitespace-nowrap ">
                                         <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-6 whitespace-nowrap ">
 
                                         <div class="text-base text-gray-900">{{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}</div>
                                         <div class="text-base text-gray-500">  </div>
 
                                     </td>
-                                    <td class="px-4 py-4 text-base text-gray-900 whitespace-nowrap ">
+                                    <td class="px-4 py-6 text-base text-gray-900">
                                        {{ $appointment->treatment_mode }}
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap ">
+                                    <td class="px-4 py-6 whitespace-nowrap ">
                                         @switch($appointment->status)
                                             @case('Atendido')
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> {{
@@ -181,10 +185,11 @@
                                         @endswitch
                                     </td>
                                     <td >
-                                        <div class="flex flex-row items-center content-center justify-end pr-4 whitespace-nowrap max-w-[22ch]">
+                                        <div class="flex flex-row items-center content-center justify-end pr-4">
                                             @isset($appointment->treatment_id)
-                                            <button title="Ver atendimento"
-                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                            <button
+                                                title="Ver atendimento"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25 text-nowrap">
                                                 {{ __('Ver atend.') }}
                                             </button>
 
@@ -289,9 +294,6 @@
                                                 </svg>
                                             </button>
                                             @endif
-
-
-
                                             @endisset
                                         </div>
 

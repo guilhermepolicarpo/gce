@@ -1391,9 +1391,6 @@ select {
 .mr-4 {
   margin-right: 1rem;
 }
-.mr-6 {
-  margin-right: 1.5rem;
-}
 .mt-0 {
   margin-top: 0px;
 }
@@ -1520,9 +1517,6 @@ select {
 .max-h-\[70vh\] {
   max-height: 70vh;
 }
-.min-h-20 {
-  min-height: 5rem;
-}
 .min-h-full {
   min-height: 100%;
 }
@@ -1639,6 +1633,12 @@ select {
 }
 .max-w-xl {
   max-width: 36rem;
+}
+.max-w-1 {
+  max-width: 0.25rem;
+}
+.max-w-10 {
+  max-width: 2.5rem;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1941,6 +1941,15 @@ select {
 }
 .whitespace-nowrap {
   white-space: nowrap;
+}
+.text-wrap {
+  text-wrap: wrap;
+}
+.text-nowrap {
+  text-wrap: nowrap;
+}
+.break-words {
+  overflow-wrap: break-word;
 }
 .break-all {
   word-break: break-all;
