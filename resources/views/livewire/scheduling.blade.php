@@ -186,6 +186,18 @@
                                     </td>
                                     <td >
                                         <div class="flex flex-row items-center content-center justify-end pr-4">
+
+                                            @if (auth()->user()->email === 'guilhermepolicarpo@outlook.com')
+                                            <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
+                                                wire:loading.attr='disabled'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                            </button>
+                                            @endif
+                                            
                                             @isset($appointment->treatment_id)
                                             <button
                                                 title="Ver atendimento"
@@ -480,7 +492,7 @@
 
         <x-slot name="content">
             <div class="max-h-[70vh] overflow-y-scroll">
-                <div class="px-4 py-5 rounded shadow bg-gray-50 sm:p-6 md:grid md:grid-cols-2 md:gap-6 ">
+                <div class="px-4 py-5 mr-5 rounded shadow bg-gray-50 sm:p-6 md:grid md:grid-cols-2 md:gap-6">
                     <div class="md:col-span-1">
                         <p class="text-lg font-semibold">
                             @isset($treatment->patient->name)
@@ -529,7 +541,7 @@
 
                 </div>
 
-                <div class="mt-10">
+                <div class="mt-10 mr-5">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
@@ -554,7 +566,7 @@
                                                 class="mt-1"
                                             />
 
-                                            <div class="col-span-6 mt-3 sm:col-span-6">
+                                            <div class="col-span-6 mt-4 sm:col-span-6">
                                                 <x-select
                                                 label="{{ __('Orientações') }}"
                                                 placeholder="Selecione uma ou mais orientações"
@@ -569,7 +581,7 @@
                                                 />
                                             </div>
 
-                                            <div class="col-span-6 mt-3 sm:col-span-6">
+                                            <div class="col-span-6 mt-4 sm:col-span-6">
                                                 <x-select
                                                     label="{{ __('Mentor') }}"
                                                     placeholder="Selecione um mentor"
@@ -590,12 +602,50 @@
                 </div>
 
                 <div class="hidden sm:block" aria-hidden="true">
-                    <div class="py-8">
+                    <div class="py-8 mr-5">
                         <div class="border-t border-gray-200"></div>
                     </div>
                 </div>
 
-                <div class="mt-10 sm:mt-0">
+                <div class="mt-10 mr-5 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Infiltração') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Informe onde foi realizado infiltração no assistido.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-gray-50 sm:p-6">
+                                    <div class="flex flex-row gap-1">
+                                        <div class="grow">
+                                            <x-jet-label for="infiltracao" value="{{ __('Local') }}" />
+                                            <x-jet-input id="infiltracao" type="text" wire:model.defer="treatmentState.infiltracao" placeholder="Local da infiltração"
+                                                class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
+                                            <x-jet-input-error for="treatmentState.infiltracao" class="mt-2" />
+                                        </div>
+                                        <div>
+                                            <x-jet-label for="retirada_infiltracao" value="{{ __('Retirada') }}" />
+                                            <x-jet-input id="retirada_infiltracao" type="date" wire:model.defer="treatmentState.infiltracao_remove_date"
+                                                min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
+                                                class="w-full mt-1 text-black border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
+                                            <x-jet-input-error for="treatmentState.infiltracao_remove_date" class="mt-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-8 mr-5">
+                        <div class="border-t border-gray-200"></div>
+                    </div>
+                </div>
+
+                <div class="mt-10 mr-5 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
@@ -618,12 +668,12 @@
                 </div>
 
                 <div class="hidden sm:block" aria-hidden="true">
-                    <div class="py-8">
+                    <div class="py-8 mr-5">
                         <div class="border-t border-gray-200"></div>
                     </div>
                 </div>
 
-                <div class="mt-10 mb-10">
+                <div class="mt-10 mb-10 mr-5 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
@@ -638,7 +688,7 @@
                                         <div class="grow">
                                             <x-jet-label for="return_date" value="{{ __('Data') }}" />
                                             <x-jet-input id="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
-                                                class="w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
+                                                class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
                                             <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
                                         </div>
                                         <div >

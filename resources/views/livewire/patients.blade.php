@@ -289,7 +289,7 @@
 
 
 
-    {{-- Patient's chart --}}
+    {{-- Patient's treatments --}}
     <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
         <x-slot name="title">
             {{ __('Prontuário do assistido') }}
@@ -330,18 +330,18 @@
                                 <ol class="relative border-l border-gray-200 dark:border-gray-700">
                                     <li class="pb-12 ml-12">
                                         <span class="absolute flex flex-col items-center justify-center text-white bg-indigo-400 rounded -left-7 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                                            <div class="px-2 pt-2 text-lg">{{ $dateFormat->parse($treatment->date)->day }}</div>
-                                            <div class="px-2 pb-1 text-sm uppercase">{{ $dateFormat->parse($treatment->date)->locale('pt-br')->shortMonthName }}</div>
-                                            <div class="px-2 pt-1 pb-2 text-sm border-t border-white">{{ $dateFormat->parse($treatment->date)->year }}</div>
+                                            <div class="px-2 pt-2 text-lg">{{ $dateFormat->parse($treatment->created_at)->day }}</div>
+                                            <div class="px-2 pb-1 text-sm uppercase">{{ $dateFormat->parse($treatment->created_at)->locale('pt-br')->shortMonthName }}</div>
+                                            <div class="px-2 pt-1 pb-2 text-sm border-t border-white">{{ $dateFormat->parse($treatment->created_at)->year }}</div>
                                         </span>
                                         <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                             <div class="items-center justify-between mb-5 sm:flex">
-                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ str_replace('antes', 'atrás', $carbon->parse($treatment->date)->locale('pt-br')->diffForHumans(now())) }}</time>
+                                                <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ str_replace('antes', 'atrás', $carbon->parse($treatment->created_at)->locale('pt-br')->diffForHumans(now())) }}</time>
                                                 <div class="text-lg font-semibold text-black dark:text-gray-300">{{ $treatment->treatmentType->name }} <span class="text-sm font-normal">({{ $treatment->treatment_mode }})</span></div>
                                             </div>
                                             @if (!$treatment->treatmentType->is_the_healing_touch)
                                                 <h6 class="text-black">Fluídicos</h6>
-                                                <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                <div class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     @foreach ($treatment->medicines as $medicine)
                                                         @php
                                                             if ($loop->last) {
@@ -355,10 +355,19 @@
 
                                                 @if (count($treatment->orientations) !== 0)
                                                 <h6 class="text-black">Orientações</h6>
-                                                <div class="p-3 mb-2 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                <div class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     @foreach ($treatment->orientations as $orientation)
                                                         {{ '- '.$orientation->name }}<br/>
                                                     @endforeach
+                                                </div>
+                                                @endif
+
+                                                @if ($treatment->infiltracao)
+                                                <h6 class="text-black">Infiltração</h6>
+                                                <div
+                                                    class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    Local: {{ $treatment->infiltracao }} <br/>
+                                                    Retirada: {{ $dateFormat->parse($treatment->infiltracao_remove_date)->format('d/m/Y')  }}
                                                 </div>
                                                 @endif
 
@@ -369,10 +378,11 @@
                                                         $notes = explode("\n", $treatment->notes);
                                                     @endphp
                                                     @foreach ($notes as $note)
-                                                        {{ '- '.$note }}<br />
+                                                        {{ $note }}<br />
                                                     @endforeach
                                                 </div>
                                                 @endif
+
 
                                                 @isset($treatment->mentor->name )
                                                     <div class="mt-5">

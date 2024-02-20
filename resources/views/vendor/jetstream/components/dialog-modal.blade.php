@@ -4,7 +4,7 @@
     <div class="text-lg border-b px-6 py-4">
         {{ $title }}
     </div>
-    
+
     <div class="px-6 py-4">
         {{ $content }}
     </div>

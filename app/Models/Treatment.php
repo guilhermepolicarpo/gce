@@ -23,8 +23,10 @@ class Treatment extends Model
         'treatment_mode',
         'notes',
         'tenant_id',
+        'infiltracao',
+        'infiltracao_remove_date',
     ];
-    
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);
@@ -34,17 +36,17 @@ class Treatment extends Model
     {
         return $this->belongsToMany(Orientation::class)->withPivot(['orientation_treatment_tenant_id'])->withTimestamps();
     }
-    
+
     public function medicines()
     {
         return $this->belongsToMany(Medicine::class)->withPivot(['medicine_treatment_tenant_id'])->withTimestamps();
     }
-    
+
     public function mentor()
     {
         return $this->belongsTo(Mentor::class);
     }
-    
+
     public function attachments()
     {
         return $this->hasMany(Attachment::class);

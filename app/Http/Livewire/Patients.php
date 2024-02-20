@@ -252,7 +252,7 @@ class Patients extends Component
     {
         $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'])
             ->where('treatments.patient_id', $patient)
-            ->orderBy('date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         $this->patientOfTheTreatment = Patient::where('id', $patient)->first();

@@ -32,6 +32,8 @@ class Appointments extends Component
         'medicines' => [],
         'return_date' => null,
         'return_mode' => 'Presencial',
+        'infiltracao' => null,
+        'infiltracao_remove_date' => null,
     ];
     public $treatment;
     public $patient;
@@ -266,7 +268,7 @@ class Appointments extends Component
                     $appointment->save();
 
                     DB::commit();
-                    
+
                 } catch (\Exception $e) {
                     DB::rollback();
 
@@ -298,6 +300,8 @@ class Appointments extends Component
             'treatmentState.notes' => 'nullable|string',
             'treatmentState.return_mode' => 'nullable|string',
             'treatmentState.return_date' => 'nullable|date|after:today',
+            'treatmentState.infiltracao' => 'nullable|string|max:255',
+            'treatmentState.infiltracao_remove_date' => 'nullable|date|after:today',
         ]);
 
         try {
@@ -310,6 +314,8 @@ class Appointments extends Component
                 'treatment_mode' => $this->treatmentState['treatment_mode'],
                 'date' => $this->treatmentState['date'],
                 'notes' => $this->treatmentState['notes'],
+                'infiltracao' => $this->treatmentState['infiltracao'],
+                'infiltracao_remove_date' => $this->treatmentState['infiltracao_remove_date'],
             ]);
 
             $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
@@ -332,9 +338,10 @@ class Appointments extends Component
             DB::commit();
 
             $this->confirmingTreatmentAddition = false;
-        } catch (\Exception $e) {
-            DB::rollback();
 
+        } catch (\Exception $e) {
+
+            DB::rollback();
             return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
         }
     }
