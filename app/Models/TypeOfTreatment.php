@@ -19,6 +19,7 @@ class TypeOfTreatment extends Model
         'name',
         'description',
         'is_the_healing_touch',
+        'has_form',
         'tenant_id',
     ];
 

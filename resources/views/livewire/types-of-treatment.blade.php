@@ -133,7 +133,11 @@
                         <div class="col-span-6 sm:col-span-6">
                             <div class="flex items-center justify-left">
                                 <x-toggle id="healing-touch" wire:model.defer="state.is_the_healing_touch" class="pt-2" />
-                                <label for="healing-touch" class="ml-3">Não adicionar formulário para este atendimento</label>
+                                <label for="healing-touch" class="ml-3">Este atendimento é um tipo de passe?</label>
+                            </div>
+                            <div class="flex items-center mt-2 justify-left">
+                                <x-toggle id="has-form" wire:model.defer="state.has_form" class="pt-2" />
+                                <label for="has-form" class="ml-3">Habilitar formulário para este atendimento?</label>
                             </div>
                         </div>
                     </div>

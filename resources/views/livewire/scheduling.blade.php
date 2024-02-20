@@ -518,7 +518,12 @@
                     @else
                         <div>
                             <p class="underline underline-offset-2">Observações:</p>
-                            <p>{{ $treatment->notes }}</p>
+                            @php
+                                $notes = explode("\n", $treatment->notes);
+                            @endphp
+                            @foreach ($notes as $note)
+                            {{ $note }}<br />
+                            @endforeach
                         </div>
                     @endempty
 

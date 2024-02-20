@@ -9,7 +9,7 @@ use App\Models\TypeOfTreatment;
 class TypesOfTreatment extends Component
 {
     use WithPagination;
-        
+
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
@@ -28,7 +28,7 @@ class TypesOfTreatment extends Component
     protected $messages = [
         'state.name.required' => 'Por favor, informe um nome para o tipo de tratamento',
         'state.name.max' => 'O nome do tipo de tratamento deve ter no máximo :max caracteres',
-        'state.description.max' => 'A descrição do tipo de tratamento deve ter no máximo :max caracteres',	
+        'state.description.max' => 'A descrição do tipo de tratamento deve ter no máximo :max caracteres',
     ];
 
     public function render()
@@ -53,7 +53,7 @@ class TypesOfTreatment extends Component
             $this->sortDesc = !$this->sortDesc;
         }
         $this->sortBy = $field;
-    }    
+    }
 
     public function confirmTypeOfTreatmentAddition()
     {
@@ -64,19 +64,20 @@ class TypesOfTreatment extends Component
 
     public function saveTypeOfTreatment()
     {
-        $this->validate([
+        $validated = $this->validate([
             'state.name' => 'required|string|max:255',
             'state.description' => 'nullable|string|max:255',
+            'state.is_the_healing_touch' => 'required|boolean',
+            'state.has_form' => 'required|boolean',
         ]);
 
         if (isset($this->state['id'])) {
             $typeOfTreatment = TypeOfTreatment::find($this->state['id']);
-            $typeOfTreatment->update($this->state);
+            $typeOfTreatment->update($validated['state']);
         } else {
-            TypeOfTreatment::create($this->state);
+            TypeOfTreatment::create($validated['state']);
         }
         $this->confirmingTypeOfTreatmentAddition = false;
-               
     }
 
     public function confirmTypeOfTreatmentEditing(TypeOfTreatment $typeOfTreatment)
@@ -91,7 +92,7 @@ class TypesOfTreatment extends Component
         $this->confirmingTypeOfTreatmentDeletion = $id;
     }
 
-    public function deleteTypeOfTreatment(TypeOfTreatment $typeOfTreatment) 
+    public function deleteTypeOfTreatment(TypeOfTreatment $typeOfTreatment)
     {
         $typeOfTreatment->delete();
         $this->confirmingTypeOfTreatmentDeletion = false;

@@ -249,7 +249,7 @@ class Appointments extends Component
 
         if (!$appointment->treatment_id) {
 
-            if ($treatmentType->is_the_healing_touch) {
+            if (!$treatmentType->has_form) {
 
                 try {
                     DB::beginTransaction();
@@ -266,6 +266,7 @@ class Appointments extends Component
                     $appointment->save();
 
                     DB::commit();
+                    
                 } catch (\Exception $e) {
                     DB::rollback();
 
