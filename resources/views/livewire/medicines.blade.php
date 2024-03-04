@@ -50,7 +50,7 @@
                                 @forelse ($medicines as $medicine)
                                     <tr>
 
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-nowrap min-w-72">
                                             <div class="flex items-center">
                                                 <div>
                                                     <div class="text-base font-medium text-gray-900">
@@ -60,8 +60,8 @@
                                             </div>
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-base text-gray-500"> {{ $medicine->description }} </div>
+                                        <td class="px-6 py-4">
+                                            <div class="text-base text-gray-500"> {{ Str::words($medicine->description, 26, '...') }} </div>
                                         </td>
 
                                         <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">

@@ -25,6 +25,13 @@ class Treatment extends Model
         'tenant_id',
         'infiltracao',
         'infiltracao_remove_date',
+        'healing_touches',
+        'return_mode',
+        'return_date',
+    ];
+
+    protected $casts = [
+        'healing_touches' => 'array',
     ];
 
     public function patient()

@@ -197,7 +197,7 @@
                                                 </svg>
                                             </button>
                                             @endif
-                                            
+
                                             @isset($appointment->treatment_id)
                                             <button
                                                 title="Ver atendimento"
@@ -324,7 +324,14 @@
                         </table>
                     </div>
                     <div class="mt-4">
+                        @if ($appointments->links()->paginator->total() <= 10 && $appointments->links()->paginator->total() > 1)
+                            <p class="text-sm leading-5 text-gray-700">
+                                Mostrando todos os {{ $appointments->links()->paginator->count() }} resultados
+                            </p>
+                        @endif
+
                         {{ $appointments->onEachSide(1)->links() }}
+
                     </div>
                 </div>
             </div>
@@ -485,7 +492,7 @@
 
 
     <!-- Add Treatment Modal -->
-    <x-jet-dialog-modal wire:model="confirmingTreatmentAddition" maxWidth="4xl" >
+    <x-jet-dialog-modal wire:model="confirmingTreatmentAddition" maxWidth="5xl" >
         <x-slot name="title">
             {{ __('Atender assistido') }}
         </x-slot>
@@ -560,7 +567,6 @@
                                                 :async-data="route('searchMedicine')"
                                                 option-label="name"
                                                 option-value="id"
-                                                option-description="description"
                                                 wire:model.defer="treatmentState.medicines"
                                                 multiselect
                                                 class="mt-1"
@@ -601,6 +607,87 @@
                     </div>
                 </div>
 
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-8 mr-5">
+                        <div class="border-t border-gray-200"></div>
+                    </div>
+                </div>
+
+                <div class="mt-10 mr-5 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Passes') }}</h3>
+                                <p class="mt-1 text-sm text-gray-600">Informe os passes que o paciente deve tomar.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-gray-50 sm:p-6">
+
+                                    @foreach ($treatmentState['healing_touches'] as $key => $state)
+                                    <div class="flex flex-row gap-1 mb-4 align-middle" wire:key="{{ $key }}">
+                                        <div class="grow">
+                                            <x-jet-label for="healing_touch-{{ $key }}" value="{{ __('Tipo de passe') }}" />
+                                            <select name="healing_touch[]" id="healing_touch-{{ $key }}" wire:model.defer="treatmentState.healing_touches.{{ $key }}.healing_touch"
+                                                class="w-full mt-1 text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                                                <option value="">- Selecione -</option>
+                                                @foreach ($healingTouches as $healingTouch)
+                                                <option value="{{ $healingTouch->name }}">{{ $healingTouch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <x-jet-input-error for="treatmentState.healing_touches.{{ $key }}.healing_touch" class="mt-2" />
+                                        </div>
+                                        <div>
+                                            <x-jet-label for="mode-{{ $key }}" value="{{ __('Modo') }}" />
+                                            <select name="mode[]" id="mode-{{ $key }}" wire:model.defer="treatmentState.healing_touches.{{ $key }}.mode"
+                                                class="w-full mt-1 text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                                                <option value="Presencial">Presencial</option>
+                                                <option value="A distância">A distância</option>
+                                            </select>
+                                            <x-jet-input-error for="treatmentState.healing_touches.{{ $key }}.mode" class="mt-2" />
+                                        </div>
+                                        <div class="w-20">
+                                            <x-jet-label for="quantity-{{ $key }}" value="{{ __('Quantidade') }}" />
+                                            <x-jet-input
+                                                id="quantity-{{ $key }}"
+                                                type="number"
+                                                wire:model.defer="treatmentState.healing_touches.{{ $key }}.quantity"
+                                                min="1"
+                                                class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" min="1" />
+                                            <x-jet-input-error for="treatmentState.healing_touches.{{ $key }}.quantity" class="mt-2" />
+                                        </div>
+                                        @if ($key > 0)
+                                        <button title="Remover este item" wire:click="removeHealingTouch({{ $key }})" wire:loading.attr='disabled' class="mt-4 ml-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>
+                                        </button>
+                                        @else
+                                        <button title="Remover este item" class="mt-4 ml-2 opacity-50">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>
+                                        </button>
+                                        @endif
+                                    </div>
+                                    @endforeach
+
+                                    <x-jet-secondary-button wire:click="addHealingTouch" wire:loading.attr="disabled" class="mt-4 text-indigo-500 border-indigo-500">
+                                        {{ __('Adicionar outro') }}
+                                    </x-jet-secondary-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-8 mr-5">
                         <div class="border-t border-gray-200"></div>
@@ -638,6 +725,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-8 mr-5">
@@ -687,7 +775,7 @@
                                     <div class="flex flex-row gap-1">
                                         <div class="grow">
                                             <x-jet-label for="return_date" value="{{ __('Data') }}" />
-                                            <x-jet-input id="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
+                                            <x-jet-input id="return_date" name="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
                                                 class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
                                             <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
                                         </div>

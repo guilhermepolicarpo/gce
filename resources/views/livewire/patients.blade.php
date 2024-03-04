@@ -340,6 +340,7 @@
                                                 <div class="text-lg font-semibold text-black dark:text-gray-300">{{ $treatment->treatmentType->name }} <span class="text-sm font-normal">({{ $treatment->treatment_mode }})</span></div>
                                             </div>
                                             @if (!$treatment->treatmentType->is_the_healing_touch)
+                                                @if (count($treatment->medicines) !== 0)
                                                 <h6 class="text-black">Fluídicos</h6>
                                                 <div class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     @foreach ($treatment->medicines as $medicine)
@@ -352,6 +353,7 @@
                                                         @endphp
                                                     @endforeach
                                                 </div>
+                                                @endif
 
                                                 @if (count($treatment->orientations) !== 0)
                                                 <h6 class="text-black">Orientações</h6>
@@ -368,6 +370,24 @@
                                                     class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                                     Local: {{ $treatment->infiltracao }} <br/>
                                                     Retirada: {{ $dateFormat->parse($treatment->infiltracao_remove_date)->format('d/m/Y')  }}
+                                                </div>
+                                                @endif
+
+                                                @if ($treatment->healing_touches)
+                                                <h6 class="text-black">Passes a tomar</h6>
+                                                <div
+                                                    class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    @foreach ($treatment->healing_touches as $healing_touch)
+                                                        <p>{{ $healing_touch['healing_touch'] }} - Quantidade: {{ $healing_touch['quantity'] }} ({{ $healing_touch['mode'] }})</p>
+                                                    @endforeach
+                                                </div>
+                                                @endif
+
+                                                @if ($treatment->return_date)
+                                                <h6 class="text-black">Retorno</h6>
+                                                <div
+                                                    class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
+                                                    <p>{{ $dateFormat->parse($treatment->return_date)->format('d/m/Y') }} ({{ $treatment->return_mode }})</p>
                                                 </div>
                                                 @endif
 

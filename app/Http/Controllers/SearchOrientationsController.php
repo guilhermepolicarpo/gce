@@ -11,7 +11,7 @@ class SearchOrientationsController extends Controller
 {
     public function __invoke(Request $request): Collection
     {
-        return Orientation::select('id', 'tenant_id', 'name', 'description')
+        return Orientation::select('id', 'tenant_id', 'name')
         ->orderBy('name')
         ->when(
             $request->search,

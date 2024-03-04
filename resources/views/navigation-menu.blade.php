@@ -15,30 +15,30 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Painel') }}
                     </x-jet-nav-link>
-                    
+
                     <x-jet-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')">
                         {{ __('Agendamento') }}
                     </x-jet-nav-link>
-                    
+
                     <x-jet-nav-link href="{{ route('patients') }}" :active="request()->routeIs('patients')">
                         {{ __('Assistidos') }}
                     </x-jet-nav-link>
                 </div>
-                
+
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <span class="inline-flex rounded-md">
                                 <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
                                     {{ __('Gestão') }}
-                                    
+
                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </span>
                         </x-slot>
-    
+
                         <x-slot name="content">
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
@@ -48,11 +48,11 @@
                             <x-jet-dropdown-link href="{{ route('spiritistCenter') }}">
                                 {{ __('Centro Espírita') }}
                             </x-jet-dropdown-link>
-    
+
                             <x-jet-dropdown-link href="{{ route('users') }}">
                                 {{ __('Usuários') }}
                             </x-jet-dropdown-link>
-    
+
                             <x-jet-dropdown-link href="{{ route('mentors') }}">
                                 {{ __('Mentores') }}
                             </x-jet-dropdown-link>
@@ -62,7 +62,7 @@
                             </x-jet-dropdown-link>
 
                             <x-jet-dropdown-link href="{{ route('medicines') }}">
-                                {{ __('Águas Magnetizadas (Fluídicos)') }}
+                                {{ __('Fluídicos') }}
                             </x-jet-dropdown-link>
 
                             <x-jet-dropdown-link href="{{ route('typesOfTreatment') }}">
@@ -227,7 +227,7 @@
                 </x-jet-responsive-nav-link>
 
                 <x-jet-responsive-nav-link href="{{ route('medicines') }}" :active="request()->routeIs('medicines')">
-                    {{ __('Águas Magnetizadas (Fluídicos)') }}
+                    {{ __('Fluídicos') }}
                 </x-jet-responsive-nav-link>
 
                 <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}" :active="request()->routeIs('typesOfTreatment')">
@@ -235,7 +235,7 @@
                 </x-jet-responsive-nav-link>
             </div>
         </div>
-        
+
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

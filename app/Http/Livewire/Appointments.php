@@ -34,6 +34,9 @@ class Appointments extends Component
         'return_mode' => 'Presencial',
         'infiltracao' => null,
         'infiltracao_remove_date' => null,
+        'healing_touches' => [
+            ['healing_touch' => null, 'mode' => 'Presencial', 'quantity' => null],
+        ],
     ];
     public $treatment;
     public $patient;
@@ -77,6 +80,9 @@ class Appointments extends Component
         'state.treatment_mode.required' => 'Por favor, selecione um modo de atendimento',
         'treatmentState.mentor_id.required' => 'Por favor, informe o mentor que realizou o atendimento',
         'treatmentState.return_date.after' => 'Por favor, informe uma data maior que a data atual',
+        'treatmentState.healing_touches.*.quantity.min' => 'Por favor, informe uma quantidade maior que 0',
+        'treatmentState.healing_touches.*.quantity.required' => 'Por favor, informe uma quantidade',
+        'treatmentState.healing_touches.*.mode.required' => 'Por favor, informe o modo de atendimento',
     ];
 
     public function mount()
@@ -115,8 +121,11 @@ class Appointments extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
             ->paginate(10);
 
+        $healingTouchesList = typeOfTreatment::where('is_the_healing_touch', true)->get(['id', 'name']);
+
         return view('livewire.scheduling', [
             'appointments' => $appointments,
+            'healingTouches' => $healingTouchesList
         ]);
     }
 
@@ -242,6 +251,17 @@ class Appointments extends Component
 
 
     // Treatment
+
+    public function addHealingTouch()
+    {
+        array_push($this->treatmentState['healing_touches'], ['healing_touch' => null, 'mode' => 'Presencial', 'quantity' => null]);
+    }
+
+    public function removeHealingTouch($key)
+    {
+        unset($this->treatmentState['healing_touches'][$key]);
+    }
+
     public function confirmTreatmentAddition(Appointment $appointment)
     {
         $this->reset(['treatmentState']);
@@ -271,9 +291,9 @@ class Appointments extends Component
 
                 } catch (\Exception $e) {
                     DB::rollback();
-
                     return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
                 }
+                
             } else {
 
                 $this->reset(['treatment']);
@@ -302,7 +322,18 @@ class Appointments extends Component
             'treatmentState.return_date' => 'nullable|date|after:today',
             'treatmentState.infiltracao' => 'nullable|string|max:255',
             'treatmentState.infiltracao_remove_date' => 'nullable|date|after:today',
+            'treatmentState.healing_touches.*.healing_touch' => 'nullable|string|max:255',
+            'treatmentState.healing_touches.*.quantity' => 'exclude_if:treatmentState.healing_touches.*.healing_touch,null|required|numeric|min:1',
+            'treatmentState.healing_touches.*.mode' => 'exclude_if:treatmentState.healing_touches.*.healing_touch,null|required|string|max:255',
+            'treatmentState.orientations.*' => 'nullable|numeric|exists:orientations,id',
+            'treatmentState.medicines.*' => 'nullable|numeric|exists:medicines,id',
         ]);
+
+        foreach ($this->treatmentState['healing_touches'] as $key => $value) {
+            if ($value['healing_touch'] == null) {
+                unset($this->treatmentState['healing_touches'][$key]);
+            };
+        }
 
         try {
             DB::beginTransaction();
@@ -316,6 +347,9 @@ class Appointments extends Component
                 'notes' => $this->treatmentState['notes'],
                 'infiltracao' => $this->treatmentState['infiltracao'],
                 'infiltracao_remove_date' => $this->treatmentState['infiltracao_remove_date'],
+                'healing_touches' => $this->treatmentState['healing_touches'],
+                'return_mode' => $this->treatmentState['return_mode'],
+                'return_date' => $this->treatmentState['return_date'],
             ]);
 
             $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
@@ -340,7 +374,6 @@ class Appointments extends Component
             $this->confirmingTreatmentAddition = false;
 
         } catch (\Exception $e) {
-
             DB::rollback();
             return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
         }
