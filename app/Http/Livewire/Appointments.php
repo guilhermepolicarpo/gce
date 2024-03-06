@@ -7,11 +7,13 @@ use App\Models\Treatment;
 use App\Models\Appointment;
 use Livewire\WithPagination;
 use App\Models\TypeOfTreatment;
+use App\Traits\PhoneNumberFormater;
 use Illuminate\Support\Facades\DB;
 
 class Appointments extends Component
 {
     use WithPagination;
+    use PhoneNumberFormater;
 
     public $state = [
         'id' => '',
@@ -293,7 +295,7 @@ class Appointments extends Component
                     DB::rollback();
                     return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
                 }
-                
+
             } else {
 
                 $this->reset(['treatment']);

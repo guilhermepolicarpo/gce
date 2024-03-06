@@ -10,14 +10,16 @@
 
     <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl">
         <x-slot name="title">
-            {{ __('Atendimento do assistido') }}
+            <div class="text-black">
+                {{ __('Atendimento do assistido') }}
+            </div>
         </x-slot>
 
         <x-slot name="content">
             <div class="mb-10 sm:mb-3">
                 <div class="md:col-span-2">
                     <div class="grid h-[70vh] max-h-[70vh] grid-cols-6 gap-3 overflow-y-scroll ">
-                        @if ($openingTreatmentsModal === true)
+                        @if ($openingTreatmentsModal)
                         <div class="col-span-6 px-4 py-5 text-black rounded shadow bg-gray-50 sm:p-6">
 
                             <p class="text-lg font-semibold">
@@ -27,7 +29,7 @@
                             </p>
 
                             @isset($treatment->patient->birth)
-                            <p>{{ "Idade: ".$dateFormat->parse($treatment->patient->birth)->diff(now())->y." anos" }}
+                            <p>{{ "Idade: ".now()->parse($treatment->patient->birth)->diff(now())->y." anos" }}
                             </p>
                             @endisset
 
@@ -39,7 +41,7 @@
                             <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
                             @endisset
                             @isset($treatment->patient->phone)
-                            <p>{{ $treatment->patient->phone}}</p>
+                            <p>{{ $this->formatPhoneNumber($treatment->patient->phone) }}</p>
                             @endisset
 
                         </div>
@@ -50,13 +52,13 @@
                                 <li class="pb-12 ml-12">
                                     <span
                                         class="absolute flex flex-col items-center justify-center text-white bg-indigo-400 rounded -left-7 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                                        <div class="px-2 pt-2 text-lg">{{ $dateFormat->parse($treatment->created_at)->day }}
+                                        <div class="px-2 pt-2 text-lg">{{ now()->parse($treatment->created_at)->day }}
                                         </div>
                                         <div class="px-2 pb-1 text-sm uppercase">{{
-                                            $dateFormat->parse($treatment->created_at)->locale('pt-br')->shortMonthName }}
+                                            now()->parse($treatment->created_at)->locale('pt-br')->shortMonthName }}
                                         </div>
                                         <div class="px-2 pt-1 pb-2 text-sm border-t border-white">{{
-                                            $dateFormat->parse($treatment->created_at)->year }}</div>
+                                            now()->parse($treatment->created_at)->year }}</div>
                                     </span>
                                     <div
                                         class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
@@ -102,7 +104,7 @@
                                             class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
                                             Local: {{ $treatment->infiltracao }} <br />
                                             Retirada: {{
-                                            $dateFormat->parse($treatment->infiltracao_remove_date)->format('d/m/Y') }}
+                                            now()->parse($treatment->infiltracao_remove_date)->format('d/m/Y') }}
                                         </div>
                                         @endif
 
@@ -121,7 +123,7 @@
                                         <h6 class="text-black">Retorno</h6>
                                         <div
                                             class="p-3 mb-3 font-normal text-gray-500 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-300">
-                                            <p>{{ $dateFormat->parse($treatment->return_date)->format('d/m/Y') }} ({{
+                                            <p>{{ now()->parse($treatment->return_date)->format('d/m/Y') }} ({{
                                                 $treatment->return_mode }})</p>
                                         </div>
                                         @endif
@@ -141,7 +143,7 @@
 
 
                                         @isset($treatment->mentor->name )
-                                        <div class="mt-5">
+                                        <div class="mt-5 text-black">
                                             Mentor: {{ $treatment->mentor->name }}
                                         </div>
                                         @endisset

@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use Carbon\Carbon;
 use App\Models\Address;
 use App\Models\Patient;
 use Livewire\Component;
@@ -11,16 +10,14 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Traits\HandleText;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use App\Traits\PhoneNumberFormater;
 
 class Patients extends Component
 {
     use WithPagination;
     use HandleText;
+    use PhoneNumberFormater;
 
-    public $carbon;
-    public $dateFormat;
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
@@ -75,16 +72,9 @@ class Patients extends Component
         'patient.address.min' => 'Informe um endereço válido.',
     ];
 
-    public function mount()
-    {
-        $this->dateFormat = now();
-    }
 
     public function render()
     {
-
-        $this->carbon = Carbon::now();
-
         $patients = Patient::with('address')
             ->when($this->q, function ($query) {
                 return $query
@@ -157,7 +147,7 @@ class Patients extends Component
         $this->confirmingPatientAddition = true;
     }
 
-    public function addPatient()
+    public function addPatient(): void
     {
         $this->validate();
 
@@ -195,7 +185,7 @@ class Patients extends Component
         $this->confirmingPatientAddition = false;
     }
 
-    public function searchZipCode($zipCode)
+    public function searchZipCode($zipCode): void
     {
         if (!empty($zipCode)) {
             $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
@@ -214,41 +204,13 @@ class Patients extends Component
         }
     }
 
-    private function formatPhoneNumber($phoneNumber)
-    {
-        // Remove non-numeric characters from the phone number
-        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-
-        // Check if it's a mobile or landline number and apply the appropriate format
-        if (strlen($phoneNumber) == 11) {
-            // Format as (XX) 9XXXX-XXXX for mobile numbers
-            return sprintf(
-                '(%s) %s-%s',
-                substr($phoneNumber, 0, 2),
-                substr($phoneNumber, 2, 5),
-                substr($phoneNumber, 7)
-            );
-        } elseif (strlen($phoneNumber) == 10) {
-            // Format as (XX) XXXX-XXXX for landline numbers
-            return sprintf(
-                '(%s) %s-%s',
-                substr($phoneNumber, 0, 2),
-                substr($phoneNumber, 2, 4),
-                substr($phoneNumber, 6)
-            );
-        }
-
-        // Return the original number if it doesn't match expected lengths
-        return $phoneNumber;
-    }
-
-    public function openTreatmentsModal($patient)
+    public function openTreatmentsModal($patient): void
     {
         $this->openingTreatmentsModal = true;
         $this->getTreatments($patient);
     }
 
-    public function getTreatments($patient)
+    public function getTreatments($patient): void
     {
         $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'])
             ->where('treatments.patient_id', $patient)

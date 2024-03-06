@@ -515,7 +515,7 @@
                             <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
                         @endisset
                         @isset($treatment->patient->phone)
-                            <p>{{ $treatment->patient->phone}}</p>
+                            <p>{{ $this->formatPhoneNumber($treatment->patient->phone) }}</p>
                         @endisset
                     </div>
                     <div class=" md:col-span-1 md:mt-7 sm:mt-0">

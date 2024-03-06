@@ -3,19 +3,17 @@
 namespace App\Http\Livewire\Treatments;
 
 use App\Models\Treatment;
+use App\Traits\PhoneNumberFormater;
 use Livewire\Component;
 
 class ViewTreatment extends Component
 {
+    use PhoneNumberFormater;
+    
     public ?Treatment $treatment;
     public $treatmentId;
     public $dateFormat;
     public $openingTreatmentsModal = false;
-
-    public function mount()
-    {
-        $this->dateFormat = now();
-    }
 
     public function render()
     {
