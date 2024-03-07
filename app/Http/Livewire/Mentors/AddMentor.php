@@ -9,7 +9,6 @@ use Livewire\Component;
 class AddMentor extends Component
 {
     public $state = [];
-
     public $confirmingMentorAddition = false;
 
     protected $rules = [
@@ -36,7 +35,7 @@ class AddMentor extends Component
     public function saveMentor()
     {
         $validated = $this->validate();
-        
+
         Mentor::create($validated['state']);
 
         $this->emitUp('mentorAdded');

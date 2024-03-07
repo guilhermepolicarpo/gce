@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Mentors;
+namespace App\Http\Livewire\Library\Categories;
 
-use App\Models\Mentor;
 use Livewire\Component;
+use App\Models\Category;
 use Livewire\WithPagination;
 
-class MentorsList extends Component
+class CategoriesList extends Component
 {
     use WithPagination;
 
@@ -21,23 +21,28 @@ class MentorsList extends Component
     ];
 
     protected $listeners = [
-        'mentorAdded' => 'render',
-        'mentorDeleted' => 'render',
-        'mentorEddited' => 'render',
+        'categoryAdded' => 'render',
+        'categoryDeleted' => 'render',
+        'categoryEddited' => 'render',
     ];
 
     public function render()
     {
-        $mentors = Mentor::when($this->q, function ($query) {
+        $categories = Category::when($this->q, function ($query) {
             $query->where('name', 'like', "%{$this->q}%");
         })->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
             ->paginate(10);
 
-        return view('livewire.mentors.mentors-list', [
-            'mentors' => $mentors,
+        return view('livewire.library.categories.categories-list', [
+            'categories' => $categories,
         ]);
     }
 
+    /**
+     * Sorts the collection by the given field.
+     *
+     * @param $field The field to sort by
+     */
     public function sortBy($field)
     {
         if ($field == $this->sortBy) {
@@ -46,6 +51,10 @@ class MentorsList extends Component
         $this->sortBy = $field;
     }
 
+    /**
+     * Reset pagination.
+     *
+     */
     public function updatingQ()
     {
         $this->resetPage();

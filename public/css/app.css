@@ -1496,17 +1496,11 @@ select {
 .h-9 {
   height: 2.25rem;
 }
-.h-full {
-  height: 100%;
-}
-.h-auto {
-  height: auto;
-}
-.h-screen {
-  height: 100vh;
-}
 .h-\[70vh\] {
   height: 70vh;
+}
+.h-full {
+  height: 100%;
 }
 .max-h-52 {
   max-height: 13rem;
@@ -1529,23 +1523,11 @@ select {
 .max-h-\[70vh\] {
   max-height: 70vh;
 }
-.max-h-\[550px\] {
-  max-height: 550px;
-}
 .min-h-full {
   min-height: 100%;
 }
 .min-h-screen {
   min-height: 100vh;
-}
-.min-h-\[\] {
-  min-height: ;
-}
-.min-h-\[50vh\] {
-  min-height: 50vh;
-}
-.min-h-\[70vh\] {
-  min-height: 70vh;
 }
 .w-0 {
   width: 0px;
@@ -1918,9 +1900,6 @@ select {
 }
 .self-center {
   align-self: center;
-}
-.justify-self-start {
-  justify-self: start;
 }
 .overflow-auto {
   overflow: auto;

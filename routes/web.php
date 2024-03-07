@@ -6,62 +6,28 @@ use App\Http\Controllers\SearchMentorController;
 use App\Http\Controllers\SearchMedicinesController;
 use App\Http\Controllers\SearchOrientationsController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
-Route::get('/', function () {
-    return view('welcome');
+    // Dashboard and basic views
+    Route::view('/', 'welcome');
+    Route::view('/painel', 'dashboard')->name('dashboard');
+    Route::view('/assistidos', 'patients')->name('patients');
+    Route::view('/agendamento', 'schedule')->name('schedule');
+    Route::view('/mentores', 'mentors')->name('mentors');
+
+    // Library
+    Route::view('/biblioteca/categorias', 'categories')->name('categories');
+
+    // Spiritist Center Management
+    Route::view('/centro-espirita', 'spiritist-center')->name('spiritistCenter');
+    Route::view('/tipos-de-tratamento', 'types-of-treatment')->name('typesOfTreatment');
+    Route::view('/usuarios', 'users')->name('users');
+    Route::view('/orientacoes', 'orientations')->name('orientations');
+    Route::view('/aguas-magnetizadas', 'medicines')->name('medicines');
+
+    // Async Search
+    Route::get('/search-patient', SearchPatient::class)->name('searchPatient');
+    Route::get('/search-mentor', SearchMentorController::class)->name('searchMentor');
+    Route::get('/search-medicine', SearchMedicinesController::class)->name('searchMedicine');
+    Route::get('/search-orientation', SearchOrientationsController::class)->name('searchOrientation');
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/painel', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/assistidos', function () {
-    return view('patients');
-})->name('patients');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/agendamento', function () {
-    return view('schedule');
-})->name('schedule');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/mentores', function () {
-    return view('mentors');
-})->name('mentors');
-
-
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/centro-espirita', function () {
-    return view('spiritist-center');
-})->name('spiritistCenter');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/tipos-de-tratamento', function () {
-    return view('types-of-treatment');
-})->name('typesOfTreatment');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/usuarios', function () {
-    return view('users');
-})->name('users');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/orientacoes', function () {
-    return view('orientatios');
-})->name('orientatios');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/aguas-magnetizadas', function () {
-    return view('medicines');
-})->name('medicines');
-
-
-// Async Search
-Route::middleware(['auth:sanctum', 'verified'])->get('/search-patient', SearchPatient::class)->name('searchPatient');
-Route::middleware(['auth:sanctum', 'verified'])->get('/search-mentor', SearchMentorController::class)->name('searchMentor');
-Route::middleware(['auth:sanctum', 'verified'])->get('/search-medicine', SearchMedicinesController::class)->name('searchMedicine');
-Route::middleware(['auth:sanctum', 'verified'])->get('/search-orientation', SearchOrientationsController::class)->name('searchOrientation');
