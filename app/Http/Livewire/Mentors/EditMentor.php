@@ -7,17 +7,20 @@ use Livewire\Component;
 
 class EditMentor extends Component
 {
-    public $mentorId;
-    public $state = [];
-    public $confirmingMentorEdditing = false;
+    public int $mentorId;
+    public string $name = '';
+    public $showEditModal = false;
 
     protected $rules = [
-        'state.name' => 'required|string|min:2',
+        'name' => 'required|string|min:2|max:255|unique:mentors,name',
     ];
 
     protected $messages = [
-        'state.name.required' => 'Por favor, informe o nome do mentor',
-        'state.name.min' => 'O nome do mentor deve ter no mínimo 2 caracteres',
+        'name.required' => 'Por favor, informe o nome do mentor',
+        'name.min' => 'O nome do mentor deve ter no mínimo 2 caracteres',
+        'name.max' => 'O nome do mentor deve ter no maximo 255 caracteres',
+        'name.unique' => 'Já existe um mentor com este nome',
+        'name.string' => 'O nome do mentor deve ser um texto',
     ];
 
     public function render()
@@ -25,20 +28,20 @@ class EditMentor extends Component
         return view('livewire.mentors.edit-mentor');
     }
 
-    public function confirmMentorEditing(Mentor $mentor)
+    public function showEditModal(Mentor $mentor)
     {
-        $this->state = $mentor->toArray();
-        $this->confirmingMentorEdditing = true;
+        $this->name = $mentor->name;
+        $this->showEditModal = true;
     }
 
     public function saveMentor()
     {
         $validated = $this->validate();
 
-        Mentor::where('id', $this->mentorId)->update($validated['state']);
+        Mentor::where('id', $this->mentorId)->update($validated);
 
-        $this->confirmingMentorEdditing = false;
-        $this->reset(['state']);
-        $this->emitUp('mentorEddited');
+        $this->showEditModal = false;
+        $this->reset(['name']);
+        $this->emitUp('mentorEdited');
     }
 }

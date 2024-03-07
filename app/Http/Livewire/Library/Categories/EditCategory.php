@@ -9,7 +9,7 @@ class EditCategory extends Component
 {
     public string $categoryId;
     public string $name = '';
-    public $showEdditingModal = false;
+    public $showEditModal = false;
 
     protected $rules = [
         'name' => 'required|min:3|max:255|unique:categories,name',
@@ -27,10 +27,10 @@ class EditCategory extends Component
         return view('livewire.library.categories.edit-category');
     }
 
-    public function showModal(Category $category): void
+    public function showEditModal(Category $category): void
     {
         $this->name = $category->name;
-        $this->showEdditingModal = true;
+        $this->showEditModal = true;
     }
 
     public function editCategory(): void
@@ -41,6 +41,6 @@ class EditCategory extends Component
 
         $this->reset('name');
         $this->emitUp('categoryEddited');
-        $this->showEdditingModal = false;
+        $this->showEditModal = false;
     }
 }

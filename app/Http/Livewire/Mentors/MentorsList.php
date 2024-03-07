@@ -23,7 +23,7 @@ class MentorsList extends Component
     protected $listeners = [
         'mentorAdded' => 'render',
         'mentorDeleted' => 'render',
-        'mentorEddited' => 'render',
+        'mentorEdited' => 'render',
     ];
 
     public function render()
