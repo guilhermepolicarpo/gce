@@ -20,9 +20,9 @@ class DeleteCategory extends Component
         $this->confirmingCategoryDeletion = true;
     }
 
-    public function deleteCategory(Category $category): void
+    public function deleteCategory(): void
     {
-        $category->delete();
+        Category::destroy($this->categoryId);
         $this->emitUp('categoryDeleted');
         $this->confirmingCategoryDeletion = false;
     }

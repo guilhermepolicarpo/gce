@@ -15,14 +15,14 @@ class DeleteMentor extends Component
         return view('livewire.mentors.delete-mentor');
     }
 
-    public function confirmMentorDeletion($id)
+    public function confirmMentorDeletion()
     {
-        $this->confirmingMentorDeletion = $id;
+        $this->confirmingMentorDeletion = true;
     }
 
-    public function deleteMentor(Mentor $mentor)
+    public function deleteMentor()
     {
-        $mentor->delete();
+        Mentor::destroy($this->mentorId);
         $this->emitUp('mentorDeleted');
         $this->confirmingMentorDeletion = false;
     }

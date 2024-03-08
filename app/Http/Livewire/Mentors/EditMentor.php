@@ -12,14 +12,13 @@ class EditMentor extends Component
     public $showEditModal = false;
 
     protected $rules = [
-        'name' => 'required|string|min:2|max:255|unique:mentors,name',
+        'name' => 'required|string|min:2|max:255',
     ];
 
     protected $messages = [
         'name.required' => 'Por favor, informe o nome do mentor',
         'name.min' => 'O nome do mentor deve ter no mínimo 2 caracteres',
         'name.max' => 'O nome do mentor deve ter no maximo 255 caracteres',
-        'name.unique' => 'Já existe um mentor com este nome',
         'name.string' => 'O nome do mentor deve ser um texto',
     ];
 
@@ -28,8 +27,9 @@ class EditMentor extends Component
         return view('livewire.mentors.edit-mentor');
     }
 
-    public function showEditModal(Mentor $mentor)
+    public function showEditModal()
     {
+        $mentor = Mentor::select('name')->where('id', $this->mentorId)->first();
         $this->name = $mentor->name;
         $this->showEditModal = true;
     }

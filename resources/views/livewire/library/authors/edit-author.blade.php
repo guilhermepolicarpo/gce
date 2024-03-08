@@ -1,6 +1,6 @@
 <div>
     {{-- Edit Author Button --}}
-    <button wire:click="showEditModal({{ $authorId }})" class="mr-3">
+    <button wire:click="showEditModal()" class="mr-3">
         <x-edit-icon />
     </button>
 

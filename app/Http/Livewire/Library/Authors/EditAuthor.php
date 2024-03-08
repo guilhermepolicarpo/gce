@@ -30,8 +30,9 @@ class EditAuthor extends Component
         return view('livewire.library.authors.edit-author');
     }
 
-    public function showEditModal(Author $author): void
+    public function showEditModal(): void
     {
+        $author = Author::select('name', 'is_spiritual_author')->where('id', $this->authorId)->first();
         $this->name = $author->name;
         $this->is_spiritual_author = $author->is_spiritual_author;
         $this->showEditModal = true;

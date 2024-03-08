@@ -29,43 +29,6 @@
                     <x-jet-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <span class="inline-flex rounded-md">
-                                <button type="button"
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
-                                    {{ __('Biblioteca') }}
-
-                                    <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </span>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <!-- Library Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Gerenciar Biblioteca') }}
-                            </div>
-
-                            <x-jet-dropdown-link href="{{ route('categories') }}">
-                                {{ __('Categorias') }}
-                            </x-jet-dropdown-link>
-
-                            <x-jet-dropdown-link href="{{ route('authors') }}">
-                                {{ __('Autores') }}
-                            </x-jet-dropdown-link>
-
-
-                        </x-slot>
-                    </x-jet-dropdown>
-                </div>
-
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
-                    <x-jet-dropdown align="left" width="48">
-                        <x-slot name="trigger">
-                            <span class="inline-flex rounded-md">
                                 <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
                                     {{ __('Gestão') }}
 
@@ -104,6 +67,45 @@
 
                             <x-jet-dropdown-link href="{{ route('typesOfTreatment') }}">
                                 {{ __('Tipos de Atendimento') }}
+                            </x-jet-dropdown-link>
+                        </x-slot>
+                    </x-jet-dropdown>
+                </div>
+
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-jet-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <span class="inline-flex rounded-md">
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
+                                    {{ __('Biblioteca') }}
+
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </span>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <!-- Library Management -->
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Gerenciar Biblioteca') }}
+                            </div>
+
+                            <x-jet-dropdown-link href="{{ route('categories') }}">
+                                {{ __('Categorias') }}
+                            </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('authors') }}">
+                                {{ __('Autores') }}
+                            </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('publishers') }}">
+                                {{ __('Editoras') }}
                             </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
@@ -243,33 +245,14 @@
             </x-jet-responsive-nav-link>
         </div>
 
-
-        {{-- Biblioteca --}}
-        <div class="pb-4 border-t border-gray-200">
-            <div class="block px-3 py-2 text-xs text-gray-400">
-                {{ __('Gerenciar Biblioteca') }}
-            </div>
-            <div class="mt-0 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('categories') }}"
-                    :active="request()->routeIs('categories')">
-                    {{ __('Categorias') }}
-                </x-jet-responsive-nav-link>
-
-                <x-jet-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
-                    {{ __('Autores') }}
-                </x-jet-responsive-nav-link>
-
-
-            </div>
-        </div>
-
         {{-- Gerenciar Centro --}}
         <div class="pb-4 border-t border-gray-200">
             <div class="block px-3 py-2 text-xs text-gray-400">
                 {{ __('Gerenciar Centro') }}
             </div>
             <div class="mt-0 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('spiritistCenter') }}" :active="request()->routeIs('spiritistCenter')">
+                <x-jet-responsive-nav-link href="{{ route('spiritistCenter') }}"
+                    :active="request()->routeIs('spiritistCenter')">
                     {{ __('Centro Espírita') }}
                 </x-jet-responsive-nav-link>
 
@@ -289,11 +272,38 @@
                     {{ __('Fluídicos') }}
                 </x-jet-responsive-nav-link>
 
-                <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}" :active="request()->routeIs('typesOfTreatment')">
+                <x-jet-responsive-nav-link href="{{ route('typesOfTreatment') }}"
+                    :active="request()->routeIs('typesOfTreatment')">
                     {{ __('Tipos de Atendimento') }}
                 </x-jet-responsive-nav-link>
             </div>
         </div>
+
+
+        {{-- Biblioteca --}}
+        <div class="pb-4 border-t border-gray-200">
+            <div class="block px-3 py-2 text-xs text-gray-400">
+                {{ __('Gerenciar Biblioteca') }}
+            </div>
+            <div class="mt-0 space-y-1">
+                <x-jet-responsive-nav-link href="{{ route('categories') }}"
+                    :active="request()->routeIs('categories')">
+                    {{ __('Categorias') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
+                    {{ __('Autores') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
+                    {{ __('Editoras') }}
+                </x-jet-responsive-nav-link>
+
+
+            </div>
+        </div>
+
+
 
 
         <!-- Responsive Settings Options -->

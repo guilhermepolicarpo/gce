@@ -21,7 +21,7 @@
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-3" wire:click="deleteCategory({{ $categoryId }})"
+            <x-jet-danger-button class="ml-3" wire:click="deleteCategory()"
                 wire:loading.attr="disabled">
                 {{ __('Deletar') }}
             </x-jet-danger-button>

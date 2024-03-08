@@ -1,5 +1,5 @@
 <div>
-    <button wire:click="confirmMentorDeletion({{ $mentorId }})" wire:loading.attr='disabled' >
+    <button wire:click="confirmMentorDeletion()" wire:loading.attr='disabled' >
         <x-delete-icon />
     </button>
 
@@ -20,8 +20,7 @@
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-3" wire:click="deleteMentor({{ $confirmingMentorDeletion }})"
-                wire:loading.attr="disabled">
+            <x-jet-danger-button class="ml-3" wire:click="deleteMentor()" wire:loading.attr="disabled">
                 {{ __('Deletar') }}
             </x-jet-danger-button>
         </x-slot>

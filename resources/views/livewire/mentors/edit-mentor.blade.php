@@ -1,5 +1,5 @@
 <div>
-    <button wire:click="showEditModal({{ $mentorId }})" wire:loading.attr='disabled' class="mr-3">
+    <button wire:click="showEditModal()" wire:loading.attr='disabled' class="mr-3">
         <x-edit-icon />
     </button>
 
@@ -16,16 +16,16 @@
                     <div class="md:col-span-2">
                         <div class="grid grid-cols-6 gap-3">
                             <div class="col-span-6 sm:col-span-6">
-                                <x-jet-label for="name" value="{{ __('Nome') }}" />
+                                <x-jet-label for="name-{{ $mentorId }}" value="{{ __('Nome') }}" />
                                 <x-jet-input
-                                    id="name"
+                                    id="name-{{ $mentorId }}"
                                     type="text"
                                     wire:model.defer="name"
                                     wire:keydown.enter='saveMentor()'
                                     class="block w-full mt-1"
                                     placeholder="Digite o nome"
                                 />
-                                <x-jet-input-error for="name" class="mt-2" />
+                                <x-jet-input-error for="name-{{ $mentorId }}" class="mt-2" />
                             </div>
 
                         </div>
