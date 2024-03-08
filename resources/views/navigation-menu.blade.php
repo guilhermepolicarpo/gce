@@ -53,6 +53,10 @@
                                 {{ __('Categorias') }}
                             </x-jet-dropdown-link>
 
+                            <x-jet-dropdown-link href="{{ route('authors') }}">
+                                {{ __('Autores') }}
+                            </x-jet-dropdown-link>
+
 
                         </x-slot>
                     </x-jet-dropdown>
@@ -249,6 +253,10 @@
                 <x-jet-responsive-nav-link href="{{ route('categories') }}"
                     :active="request()->routeIs('categories')">
                     {{ __('Categorias') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
+                    {{ __('Autores') }}
                 </x-jet-responsive-nav-link>
 
 

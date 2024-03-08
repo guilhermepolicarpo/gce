@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class EditCategory extends Component
 {
-    public string $categoryId;
+    public int $categoryId;
     public string $name = '';
     public $showEditModal = false;
 

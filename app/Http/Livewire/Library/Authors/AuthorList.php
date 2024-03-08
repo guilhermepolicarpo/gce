@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Library\Categories;
+namespace App\Http\Livewire\Library\Authors;
 
 use Livewire\Component;
-use App\Models\Category;
 use Livewire\WithPagination;
+use App\Models\Author;
 
-class CategoriesList extends Component
+class AuthorList extends Component
 {
     use WithPagination;
 
@@ -21,28 +21,23 @@ class CategoriesList extends Component
     ];
 
     protected $listeners = [
-        'categoryAdded' => 'render',
-        'categoryDeleted' => 'render',
-        'categoryEddited' => 'render',
+        'authorUpdated' => 'render',
+        'authorDeleted' => 'render',
+        'authorCreated' => 'render',
     ];
 
     public function render()
     {
-        $categories = Category::select('id', 'name')->when($this->q, function ($query) {
+        $authors = Author::select('id', 'name', 'is_spiritual_author')->when($this->q, function ($query) {
             $query->where('name', 'like', "%{$this->q}%");
         })->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
-            ->paginate(10);
+        ->paginate(10);
 
-        return view('livewire.library.categories.categories-list', [
-            'categories' => $categories,
+        return view('livewire.library.authors.author-list', [
+            'authors' => $authors,
         ]);
     }
 
-    /**
-     * Sorts the collection by the given field.
-     *
-     * @param $field The field to sort by
-     */
     public function sortBy($field)
     {
         if ($field == $this->sortBy) {
@@ -51,10 +46,6 @@ class CategoriesList extends Component
         $this->sortBy = $field;
     }
 
-    /**
-     * Reset pagination.
-     *
-     */
     public function updatingQ()
     {
         $this->resetPage();
