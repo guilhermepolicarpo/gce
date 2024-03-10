@@ -2,7 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchPatient;
+use App\Http\Controllers\GetBookAuthors;
+use App\Http\Controllers\GetBookPublisher;
+use App\Http\Controllers\GetBookCategories;
 use App\Http\Controllers\SearchMentorController;
+use App\Http\Controllers\GetIncarnateBookAuthors;
 use App\Http\Controllers\SearchMedicinesController;
 use App\Http\Controllers\SearchOrientationsController;
 
@@ -19,6 +23,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/biblioteca/categorias', 'categories')->name('categories');
     Route::view('/biblioteca/autores', 'authors')->name('authors');
     Route::view('/biblioteca/editoras', 'publishers')->name('publishers');
+    Route::view('/biblioteca/livros', 'books')->name('books');
 
     // Spiritist Center Management
     Route::view('/centro-espirita', 'spiritist-center')->name('spiritistCenter');
@@ -27,9 +32,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/orientacoes', 'orientations')->name('orientations');
     Route::view('/aguas-magnetizadas', 'medicines')->name('medicines');
 
-    // Async Search
+    // Async Search/Get
     Route::get('/search-patient', SearchPatient::class)->name('searchPatient');
     Route::get('/search-mentor', SearchMentorController::class)->name('searchMentor');
     Route::get('/search-medicine', SearchMedicinesController::class)->name('searchMedicine');
     Route::get('/search-orientation', SearchOrientationsController::class)->name('searchOrientation');
+    Route::get('/get-categories', GetBookCategories::class)->name('getBookCategories');
+    Route::get('/get-publishers', GetBookPublisher::class)->name('getBookPublisher');
+    Route::get('/get-authors', GetIncarnateBookAuthors::class)->name('getIncarnateBookAuthors');
+    Route::get('/get-spiritual-authors', GetBookAuthors::class)->name('getBookAuthors');
 });

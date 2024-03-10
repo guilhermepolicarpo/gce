@@ -354,8 +354,8 @@ class Appointments extends Component
                 'return_date' => $this->treatmentState['return_date'],
             ]);
 
-            $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => $treatment->tenant_id]);
-            $treatment->medicines()->attach($this->treatmentState['medicines'], ['medicine_treatment_tenant_id' => $treatment->tenant_id]);
+            $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => auth()->user()->tenant_id]);
+            $treatment->medicines()->attach($this->treatmentState['medicines'], ['medicine_treatment_tenant_id' => auth()->user()->tenant_id]);
 
             $appointment = Appointment::where('id', $this->treatment->id)->first();
             $appointment->treatment_id = $treatment->id;

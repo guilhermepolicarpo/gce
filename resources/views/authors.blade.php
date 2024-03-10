@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Autores') }}
+        <h2 class="flex items-center gap-2 text-xl font-semibold leading-tight text-gray-800">
+            {{ __('Biblioteca') }} <x-chevron-right-icon /> {{ __('Autores') }}
         </h2>
     </x-slot>
 

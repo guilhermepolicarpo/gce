@@ -1,6 +1,6 @@
 <div>
     {{-- Delete Author Button --}}
-    <button title="Excluir autor" wire:click="showDeleteModal()" wire:loading.attr='disabled'>
+    <button title="Excluir livro" wire:click="showDeleteModal()" wire:loading.attr='disabled'>
         <x-delete-icon />
     </button>
 
@@ -8,12 +8,12 @@
     <x-jet-confirmation-modal wire:model="showDeleteModal">
         <x-slot name="title">
             <div class="text-black">
-                {{ __('Deletar autor') }}
+                {{ __('Deletar livro') }}
             </div>
         </x-slot>
 
         <x-slot name="content">
-            <p class="text-base text-black">{{ __('Tem certeza de que deseja excluir autor?') }}</p>
+            <p class="text-base text-black">{{ __('Tem certeza de que deseja excluir este livro?') }}</p>
         </x-slot>
 
         <x-slot name="footer">
@@ -21,7 +21,7 @@
                 {{ __('Cancelar') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-3" wire:click="deleteAuthor()" wire:loading.attr="disabled">
+            <x-jet-danger-button class="ml-3" wire:click="deleteBook()" wire:loading.attr="disabled">
                 {{ __('Deletar') }}
             </x-jet-danger-button>
         </x-slot>

@@ -12,4 +12,9 @@ class Publisher extends Model
     protected $guarded = ['id'];
 
     protected $fillable = ['name'];
+
+    public function books()
+    {
+        return $this->hasOne(Book::class);
+    }
 }

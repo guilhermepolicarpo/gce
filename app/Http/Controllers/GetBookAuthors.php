@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Orientation;
+use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class SearchOrientationsController extends Controller
+class GetBookAuthors extends Controller
 {
     public function __invoke(Request $request): Collection
     {
-        return Orientation::select('id', 'tenant_id', 'name')
+        return Author::select('id', 'name')
             ->orderBy('name')
             ->when(
                 $request->search,

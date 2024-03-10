@@ -96,6 +96,10 @@
                                 {{ __('Gerenciar Biblioteca') }}
                             </div>
 
+                            <x-jet-dropdown-link href="{{ route('books') }}">
+                                {{ __('Livros') }}
+                            </x-jet-dropdown-link>
+
                             <x-jet-dropdown-link href="{{ route('categories') }}">
                                 {{ __('Categorias') }}
                             </x-jet-dropdown-link>
@@ -286,8 +290,12 @@
                 {{ __('Gerenciar Biblioteca') }}
             </div>
             <div class="mt-0 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('categories') }}"
-                    :active="request()->routeIs('categories')">
+                <x-jet-responsive-nav-link href="{{ route('books') }}"
+                    :active="request()->routeIs('books')">
+                    {{ __('Livros') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
                     {{ __('Categorias') }}
                 </x-jet-responsive-nav-link>
 
