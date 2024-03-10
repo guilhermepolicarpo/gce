@@ -63,6 +63,7 @@
                     </x-dropdown.item>
                 </x-dropdown>
             </div>
+            {{-- Loagind Spinner --}}
             <div class="flex items-center mb-2 ml-3">
                 <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q, date, status, treatmentType' ></div>
             </div>

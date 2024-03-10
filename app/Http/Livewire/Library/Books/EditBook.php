@@ -98,7 +98,6 @@ class EditBook extends Component
         $book = Book::find($this->bookId);
 
         if (!$book) {
-            // Tratar o caso em que o livro não é encontrado
             return;
         }
 

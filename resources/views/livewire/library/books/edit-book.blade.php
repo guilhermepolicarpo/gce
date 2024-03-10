@@ -4,6 +4,8 @@
         <x-edit-icon />
     </button>
 
+    
+
     {{-- Edit Author Modal --}}
     <div class="flex justify-start">
         <x-jet-dialog-modal wire:model="showEditModal" maxWidth="4xl">
@@ -14,7 +16,13 @@
             <x-slot name="content">
                 <div class="flex">
                     <div class="w-1/4">
-                        <img src="https://placehold.co/180x275" alt="">
+                        @if ($book['cover_image'])
+                            <img src="{{ $book['cover_image'] }}" alt="Capa do Livro">
+                        <div class="absolute w-6 h-6 border-4 border-gray-300 rounded-full inset-1/2 animate-spin border-t-indigo-600"
+                            wire:loading></div>
+                        @else
+                        <img src="https://placehold.co/180x275" alt="Capa do Livro">
+                        @endif
                     </div>
                     <div class="flex flex-col w-3/4 gap-4">
                         <div class="flex flex-row gap-4">

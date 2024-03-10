@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Library\Books;
 
 use App\Models\Book;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class AddBook extends Component
 {
+    public $addModal;
     public $book = [
         'isbn' => null,
         'title' => null,
@@ -19,8 +21,6 @@ class AddBook extends Component
     ];
     public $author = null;
     public $incarnateAuthor = null;
-
-    public bool $showAddModal = false;
 
     protected function rules()
     {
@@ -64,16 +64,10 @@ class AddBook extends Component
         'incarnateAuthor.exists' => 'Este autor não existe. Por favor, selecione um autor válido.',
     ];
 
+
     public function render()
     {
         return view('livewire.library.books.add-book');
-    }
-
-
-    public function showAddModal(): void
-    {
-        $this->reset('book', 'author', 'incarnateAuthor');
-        $this->showAddModal = true;
     }
 
     public function saveBook(): void
@@ -84,7 +78,53 @@ class AddBook extends Component
         $bookCreated->authors()->attach($validated['author']);
         $bookCreated->authors()->attach($validated['incarnateAuthor']);
 
-        $this->showAddModal = false;
         $this->emitUp('bookCreated');
+        $this->reset('book', 'author', 'incarnateAuthor');
+        $this->resetValidation();
+    }
+
+    public function saveBookAndClose(): void
+    {
+        $this->saveBook();
+        $this->addModal = false;
+    }
+
+
+    public function getBookInformationFromOpenLibraryApi(): void
+    {
+        $isbn = $this->book['isbn'];
+
+        if (!$isbn) {
+            return;
+        }
+
+        if (strlen($isbn) !== 13 && strlen($isbn) !== 10) {
+            return;
+        }
+
+        $response = Http::get("https://openlibrary.org/search.json?isbn={{ $isbn }}");
+
+        if ($response->ok() && $response->json('numFound') > 0) {
+
+            $book = $response->json('docs.0');
+
+            $this->book['title'] = $book['title'];
+            $this->book['year_published'] = $book['first_publish_year'];
+
+            if ($book['cover_edition_key']) {
+                $this->getBookCoverImage($book['cover_edition_key']);
+            }
+        }
+    }
+
+    public function getBookCoverImage($coverId): void
+    {
+        $cover_imageUrl = "https://covers.openlibrary.org/b/olid/$coverId-M.jpg";
+
+        if ($this->book['cover_image'] === $cover_imageUrl) {
+            return;
+        }
+
+        $this->book['cover_image'] = "https://covers.openlibrary.org/b/olid/$coverId-M.jpg";
     }
 }
