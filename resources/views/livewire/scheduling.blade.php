@@ -201,7 +201,7 @@
 
                                             @isset($appointment->treatment_id)
 
-                                            @livewire('treatments.view-treatment', ['treatmentId' => $appointment->treatment_id], key($appointment->treatment_id))
+                                            @livewire('treatments.view-treatment', ['treatmentId' => $appointment->treatment_id], key('view-treatment-'.$appointment->treatment_id))
 
                                             <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
