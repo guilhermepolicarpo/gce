@@ -81,8 +81,8 @@ class EditBook extends Component
         $this->book = Book::with(['category', 'publisher', 'authors'])->where('id', $this->bookId)->first();
 
         if ($this->hasPsychographer($this->book->authors)) {
-            $this->incarnateAuthor = $this->book->authors->first()->id;
-            $this->author = $this->book->authors->last()->id;
+            $this->incarnateAuthor = $this->book->authors->where('is_spiritual_author', false)->first()->id;
+            $this->author = $this->book->authors->where('is_spiritual_author', true)->first()->id;
 
         } else {
             $this->author = $this->book->authors->last()->id;
