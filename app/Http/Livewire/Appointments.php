@@ -39,6 +39,7 @@ class Appointments extends Component
         'healing_touches' => [
             ['healing_touch' => null, 'mode' => 'Presencial', 'quantity' => null],
         ],
+        'magnetized_water_frequency' => null,
     ];
     public $treatment;
     public $patient;
@@ -171,6 +172,8 @@ class Appointments extends Component
             }
         }
 
+
+
         Appointment::updateOrCreate([
             'id' => $this->state['id'],
         ], [
@@ -179,6 +182,7 @@ class Appointments extends Component
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
             'notes' => $this->state['notes'],
+            'status' => ($this->state['treatment_mode'] === 'A distância') ? 'Em espera' : 'Não atendido',
         ]);
 
         $this->confirmingSchedulingAddition = false;
@@ -290,12 +294,10 @@ class Appointments extends Component
                     $appointment->save();
 
                     DB::commit();
-
                 } catch (\Exception $e) {
                     DB::rollback();
                     return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
                 }
-
             } else {
 
                 $this->reset(['treatment']);
@@ -329,6 +331,7 @@ class Appointments extends Component
             'treatmentState.healing_touches.*.mode' => 'exclude_if:treatmentState.healing_touches.*.healing_touch,null|required|string|max:255',
             'treatmentState.orientations.*' => 'nullable|numeric|exists:orientations,id',
             'treatmentState.medicines.*' => 'nullable|numeric|exists:medicines,id',
+            'treatmentState.magnetized_water_frequency' => 'nullable|string|max:255',
         ]);
 
         foreach ($this->treatmentState['healing_touches'] as $key => $value) {
@@ -352,6 +355,7 @@ class Appointments extends Component
                 'healing_touches' => $this->treatmentState['healing_touches'],
                 'return_mode' => $this->treatmentState['return_mode'],
                 'return_date' => $this->treatmentState['return_date'],
+                'magnetized_water_frequency' => $this->treatmentState['magnetized_water_frequency'],
             ]);
 
             $treatment->orientations()->attach($this->treatmentState['orientations'], ['orientation_treatment_tenant_id' => auth()->user()->tenant_id]);
@@ -376,6 +380,7 @@ class Appointments extends Component
             $this->confirmingTreatmentAddition = false;
 
         } catch (\Exception $e) {
+
             DB::rollback();
             return response()->json(['erro' => 'Ocorreu um erro no servidor.'], 500);
         }

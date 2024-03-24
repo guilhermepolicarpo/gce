@@ -1,25 +1,17 @@
 <div class="p-6 bg-white border-b border-gray-200 sm:px-10 sm:rounded-lg">
     <div class="flex items-end justify-between">
         <div class="flex items-end justify-start space-x-2 align-middle">
-            <!-- Search form -->
-            <div class="w-6/12">
-                <div class="relative mt-1 rounded-md shadow-sm">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 mt-6 pointer-events-none ">
-                    <span class="text-gray-500 sm:text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </span>
-                    </div>
-                    <label class="text-gray-500 sm:text-sm">Pesquisar</label>
-                    <input wire:model.debounce.500ms='q' class="w-full px-5 text-sm bg-white border-gray-300 rounded-lg border-1 pl-9 focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
-                </div>
-            </div>
+
+            {{-- Search form --}}
+            <x-search-form :q="$q" />
+
             <!-- Search date -->
             <div>
                 <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
                 <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="block w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
             </div>
+
+            {{-- Filter --}}
             <div>
                 <x-dropdown persistent=true align=left>
                     <x-slot name="trigger" title="Filtrar consulta">
@@ -63,11 +55,14 @@
                     </x-dropdown.item>
                 </x-dropdown>
             </div>
+
             {{-- Loagind Spinner --}}
             <div class="flex items-center mb-2 ml-3">
                 <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q, date, status, treatmentType' ></div>
             </div>
         </div>
+
+
         <!-- Add new scheduling -->
         <div class="mr-2">
             <x-jet-button wire:click="confirmSchedulingAddition" title="Inserir agendamento">
@@ -122,7 +117,7 @@
                                     <td class="px-4 py-6 ">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="text-base font-medium text-gray-900 align-middle ">
+                                                <div class="text-base font-medium text-gray-900 align-middle whitespace-nowrap">
                                                     {{ Str::words($appointment->patient->name, 5, '...') }}
                                                 </div>
                                                 {{-- <div class="text-xs text-gray-500">
@@ -452,9 +447,12 @@
                         </div>
 
                         <div class="col-span-6 p-5 rounded-lg sm:col-span-6 bg-gray-50">
-                            <x-jet-label for="date" value="{{ __('Data') }}" />
+                            <x-datetime-picker label="Data" id="date" placeholder="Selecione uma data" wire:model="state.date" wire:keydown.enter="saveScheduling()"
+                                :min="now()" without-time />
+
+                            {{-- <x-jet-label for="date" value="{{ __('Data') }}" />
                             <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="block w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/7" />
-                            <x-jet-input-error for="state.date" class="mt-2" />
+                            <x-jet-input-error for="state.date" class="mt-2" /> --}}
                         </div>
 
                         <div class="col-span-6 sm:col-span-6">
@@ -475,6 +473,10 @@
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
+
+
+
+
 
 
 
@@ -559,16 +561,20 @@
                                 <div class="px-4 py-5 bg-gray-50 sm:p-6">
                                     <div class="grid grid-cols-6 gap-6">
                                         <div class="col-span-6 sm:col-span-6">
-                                            <x-select
-                                                label="{{ __('Fluídicos') }}"
-                                                placeholder="Selecione um ou mais fluídicos"
-                                                :async-data="route('searchMedicine')"
-                                                option-label="name"
-                                                option-value="id"
-                                                wire:model.defer="treatmentState.medicines"
-                                                multiselect
-                                                class="mt-1"
-                                            />
+                                            <div class="flex flex-row gap-1">
+                                                <div class="grow">
+                                                    <x-select label="{{ __('Fluídicos') }}" placeholder="Selecione um ou mais fluídicos"
+                                                        :async-data="route('searchMedicine')" option-label="name" option-value="id"
+                                                        wire:model.defer="treatmentState.medicines" multiselect class="w-full mt-1" />
+                                                </div>
+                                                <div>
+                                                    <x-jet-label for="medicine_frequency" value="{{ __('Frequência') }}" />
+                                                    <x-jet-input id="medicine_frequency" type="text" wire:model.defer="treatmentState.magnetized_water_frequency"
+                                                        class="mt-2 text-black border-gray-300 w-28 sm:text-sm focus:outline-none focus:border-indigo-500/75" placeholder="3x ao dia" />
+                                                    <x-jet-input-error for="treatmentState.magnetized_water_frequency" class="mt-2" />
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-span-6 mt-4 sm:col-span-6">
                                                 <x-select

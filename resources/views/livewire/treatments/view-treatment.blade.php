@@ -11,18 +11,20 @@
     <x-modal.card title="Atendimento do assistido" blur wire:model.defer="viewTreatmentModal-{{ $treatmentId }}" max-width="4xl" spacing="p-6" >
         <div class="mb-10 sm:mb-3">
             <div class="md:col-span-2">
-                <div class=" grid h-[70vh] max-h-[70vh] grid-cols-6 gap-3 overflow-y-scroll ">
+                <div class="grid h-[70vh] max-h-[70vh] grid-cols-6 gap-3 overflow-y-scroll">
+
                     {{-- Loagind Spinner --}}
                     <div class="absolute transform translate-x-1/2 translate-y-1/2 right-1/2 bottom-1/2 ">
                         <div class="w-20 h-20 border-4 border-indigo-600 border-solid rounded-full border-t-transparent animate-spin" wire:loading
                             wire:target='getTreatmentData'></div>
                     </div>
+
                     @if ($treatment)
                     <div class="col-span-6 px-4 py-5 text-black rounded shadow bg-gray-50 sm:p-6">
 
                         <p class="text-lg font-semibold">
                             @isset($treatment->patient->name)
-                            {{ $treatment->patient->name }}
+                                {{ $treatment->patient->name }}
                             @endisset
                         </p>
 
@@ -84,6 +86,9 @@
                                         }
                                         @endphp
                                         @endforeach
+                                        @if ($treatment->magnetized_water_frequency)
+                                        <br /><br />Frequência: {{ $treatment->magnetized_water_frequency }}
+                                        @endif
                                     </div>
                                     @endif
 

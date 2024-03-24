@@ -28,6 +28,7 @@ class Treatment extends Model
         'healing_touches',
         'return_mode',
         'return_date',
+        'magnetized_water_frequency',
     ];
 
     protected $casts = [

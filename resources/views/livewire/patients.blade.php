@@ -352,6 +352,9 @@
                                                             }
                                                         @endphp
                                                     @endforeach
+                                                    @if ($treatment->magnetized_water_frequency)
+                                                        <br/><br/>Frequência: {{ $treatment->magnetized_water_frequency }}
+                                                    @endif
                                                 </div>
                                                 @endif
 
