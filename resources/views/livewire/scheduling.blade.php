@@ -1,15 +1,15 @@
 <div class="p-6 bg-white border-b border-gray-200 sm:px-10 sm:rounded-lg">
-    <div class="flex items-end justify-between">
-        <div class="flex items-end justify-start space-x-2 align-middle">
-
+    <div class="flex flex-wrap items-end justify-between gap-3">
+        <div class="flex flex-wrap items-end justify-start order-2 gap-3 align-middle sm:order-1">
             {{-- Search form --}}
             <x-search-form :q="$q" />
 
             <!-- Search date -->
-            <div>
-                <x-jet-label for="date_search" value="{{ __('Data') }}" class="text-gray-500 sm:text-sm"/>
-                <x-jet-input wire:model.debounce.500ms="date" id="date_search" type="date" class="block w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
-            </div>
+            <x-datetime-picker
+                without-timezone
+                without-time
+                label="Data" placeholder="Data"
+                wire:model="date" />
 
             {{-- Filter --}}
             <div>
@@ -63,16 +63,16 @@
         </div>
 
 
-        <!-- Add new scheduling -->
-        <div class="mr-2">
+        <!-- Add new scheduling button -->
+        <div class="order-1 mr-2 sm:order-2 justify-self-end">
             <x-jet-button wire:click="confirmSchedulingAddition" title="Inserir agendamento">
                 {{ __('Novo agendamento') }}
             </x-jet-button>
         </div>
     </div>
 
+    <!-- Table -->
     <div class="mt-6 text-gray-500">
-        <!-- Table -->
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-8">
@@ -90,12 +90,16 @@
                                             <button class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{ __('Tipo de Atendimento') }}</button>
                                         </div>
                                     </th>
+                                    @if (!$date)
                                     <th scope="col" class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('date')" class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{ __('Data') }}</button>
+                                            <button wire:click="sortBy('date')"
+                                                class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{ __('Data') }}</button>
                                             <x-sort-icon sortField="date" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
+                                    @endif
+
                                     <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
                                             <button wire:click="sortBy('treatment_mode')" class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase break-words">Modo de atendimento</button>
@@ -150,12 +154,13 @@
                                     <td class="px-4 py-6 whitespace-nowrap ">
                                         <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>
                                     </td>
+                                    @if (!$date)
                                     <td class="px-4 py-6 whitespace-nowrap ">
-
-                                        <div class="text-base text-gray-900">{{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}</div>
-                                        <div class="text-base text-gray-500">  </div>
-
+                                        <div class="text-base text-gray-900">
+                                            {{ $dateFormat->parse($appointment->date)->format('d/m/Y') }}
+                                        </div>
                                     </td>
+                                    @endif
                                     <td class="px-4 py-6 text-base text-gray-900">
                                        {{ $appointment->treatment_mode }}
                                     </td>
@@ -602,7 +607,6 @@
                                                     class="block w-full mt-1"
                                                 />
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -716,13 +720,14 @@
                                                 class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
                                             <x-jet-input-error for="treatmentState.infiltracao" class="mt-2" />
                                         </div>
-                                        <div>
-                                            <x-jet-label for="retirada_infiltracao" value="{{ __('Retirada') }}" />
-                                            <x-jet-input id="retirada_infiltracao" type="date" wire:model.defer="treatmentState.infiltracao_remove_date"
-                                                min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
-                                                class="w-full mt-1 text-black border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
-                                            <x-jet-input-error for="treatmentState.infiltracao_remove_date" class="mt-2" />
-                                        </div>
+                                        <x-datetime-picker
+                                            display-format="DD/MM/YYYY HH:mm"
+                                            without-timezone
+                                            label="Retirada"
+                                            placeholder="Data"
+                                            wire:model.defer="treatmentState.infiltracao_remove_date"
+                                            min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
+                                            time-format="24" />
                                     </div>
                                 </div>
                             </div>
@@ -778,10 +783,13 @@
                                 <div class="px-4 py-5 bg-gray-50 sm:p-6">
                                     <div class="flex flex-row gap-1">
                                         <div class="grow">
-                                            <x-jet-label for="return_date" value="{{ __('Data') }}" />
-                                            <x-jet-input id="return_date" name="return_date" type="date" wire:model.defer="treatmentState.return_date" min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}"
-                                                class="w-full mt-1 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/75" />
-                                            <x-jet-input-error for="treatmentState.return_date" class="mt-2" />
+                                            <x-datetime-picker
+                                                without-timezone
+                                                without-time
+                                                label="Data"
+                                                placeholder="Selecione uma data"
+                                                wire:model.defer="treatmentState.return_date"
+                                                min="{{ (new DateTime())->modify('+1 day')->format('Y-m-d') }}" />
                                         </div>
                                         <div >
                                             <x-jet-label for="return_mode" value="{{ __('Modo') }}" />
