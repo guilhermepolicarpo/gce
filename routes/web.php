@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/biblioteca/autores', 'authors')->name('authors');
     Route::view('/biblioteca/editoras', 'publishers')->name('publishers');
     Route::view('/biblioteca/livros', 'books')->name('books');
+    Route::view('/biblioteca/emprestimos', 'checkouts')->name('checkouts');
 
     // Spiritist Center Management
     Route::view('/centro-espirita', 'spiritist-center')->name('spiritistCenter');
