@@ -105,15 +105,10 @@ class Index extends Component
     }
 
 
-    public function receiveBookLoan($id)
+    public function receiveBookLoan(Checkout $checkout)
     {
-        $this->dialog()->confirm([
-            'title'       => 'Are you Sure?',
-            'description' => 'Save the information?',
-            'acceptLabel' => 'Yes, save it',
-            'method'      => 'receiveBookLoan',
-            'params'      => 'Saved',
-        ]);
+        $checkout->is_returned = true;
+        $checkout->save();
     }
 
 
@@ -138,5 +133,6 @@ class Index extends Component
     public function resetData()
     {
         $this->reset(['checkout']);
+        $this->resetValidation();
     }
 }

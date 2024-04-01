@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,7 +27,7 @@ class SearchPatient extends Controller
             )
             ->get()
             ->map(function (Patient $patient) {
-                $patient->full_address = $patient->address->address . ", " . $patient->address->number . " - " . $patient->address->neighborhood . ", " . $patient->address->city . " " . $patient->address->state;
+                $patient->full_address = Str::words($patient->address->address . ", " . $patient->address->number . " - " . $patient->address->neighborhood . ", " . $patient->address->city . " " . $patient->address->state, 10, '...');
 
                 return $patient;
             });
