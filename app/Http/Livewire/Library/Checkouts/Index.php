@@ -5,14 +5,26 @@ namespace App\Http\Livewire\Library\Checkouts;
 use App\Models\Checkout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use WireUi\Traits\Actions;
+
 
 class Index extends Component
 {
     use WithPagination;
+    use Actions;
 
-    public $q;
-    public $sortBy = 'id';
-    public $sortDesc = true;
+    public string $q = '';
+    public string $sortBy = 'id';
+    public bool $sortDesc = true;
+    public bool $openModal = false;
+    public array $checkout = [
+        'id' => null,
+        'book_id' => null,
+        'patient_id' => null,
+        'start_date' => null,
+        'end_date' => null,
+    ];
+
 
     protected $queryString = [
         'q' => ['except' => ''],
@@ -20,11 +32,33 @@ class Index extends Component
         'sortDesc' => ['except' => true],
     ];
 
-    protected $listeners = [
-        'checkoutUpdated' => 'render',
-        'checkoutDeleted' => 'render',
-        'checkoutCreated' => 'render',
-    ];
+
+    protected function rules()
+    {
+        return [
+            'checkout.book_id' => 'required|exists:books,id',
+            'checkout.patient_id' => 'required|exists:patients,id',
+            'checkout.start_date' => 'required|date',
+            'checkout.end_date' => 'required|date|after:start_date',
+        ];
+    }
+
+
+    protected function messages()
+    {
+        return [
+            'checkout.book_id.required' => 'Selecione um livro.',
+            'checkout.book_id.exists' => 'O livro não existe.',
+            'checkout.patient_id.required' => 'Selecione o assistido.',
+            'checkout.patient_id.exists' => 'O assistido não existe.',
+            'checkout.start_date.required' => 'Informe a data do empréstimo.',
+            'checkout.start_date.date' => 'Informe a data válida.',
+            'checkout.end_date.required' => 'Informe a data da devolução do empréstimo.',
+            'checkout.end_date.date' => 'Informe a data válida.',
+            'checkout.end_date.after' => 'A data de devolução deve ser posterior a data do empréstimo.',
+        ];
+    }
+
 
     public function render()
     {
@@ -38,10 +72,54 @@ class Index extends Component
             })
             ->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
             ->paginate(10);
-            
+
+        if ($this->checkout['id']) {
+            $this->checkout = Checkout::find($this->checkout['id'])->toArray();
+        }
+
+        if ($this->openModal === false) {
+            $this->resetData();
+        }
+
         return view('livewire.library.checkouts.index', [
             'checkouts' => $checkouts,
         ]);
+    }
+
+
+    public function saveCheckout()
+    {
+        $validated = $this->validate();
+
+        $checkout = Checkout::updateOrCreate(
+            [
+                'id' => $this->checkout['id']
+            ],
+            $validated['checkout']
+        );
+
+        if ($checkout) {
+            $this->openModal = false;
+            $this->reset(['checkout']);
+        }
+    }
+
+
+    public function receiveBookLoan($id)
+    {
+        $this->dialog()->confirm([
+            'title'       => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'acceptLabel' => 'Yes, save it',
+            'method'      => 'receiveBookLoan',
+            'params'      => 'Saved',
+        ]);
+    }
+
+
+    public function getCheckout(Checkout $checkout)
+    {
+        $this->checkout = $checkout->toArray();
     }
 
     public function sortBy($field)
@@ -55,5 +133,10 @@ class Index extends Component
     public function updatingQ()
     {
         $this->resetPage();
+    }
+
+    public function resetData()
+    {
+        $this->reset(['checkout']);
     }
 }

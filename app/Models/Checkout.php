@@ -12,8 +12,8 @@ class Checkout extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'start_time',
-        'end_time',
+        'start_date',
+        'end_date',
         'book_id',
         'patient_id',
         'is_returned',

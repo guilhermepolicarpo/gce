@@ -5,6 +5,7 @@ use App\Http\Controllers\SearchPatient;
 use App\Http\Controllers\GetBookAuthors;
 use App\Http\Controllers\GetBookPublisher;
 use App\Http\Controllers\GetBookCategories;
+use App\Http\Controllers\GetBooks;
 use App\Http\Controllers\SearchMentorController;
 use App\Http\Controllers\GetIncarnateBookAuthors;
 use App\Http\Controllers\SearchMedicinesController;
@@ -42,4 +43,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/get-publishers', GetBookPublisher::class)->name('getBookPublisher');
     Route::get('/get-authors', GetIncarnateBookAuthors::class)->name('getIncarnateBookAuthors');
     Route::get('/get-spiritual-authors', GetBookAuthors::class)->name('getBookAuthors');
+    Route::get('/get-books', GetBooks::class)->name('getBooks');
 });

@@ -12,7 +12,7 @@ class SearchPatient extends Controller
     public function __invoke(Request $request): Collection
     {
         return Patient::with('address')
-            ->select('id', 'tenant_id', 'name', 'address_id')
+            ->select('id', 'name', 'address_id')
             ->orderBy('name')
             ->when(
                 $request->search,

@@ -4,11 +4,16 @@
         {{-- Search form --}}
         <x-search-form :q="$q" />
 
-        {{-- Add Book --}}
-        {{-- @livewire('library.books.add-checkout') --}}
+        {{-- Add Book Button --}}
+        <div class="mr-2">
+            <x-jet-button onclick="$openModal('openModal')">
+                Registrar empréstimo
+            </x-jet-button>
+        </div>
 
     </div>
 
+    {{-- Table --}}
     <div class="mt-6 text-gray-500">
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -17,44 +22,44 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th scope="col"
+                                    class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
+                                    <div class="flex items-center">
+                                        <button {{-- wire:click="sortBy('category.name')" --}}
+                                        class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{
+                                            __('Assistido') }}</button>
+                                            <x-sort-icon sortField="patient.name" :sort-by="$sortBy"
+                                            :sort-desc="$sortDesc" />
+                                        </div>
+                                    </th>
                                     <th scope="col" class="px-4 py-3">
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button wire:click="sortBy('title')"
+                                            <button {{-- wire:click="sortBy('title')" --}}
                                                 class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{
-                                                __('Título') }}</button>
-                                            <x-sort-icon sortField="title" :sort-by="$sortBy" :sort-desc="$sortDesc" />
+                                                __('Livro') }}</button>
+                                            <x-sort-icon sortField="book.title" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button {{-- wire:click="sortBy('category.name')" --}}
-                                                class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{
-                                                __('Assistido') }}</button>
-                                            <x-sort-icon sortField="patient.name" :sort-by="$sortBy"
-                                                :sort-desc="$sortDesc" />
-                                        </div>
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
-                                        <div class="flex items-center">
-                                            <button {{-- wire:click="sortBy('authors.name')" --}}
+                                            <button wire:click="sortBy('start_date')"
                                                 class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{
                                                 __('Saída') }}</button>
-                                            <x-sort-icon sortField="authors.name" :sort-by="$sortBy"
+                                            <x-sort-icon sortField="start_date" :sort-by="$sortBy"
                                                 :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3 font-medium tracking-wider text-left text-gray-500 ">
                                         <div class="flex items-center">
-                                            <button {{-- wire:click="sortBy('publisher.name')" --}}
+                                            <button wire:click="sortBy('end_date')"
                                                 class="text-xs font-medium tracking-wider text-left text-gray-500 uppercase">{{
                                                 __('Retorno') }}</button>
-                                            <x-sort-icon sortField="publisher.name" :sort-by="$sortBy"
+                                            <x-sort-icon sortField="end_date" :sort-by="$sortBy"
                                                 :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
@@ -66,47 +71,45 @@
                                             <x-sort-icon sortField="publisher.name" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="relative px-4 py-3"></th>
+                                    <th scope="col" class="relative px-4 py-3">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($checkouts as $checkout)
                                 <tr>
+                                    <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
+                                        @if ($checkout->patient)
+                                        {{ Str::words($checkout->patient->name, 4, '...') }}
+                                        @endif
+                                    </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap ">
                                         @if ($checkout->book->cover_image)
-                                        <img src="{{ $checkout->book->cover_image }}" title="{{ $checkout->book->title }}" class="w-[60px]">
+                                            <img src="{{ $checkout->book->cover_image }}" title="{{ $checkout->book->title }}" class="w-[40px]">
                                         @else
-                                        <img src="https://via.placeholder.com/60x80" title="{{ $checkout->book->title }}"
-                                            class="w-[60px]">
+                                            <img src="https://via.placeholder.com/60x80" title="{{ $checkout->book->title }}"
+                                            class="w-[40px]">
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap max-w-[31ch] overflow-hidden">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
-                                                    {{ $checkout->book->title }}
+                                                    {{ Str::words($checkout->book->title, 4, '...') }}
                                                 </div>
-                                                <div class="text-base text-gray-500">
-                                                    <p class="text-sm">{{ Str::words($checkout->book->subtitle, 10, '...') }}</p>
-                                                    @if ($checkout->book->isbn)
-                                                    <p class="text-[13px]">ISBN: {{ $checkout->book->isbn }}</p>
-                                                    @endif
+                                                <div class="text-base text-gray-500 whitespace-normal">
+                                                    <p class="text-sm">{{ Str::words($checkout->book->subtitle, 8, '...') }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
-                                        @if ($checkout->patient)
-                                        {{ $checkout->patient->name }}
-                                        @endif
+                                        {{ now()->parse($checkout->start_date)->format('d/m/Y') }}
                                     </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
-                                        {{ $checkout->start_date }}
+                                        {{ now()->parse($checkout->end_date)->format('d/m/Y') }}
                                     </td>
-                                    <td>
-                                        {{ $checkout->end_date }}
-                                    </td>
-                                    <td>
+                                    <td >
                                         @if ($checkout->is_returned)
                                             <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Devolvido</span>
 
@@ -122,11 +125,14 @@
                                     <td>
                                         <div class="flex justify-end px-4 py-3 font-medium text-black whitespace-nowrap">
 
-                                            {{-- @livewire('library.books.edit-book', ['bookId'=>
-                                            $book->id], key('edit-book-' . $book->id)) --}}
+                                            <button title="Receber devolução do livro" wire:click="receiveBookLoan({{ $checkout->id }})"
+                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                {{ __('Receber') }}
+                                            </button>
 
-                                            {{-- @livewire('library.books.delete-book', ['bookId'=>
-                                            $book->id], key('delete-book-' . $book->id)) --}}
+                                            <button onclick="$openModal('openModal')" wire:click="getCheckout({{ $checkout->id }})" class="ml-3">
+                                                <x-edit-icon />
+                                            </button>
 
                                         </div>
                                     </td>
@@ -155,3 +161,68 @@
             </div>
         </div>
     </div>
+
+
+
+
+    {{-- Create or Update Modal --}}
+    <x-modal.card title="Emprestar livro" blur wire:model.defer="openModal" maxWidth="2xl" spacing="p-10" x-on:close="$wire.resetData()">
+        <div class="relative grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {{-- Loagind Spinner --}}
+            <div class="absolute z-10 transform translate-x-1/2 translate-y-1/2 right-1/2 bottom-1/2">
+                <div class="w-20 h-20 border-4 border-indigo-600 border-solid rounded-full border-t-transparent animate-spin"
+                    wire:loading wire:target='getCheckout'></div>
+            </div>
+
+            <x-select
+                label="Selecione o livro"
+                wire:model.defer="checkout.book_id"
+                placeholder="Selecione um livro"
+                :async-data="route('getBooks')"
+                option-label="title"
+                option-value="id"
+                option-description="subtitle"
+            />
+
+            <x-select
+                label="Selecione o Assistido"
+                wire:model.defer="checkout.patient_id"
+                placeholder="Selecione um assistido"
+                :async-data="route('searchPatient')"
+                option-label="name"
+                option-value="id"
+                option-description="full_address"
+            />
+
+            <x-datetime-picker
+                without-timezone
+                without-time
+                label="Data de saída"
+                placeholder="Selecione uma data"
+                wire:modeldefer="checkout.start_date"
+            />
+
+            <x-datetime-picker
+                without-timezone
+                without-time
+                label="Data de retorno"
+                placeholder="Selecione uma data"
+                wire:model.defer="checkout.end_date"
+            />
+        </div>
+
+
+        <x-slot name="footer">
+            <div class="flex justify-end">
+                <x-jet-secondary-button x-on:click="close" wire:loading.attr="disabled" >
+                    {{ __('Cancelar') }}
+                </x-jet-secondary-button>
+
+                <x-jet-button class="ml-3" wire:click="saveCheckout()" wire:loading.attr="disabled">
+                    {{ __('Salvar') }}
+                </x-jet-button>
+            </div>
+        </x-slot>
+    </x-modal.card>
+
+</div>
