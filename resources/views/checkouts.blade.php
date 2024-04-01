@@ -5,6 +5,26 @@
         </h2>
     </x-slot>
 
+
+    <div class="flex gap-6 pt-12 mx-auto max-w-7xl sm:px-6 lg:px-8 justify-evenly">
+            <x-card>
+                Total de livros cadastrados
+            </x-card>
+
+            <x-card>
+                Total livros emprestados
+            </x-card>
+
+            <x-card>
+                Total de emprestimos atrasados
+            </x-card>
+
+
+            <x-card>
+                Total de livros devolvidos
+            </x-card>
+    </div>
+
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">

@@ -64,10 +64,10 @@
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
-                                                    {{ $book->title }}
+                                                    {{ Str::words($book->title, 6, '...') }}
                                                 </div>
                                                 <div class="text-base text-gray-500">
-                                                    <p class="text-sm">{{ Str::words($book->subtitle, 10, '...') }}</p>
+                                                    <p class="text-sm">{{ Str::words($book->subtitle, 6, '...') }}</p>
                                                     @if ($book->isbn)
                                                     <p class="text-[13px]">ISBN: {{ $book->isbn }}</p>
                                                     @endif
@@ -77,7 +77,7 @@
                                     </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
                                         @if ($book->category)
-                                            {{ $book->category->name }}
+                                            {{ Str::words($book->category->name, 3, '...') }}
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
@@ -88,17 +88,17 @@
                                                         @foreach ($book->authors as $author)
                                                             @if (!$loop->last)
                                                                 <div class="text-base font-medium text-gray-900">
-                                                                    {{ $author->name }}
+                                                                    {{ Str::words($author->name, 4, '...') }}
                                                                 </div>
                                                             @else
                                                                 <div class="text-sm text-gray-500">
-                                                                    <p>Psicografia de {{ $author->name }}</p>
+                                                                    <p>Psicografia de {{ Str::words($author->name, 4, '...') }}</p>
                                                                 </div>
                                                             @endif
                                                         @endforeach
                                                     @else
                                                         <div class="text-base font-medium text-gray-900">
-                                                            {{ $book->authors->first()->name }}
+                                                            {{ Str::words($book->authors->first()->name, 4, '...') }}
                                                         </div>
                                                     @endif
                                                 </div>
@@ -109,7 +109,7 @@
                                         <div class="flex items-center px-4 py-3 whitespace-nowrap">
                                             <div class="text-base font-medium text-gray-900">
                                                 @if ($book->publisher)
-                                                    {{ $book->publisher->name }}
+                                                    {{ Str::words($book->publisher->name, 2, '...') }}
                                                 @endif
                                             </div>
                                         </div>
