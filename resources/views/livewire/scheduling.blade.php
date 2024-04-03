@@ -721,8 +721,9 @@
                                             <x-jet-input-error for="treatmentState.infiltracao" class="mt-2" />
                                         </div>
                                         <x-datetime-picker
-                                            display-format="DD/MM/YYYY HH:mm"
+                                            display-format="DD/MM/YYYY"
                                             without-timezone
+                                            without-time
                                             label="Retirada"
                                             placeholder="Data"
                                             wire:model.defer="treatmentState.infiltracao_remove_date"
