@@ -8,20 +8,24 @@
 
     <div class="flex gap-6 pt-12 mx-auto max-w-7xl sm:px-6 lg:px-8 justify-evenly">
             <x-card>
-                Total de livros cadastrados
+                <livewire:library.checkouts.total-books-registered>
+                <small>Livros cadastrados</small>
             </x-card>
 
             <x-card>
-                Total livros emprestados
+                <livewire:library.checkouts.total-books-borrowed>
+                <small>Livros emprestados no momento</small>
             </x-card>
 
             <x-card>
-                Total de emprestimos atrasados
+                <livewire:library.checkouts.total-outstanding-loans>
+                <small>Empréstimos atrasados</small>
             </x-card>
 
 
             <x-card>
-                Total de livros devolvidos
+                <livewire:library.checkouts.total-loans-made>
+                <small>Empréstimos realizados até hoje</small>
             </x-card>
     </div>
 

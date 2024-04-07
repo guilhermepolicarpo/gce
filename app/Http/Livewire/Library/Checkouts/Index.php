@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Library\Checkouts;
 
-use App\Models\Checkout;
 use Livewire\Component;
-use Livewire\WithPagination;
+use App\Models\Checkout;
 use WireUi\Traits\Actions;
+use Livewire\WithPagination;
+use App\Rules\BookAvailability;
 
 
 class Index extends Component
@@ -36,7 +37,7 @@ class Index extends Component
     protected function rules()
     {
         return [
-            'checkout.book_id' => 'required|exists:books,id',
+            'checkout.book_id' => ['required', 'exists:books,id', new BookAvailability($this->checkout['book_id'])],
             'checkout.patient_id' => 'required|exists:patients,id',
             'checkout.start_date' => 'required|date',
             'checkout.end_date' => 'required|date|after:start_date',
@@ -79,6 +80,7 @@ class Index extends Component
 
         if ($this->openModal === false) {
             $this->resetData();
+            $this->checkout['start_date'] = now();
         }
 
         return view('livewire.library.checkouts.index', [
@@ -89,26 +91,29 @@ class Index extends Component
 
     public function saveCheckout()
     {
+
         $validated = $this->validate();
 
         $checkout = Checkout::updateOrCreate(
-            [
-                'id' => $this->checkout['id']
-            ],
+            ['id' => $this->checkout['id']],
             $validated['checkout']
         );
 
         if ($checkout) {
             $this->openModal = false;
             $this->reset(['checkout']);
+            $this->emit('checkoutCreated');
         }
     }
 
 
     public function receiveBookLoan(Checkout $checkout)
     {
-        $checkout->is_returned = true;
-        $checkout->save();
+        if (!$checkout->is_returned) {
+            $checkout->is_returned = true;
+            $checkout->save();
+            $this->emit('checkoutUpdated');
+        }
     }
 
 

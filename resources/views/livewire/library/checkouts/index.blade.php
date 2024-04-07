@@ -80,7 +80,7 @@
                                 <tr>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap">
                                         @if ($checkout->patient)
-                                        {{ Str::words($checkout->patient->name, 4, '...') }}
+                                            {{ Str::words($checkout->patient->name, 4, '...') }}
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 text-base text-gray-900 whitespace-nowrap ">
@@ -112,41 +112,49 @@
                                     <td >
                                         @if ($checkout->is_returned)
                                             <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Devolvido</span>
-
                                         @else
                                             @if (now()->gt($checkout->end_date))
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Atrasado</span>
                                             @else
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full">Empresatado</span>
                                             @endif
-
                                         @endif
                                     </td>
                                     <td>
                                         <div class="flex justify-end px-4 py-3 font-medium text-black whitespace-nowrap">
-
-                                            <div x-data="{ title: 'Confirmar devolução' }">
+                                            @if ($checkout->is_returned)
                                                 <button
                                                     title="Receber devolução do livro"
-                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25"
-                                                    x-on:confirm="{
-                                                        title,
-                                                        description: 'Confirma que deseja receber a devolução do livro?',
-                                                        icon: 'question',
-                                                        method: 'receiveBookLoan',
-                                                        params: {{ $checkout->id }},
-                                                        acceptLabel: 'Confirmar',
-                                                        rejectLabel: 'Cancelar',
-                                                        }"
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm opacity-50"
                                                 >
                                                     {{ __('Receber') }}
                                                 </button>
-                                            </div>
 
-                                            <button onclick="$openModal('openModal')" wire:click="getCheckout({{ $checkout->id }})" class="ml-3">
-                                                <x-edit-icon />
-                                            </button>
+                                                <button class="ml-3 opacity-50">
+                                                    <x-edit-icon />
+                                                </button>
+                                            @else
+                                                <div x-data="{ title: 'Confirmar devolução' }">
+                                                    <button
+                                                        title="Receber devolução do livro"
+                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25"
+                                                        x-on:confirm="{
+                                                            title,
+                                                            description: 'Confirma que deseja receber a devolução do livro?',
+                                                            icon: 'question',
+                                                            method: 'receiveBookLoan',
+                                                            params: {{ $checkout->id }},
+                                                            acceptLabel: 'Confirmar',
+                                                            rejectLabel: 'Cancelar',
+                                                        }">
+                                                        {{ __('Receber') }}
+                                                    </button>
+                                                </div>
 
+                                                <button onclick="$openModal('openModal')" wire:click="getCheckout({{ $checkout->id }})" class="ml-3">
+                                                    <x-edit-icon />
+                                                </button>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -187,41 +195,49 @@
                     wire:loading wire:target='getCheckout'></div>
             </div>
 
-            <x-select
-                label="Selecione o livro"
-                wire:model.defer="checkout.book_id"
-                placeholder="Selecione um livro"
-                :async-data="route('getBooks')"
-                option-label="title"
-                option-value="id"
-                option-description="subtitle"
-            />
+            <div wire:loading.class='invisible' wire:target='getCheckout'>
+                <x-select
+                    label="Selecione o livro"
+                    wire:model.defer="checkout.book_id"
+                    placeholder="Selecione um livro"
+                    :async-data="route('getBooks')"
+                    option-label="title"
+                    option-value="id"
+                    option-description="subtitle"
+                />
+            </div>
 
-            <x-select
-                label="Selecione o Assistido"
-                wire:model.defer="checkout.patient_id"
-                placeholder="Selecione um assistido"
-                :async-data="route('searchPatient')"
-                option-label="name"
-                option-value="id"
-                option-description="full_address"
-            />
+            <div wire:loading.class='invisible' wire:target='getCheckout'>
+                <x-select
+                    label="Selecione o Assistido"
+                    wire:model.defer="checkout.patient_id"
+                    placeholder="Selecione um assistido"
+                    :async-data="route('searchPatient')"
+                    option-label="name"
+                    option-value="id"
+                    option-description="full_address"
+                />
+            </div>
 
-            <x-datetime-picker
-                without-timezone
-                without-time
-                label="Data de saída"
-                placeholder="Selecione uma data"
-                wire:modeldefer="checkout.start_date"
-            />
+            <div wire:loading.class='invisible' wire:target='getCheckout'>
+                <x-datetime-picker
+                    without-timezone
+                    without-time
+                    label="Data de saída"
+                    placeholder="Selecione uma data"
+                    wire:modeldefer="checkout.start_date"
+                />
+            </div>
 
-            <x-datetime-picker
-                without-timezone
-                without-time
-                label="Data de retorno"
-                placeholder="Selecione uma data"
-                wire:model.defer="checkout.end_date"
-            />
+            <div wire:loading.class='invisible' wire:target='getCheckout'>
+                <x-datetime-picker
+                    without-timezone
+                    without-time
+                    label="Data de retorno"
+                    placeholder="Selecione uma data"
+                    wire:model.defer="checkout.end_date"
+                />
+            </div>
         </div>
 
 
