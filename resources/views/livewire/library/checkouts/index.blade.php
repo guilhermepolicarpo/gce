@@ -196,27 +196,54 @@
             </div>
 
             <div wire:loading.class='invisible' wire:target='getCheckout'>
-                <x-select
-                    label="Selecione o livro"
-                    wire:model.defer="checkout.book_id"
-                    placeholder="Selecione um livro"
-                    :async-data="route('getBooks')"
-                    option-label="title"
-                    option-value="id"
-                    option-description="subtitle"
-                />
+                @if ($this->checkout['id'])
+                    <x-select
+                        label="Selecione o livro"
+                        wire:model.defer="checkout.book_id"
+                        placeholder="Selecione um livro"
+                        :async-data="route('getBooks')"
+                        option-label="title"
+                        option-value="id"
+                        option-description="subtitle"
+                        disabled
+                    />
+                @else
+                    <x-select
+                        label="Selecione o livro"
+                        wire:model.defer="checkout.book_id"
+                        placeholder="Selecione um livro"
+                        :async-data="route('getBooks')"
+                        option-label="title"
+                        option-value="id"
+                        option-description="subtitle"
+                    />
+                @endif
             </div>
 
             <div wire:loading.class='invisible' wire:target='getCheckout'>
-                <x-select
-                    label="Selecione o Assistido"
-                    wire:model.defer="checkout.patient_id"
-                    placeholder="Selecione um assistido"
-                    :async-data="route('searchPatient')"
-                    option-label="name"
-                    option-value="id"
-                    option-description="full_address"
-                />
+                @if ($this->checkout['id'] !== null)
+                    <x-select
+                        label="Selecione o Assistido"
+                        wire:model.defer="checkout.patient_id"
+                        placeholder="Selecione um assistido"
+                        :async-data="route('searchPatient')"
+                        option-label="name"
+                        option-value="id"
+                        option-description="full_address"
+                        disabled
+                    />
+                @else
+                    <x-select
+                        label="Selecione o Assistido"
+                        wire:model.defer="checkout.patient_id"
+                        placeholder="Selecione um assistido"
+                        :async-data="route('searchPatient')"
+                        option-label="name"
+                        option-value="id"
+                        option-description="full_address"
+                    />
+
+                @endif
             </div>
 
             <div wire:loading.class='invisible' wire:target='getCheckout'>
@@ -255,5 +282,4 @@
     </x-modal.card>
 
     <x-dialog />
-
 </div>

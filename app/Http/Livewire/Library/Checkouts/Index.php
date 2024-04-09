@@ -37,7 +37,7 @@ class Index extends Component
     protected function rules()
     {
         return [
-            'checkout.book_id' => ['required', 'exists:books,id', new BookAvailability($this->checkout['book_id'])],
+            'checkout.book_id' => ['required', 'exists:books,id', new BookAvailability($this->checkout['book_id'], $this->checkout['id'])],
             'checkout.patient_id' => 'required|exists:patients,id',
             'checkout.start_date' => 'required|date',
             'checkout.end_date' => 'required|date|after:start_date',
@@ -74,14 +74,14 @@ class Index extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'desc' : 'asc')
             ->paginate(10);
 
-        if ($this->checkout['id']) {
-            $this->checkout = Checkout::find($this->checkout['id'])->toArray();
-        }
+        // if ($this->checkout['id']) {
+        //     $this->checkout = Checkout::find($this->checkout['id'])->toArray();
+        // }
 
-        if ($this->openModal === false) {
-            $this->resetData();
-            $this->checkout['start_date'] = now()->format('Y-m-d');
-        }
+        // if ($this->openModal === false) {
+        //     $this->resetData();
+        //     $this->checkout['start_date'] = now()->format('Y-m-d');
+        // }
 
         return view('livewire.library.checkouts.index', [
             'checkouts' => $checkouts,

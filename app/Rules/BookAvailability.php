@@ -8,6 +8,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 class BookAvailability implements Rule
 {
+    protected $bookId;
+    protected $currentCheckoutId;
+
+    public function __construct($bookId, $currentCheckoutId = null)
+    {
+        $this->bookId = $bookId;
+        $this->currentCheckoutId = $currentCheckoutId;
+    }
+
     /**
      * Determine if the validation rule passes.
      *
@@ -17,8 +26,8 @@ class BookAvailability implements Rule
      */
     public function passes($attribute, $value)
     {
-        $quantityAvailable = Book::where('id', $value)->first('quantity_available')->quantity_available;
-        $quantityBorrowed = Checkout::where('book_id', $value)->where('is_returned', false)->count();
+        $quantityAvailable = Book::where('id', $this->bookId)->first('quantity_available')->quantity_available;
+        $quantityBorrowed = Checkout::where('book_id', $this->bookId)->where('is_returned', false)->where('id', '!=', $this->currentCheckoutId)->count();
 
         return $quantityAvailable > $quantityBorrowed;
     }

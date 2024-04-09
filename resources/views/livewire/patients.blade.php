@@ -1,22 +1,9 @@
 <div class="p-6 bg-white border-b border-gray-200 sm:px-10">
     <div class="flex items-end justify-between">
-        <!-- Search form -->
-        <div class="flex flex-row align-middle">
-            <div class="relative mt-1 rounded-md shadow-sm">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 mt-6 pointer-events-none ">
-                <span class="text-gray-500 sm:text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </span>
-                </div>
-                <label class="text-gray-500 sm:text-sm">Pesquisar</label>
-                <input wire:model.debounce.500ms='q' class="w-full h-10 px-5 text-sm bg-white border-gray-300 rounded-lg border-1 pl-9 focus:outline-none focus:border-indigo-500/75" type="search" name="search" placeholder="Digite para pesquisar">
-            </div>
-            <div class="flex items-center mt-6 ml-3">
-                <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q' ></div>
-            </div>
-        </div>
+
+        {{-- Search form --}}
+        <x-search-form :q="$q" />
+
         <!-- Add Patient -->
         <div>
             <x-jet-button wire:click="confirmPatientAddition">
@@ -71,7 +58,7 @@
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
-                                                    {{$patient->name}}
+                                                    {{Str::words($patient->name, 4, '...')}}
                                                 </div>
                                                 <div class="text-base text-gray-500">
                                                     {{$patient->email}}
@@ -79,9 +66,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap max-w-[41ch] overflow-hidden">
+                                    <td class="px-6 py-4 whitespace-nowrap max-w-[40ch] overflow-hidden">
                                         @if ($patient->address->address !== '')
-                                            <div class="text-base text-gray-900 ">{{ $patient->address->address }}, {{$patient->address->number}} - {{$patient->address->neighborhood}}</div>
+                                            <div class="text-base text-gray-900 ">{{ Str::words($patient->address->address, 4, '...') }}, {{$patient->address->number}} - {{Str::words($patient->address->neighborhood, 2, '...')}}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
                                         @else
                                             -
@@ -113,15 +100,10 @@
                                             <div class="tooltip-arrow" data-popper-arrow></div>
                                         </div> --}}
                                         <button title='Editar' wire:click="confirmPatientEditing({{ $patient->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                              </svg>
+                                            <x-edit-icon />
                                         </button>
                                         <button title="Excluir" wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                            </svg>
+                                            <x-delete-icon />
                                         </button>
                                     </td>
                                 </tr>
