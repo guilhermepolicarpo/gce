@@ -80,7 +80,7 @@ class Index extends Component
 
         if ($this->openModal === false) {
             $this->resetData();
-            $this->checkout['start_date'] = now();
+            $this->checkout['start_date'] = now()->format('Y-m-d');
         }
 
         return view('livewire.library.checkouts.index', [

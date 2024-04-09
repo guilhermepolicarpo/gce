@@ -122,7 +122,7 @@ class Appointments extends Component
                     ->where('date', '=', $this->date);
             })
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
-            ->paginate(10);
+            ->paginate(15);
 
         $healingTouchesList = typeOfTreatment::where('is_the_healing_touch', true)->get(['id', 'name']);
 

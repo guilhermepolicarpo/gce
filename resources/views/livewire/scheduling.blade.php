@@ -185,6 +185,7 @@
                                             @break
                                         @endswitch
                                     </td>
+                                    {{-- Table actions --}}
                                     <td >
                                         <div class="flex flex-row items-center content-center justify-end pr-4">
 
@@ -321,8 +322,10 @@
                             </tbody>
                         </table>
                     </div>
+
+                    {{-- Pagination --}}
                     <div class="mt-4">
-                        @if ($appointments->links()->paginator->total() <= 10 && $appointments->links()->paginator->total() > 1)
+                        @if ($appointments->links()->paginator->total() <= $appointments->links()->paginator->perPage() && $appointments->links()->paginator->total() > 1)
                             <p class="text-sm leading-5 text-gray-700">
                                 Mostrando todos os {{ $appointments->links()->paginator->count() }} resultados
                             </p>
