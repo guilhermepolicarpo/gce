@@ -212,7 +212,15 @@ class Patients extends Component
 
     public function getTreatments($patientId): void
     {
-        $this->treatments = Treatment::with(['patient', 'mentor', 'attachments', 'medicines', 'treatmentType','orientations' => function ($query) {
+        $this->treatments = Treatment::with([
+            'patient',
+            'mentor',
+            'attachments',
+            'treatmentType',
+            'medicines' => function ($query) {
+                $query->withTrashed();
+            },
+            'orientations' => function ($query) {
                 $query->withTrashed();
             }])
             ->where('patient_id', $patientId)

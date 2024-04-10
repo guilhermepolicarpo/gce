@@ -39,26 +39,32 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($orientations as $orientation)
                                     <tr>
-
                                         <td class="px-6 py-4 min-w-80">
-                                            <div class="flex items-center">
-                                                <div>
-                                                    <div class="text-base font-medium text-gray-900">
-                                                        {{Str::words($orientation->name, 11, '...')}}
-                                                    </div>
-                                                </div>
+                                            <div class="text-base font-medium text-gray-900">
+                                                {{Str::words($orientation->name, 11, '...')}}
                                             </div>
                                         </td>
 
                                         <td class="px-6 py-4 min-w-96">
-                                            <div class="text-base text-gray-500"> {{ Str::limit($orientation->description, 145) }} </div>
+                                            <div class="text-base text-gray-500">
+                                                {{ Str::limit($orientation->description, 145) }}
+                                            </div>
                                         </td>
 
                                         <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                            <button wire:click="confirmOrientationEditing({{ $orientation->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                            <button
+                                                title="Editar"
+                                                wire:click="confirmOrientationEditing({{ $orientation->id }})"
+                                                class="mr-3 text-indigo-600 hover:text-indigo-900"
+                                            >
                                                 <x-edit-icon />
                                             </button>
-                                            <button wire:click="confirmOrientationDeletion({{ $orientation->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
+                                            <button
+                                                title="Desativar"
+                                                wire:click="confirmOrientationDeletion({{ $orientation->id }})"
+                                                wire:loading.attr='disabled'
+                                                class="text-red-600 hover:text-red-900"
+                                            >
                                                 <x-delete-icon />
                                             </button>
                                         </td>
@@ -66,7 +72,7 @@
                                 @empty
                                     <tr>
                                         <td class="p-5">
-                                            Nenhum medicamento encontrado.
+                                            Nenhuma orientação encontrada.
                                         </td>
                                     </tr>
                                 @endforelse
@@ -81,7 +87,7 @@
         </div>
     </div>
 
-    <!-- Delete Medicine Confirmation Modal -->
+    {{-- Delete Medicine Confirmation Modal --}}
     <x-jet-confirmation-modal wire:model="confirmingOrientationDeletion">
         <x-slot name="title">
             {{ __('Deletar medicamento') }}
@@ -102,7 +108,7 @@
         </x-slot>
     </x-jet-confirmation-modal>
 
-    <!-- Add Orientation Modal -->
+    {{-- Add Orientation Modal --}}
     <x-jet-dialog-modal wire:model="confirmingOrientationAddition" maxWidth="lg">
         <x-slot name="title">
             {{ ($this->actionAdd) ? __('Adicionar orientação') : __('Editar orientação') }}
