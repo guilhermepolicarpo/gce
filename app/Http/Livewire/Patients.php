@@ -210,13 +210,15 @@ class Patients extends Component
         $this->getTreatments($patient);
     }
 
-    public function getTreatments($patient): void
+    public function getTreatments($patientId): void
     {
-        $this->treatments = Treatment::with(['mentor', 'attachments', 'medicines', 'orientations', 'treatmentType'])
-            ->where('treatments.patient_id', $patient)
+        $this->treatments = Treatment::with(['patient', 'mentor', 'attachments', 'medicines', 'treatmentType','orientations' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->where('patient_id', $patientId)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $this->patientOfTheTreatment = Patient::where('id', $patient)->first();
+        $this->patientOfTheTreatment = $this->treatments->isNotEmpty() ? $this->treatments->first()->patient : null;
     }
 }

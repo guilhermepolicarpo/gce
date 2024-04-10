@@ -1667,6 +1667,18 @@ select {
 .min-w-full {
   min-width: 100%;
 }
+.min-w-28 {
+  min-width: 7rem;
+}
+.min-w-60 {
+  min-width: 15rem;
+}
+.min-w-80 {
+  min-width: 20rem;
+}
+.min-w-96 {
+  min-width: 24rem;
+}
 .max-w-6xl {
   max-width: 72rem;
 }
@@ -1679,8 +1691,8 @@ select {
 .max-w-\[31ch\] {
   max-width: 31ch;
 }
-.max-w-\[41ch\] {
-  max-width: 41ch;
+.max-w-\[40ch\] {
+  max-width: 40ch;
 }
 .max-w-screen-xl {
   max-width: 1280px;
@@ -1690,9 +1702,6 @@ select {
 }
 .max-w-xl {
   max-width: 36rem;
-}
-.max-w-\[40ch\] {
-  max-width: 40ch;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -2100,11 +2109,11 @@ select {
 .border-l-4 {
   border-left-width: 4px;
 }
-.border-t {
-  border-top-width: 1px;
-}
 .border-r {
   border-right-width: 1px;
+}
+.border-t {
+  border-top-width: 1px;
 }
 .border-solid {
   border-style: solid;
