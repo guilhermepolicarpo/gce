@@ -23,6 +23,7 @@ class Appointments extends Component
         'treatment_mode' => 'Presencial',
         'notes' => '',
     ];
+
     public $treatmentState = [
         'patient_id' => null,
         'treatment_type_id' => null,
@@ -41,6 +42,7 @@ class Appointments extends Component
         ],
         'magnetized_water_frequency' => null,
     ];
+
     public $treatment;
     public $patient;
     public $q;
@@ -51,11 +53,8 @@ class Appointments extends Component
     public $status = "";
     public $treatmentMode;
     public $treatmentType;
-    public $confirmingSchedulingDeletion = false;
     public $confirmingSchedulingAddition = false;
     public $confirmingTreatmentAddition = false;
-    public $confirmingArrivalOfTheAssisted = false;
-    public $confirmingAbsentAssisted = false;
     public $dateFormat;
     public $typesOfTreatment;
 
@@ -140,15 +139,9 @@ class Appointments extends Component
         $this->sortBy = $field;
     }
 
-    public function confirmSchedulingDeletion($id)
-    {
-        $this->confirmingSchedulingDeletion = $id;
-    }
-
     public function deleteScheduling(Appointment $appointment)
     {
         $appointment->delete();
-        $this->confirmingSchedulingDeletion = false;
     }
 
     public function confirmSchedulingAddition()
@@ -197,28 +190,15 @@ class Appointments extends Component
         $this->resetValidation();
     }
 
-    public function confirmArrivalOfTheAssisted($appointmentId)
-    {
-        $this->confirmingArrivalOfTheAssisted = $appointmentId;
-    }
-
     public function changeStatusToArrived(Appointment $appointment)
     {
         $appointment->status = "Em espera";
-        $this->confirmingArrivalOfTheAssisted = false;
         $appointment->save();
-    }
-
-
-    public function confirmAbsentAssisted($appointmentId): void
-    {
-        $this->confirmingAbsentAssisted = $appointmentId;
     }
 
     public function changeStatusToAbsent(Appointment $appointment)
     {
         $appointment->status = "Faltou";
-        $this->confirmingAbsentAssisted = false;
         $appointment->save();
     }
 

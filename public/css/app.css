@@ -1664,20 +1664,14 @@ select {
 .min-w-72 {
   min-width: 18rem;
 }
-.min-w-full {
-  min-width: 100%;
-}
-.min-w-28 {
-  min-width: 7rem;
-}
-.min-w-60 {
-  min-width: 15rem;
-}
 .min-w-80 {
   min-width: 20rem;
 }
 .min-w-96 {
   min-width: 24rem;
+}
+.min-w-full {
+  min-width: 100%;
 }
 .max-w-6xl {
   max-width: 72rem;

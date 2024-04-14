@@ -188,123 +188,147 @@
                                     {{-- Table actions --}}
                                     <td >
                                         <div class="flex flex-row items-center content-center justify-end pr-4">
-
-                                            @if (auth()->user()->email === 'guilhermepolicarpo@outlook.com')
-                                            <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
-                                                wire:loading.attr='disabled'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </button>
-                                            @endif
-
                                             @isset($appointment->treatment_id)
 
-                                            @livewire('treatments.view-treatment', ['treatmentId' => $appointment->treatment_id], key('view-treatment-'.$appointment->treatment_id))
+                                                @livewire('treatments.view-treatment', ['treatmentId' => $appointment->treatment_id], key('view-treatment-'.$appointment->treatment_id))
 
-                                            <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                                </svg>
-                                            </button>
+                                                <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                    </svg>
+                                                </button>
 
-                                            <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                </svg>
-                                            </button>
+                                                <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                    </svg>
+                                                </button>
 
-                                            <button title="Não é mais possível excluir este agendamento" class="opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </button>
+                                                <button title="Não é mais possível excluir este agendamento" class="opacity-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                        stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                    </svg>
+                                                </button>
 
-                                            @else
+                                                @else
 
-                                            @if ($appointment->status === 'Não atendido')
-                                            @if ($appointment->treatment_mode === "Presencial")
-                                            <button title="Receber assistido" wire:click="confirmArrivalOfTheAssisted({{ $appointment->id }})"
-                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                {{ __('Receber') }}
-                                            </button>
-                                            @else
-                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                {{ __('Atender') }}
-                                            </button>
-                                            @endif
-                                            @endif
+                                                @if ($appointment->status === 'Não atendido')
+                                                    @if ($appointment->treatment_mode === "Presencial")
+                                                        <div x-data="{ title: 'Confirmar chegada do assistido' }">
+                                                            <button title="Receber assistido"
+                                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25"
+                                                                x-on:confirm="{
+                                                                    title,
+                                                                    description: 'Deseja realmente confirmar a chegada do assistido?',
+                                                                    icon: 'question',
+                                                                    method: 'changeStatusToArrived',
+                                                                    params: {{ $appointment->id }},
+                                                                    acceptLabel: 'Confirmar',
+                                                                    rejectLabel: 'Cancelar',
+                                                                }">
+                                                                {{ __('Receber') }}
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                            class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                            {{ __('Atender') }}
+                                                        </button>
+                                                    @endif
+                                                @endif
 
-                                            @if ($appointment->status === 'Em espera')
-                                            <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
-                                                class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
-                                                {{ __('Atender') }}
-                                            </button>
-                                            @endif
+                                                @if ($appointment->status === 'Em espera')
+                                                    <button title="Atender assistido" wire:click="confirmTreatmentAddition({{ $appointment->id }})"
+                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25">
+                                                        {{ __('Atender') }}
+                                                    </button>
+                                                @endif
 
-                                            @if ($appointment->status === "Não atendido" && $appointment->treatment_mode !== "A distância")
-                                            <button title="Assitido faltou" class="ml-3 mr-3" wire:click='confirmAbsentAssisted({{ $appointment->id }})'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                                </svg>
-                                            </button>
+                                                @if ($appointment->status === "Não atendido" && $appointment->treatment_mode !== "A distância")
+                                                    <div x-data="{ title: 'Confirmar falta do assistido' }">
+                                                        <button title="Assistido faltou"
+                                                            class="mt-2 ml-3 mr-3"
+                                                            x-on:confirm="{
+                                                                title,
+                                                                description: 'Deseja realmente confirmar que o assistido faltou ao atendimento?',
+                                                                icon: 'question',
+                                                                method: 'changeStatusToAbsent',
+                                                                params: {{ $appointment->id }},
+                                                                acceptLabel: 'Confirmar',
+                                                                rejectLabel: 'Cancelar',
+                                                            }">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                                class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                @else
+                                                    <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                                        </svg>
+                                                    </button>
+                                                @endif
 
-                                            @else
+                                                @if ($appointment->status === 'Faltou')
+                                                    <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                        </svg>
+                                                    </button>
+                                                    <button title="Não é mais possível excluir este agendamento" class="opacity-50">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                            stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                        </svg>
+                                                    </button>
+                                                @else
+                                                    <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="mr-3 ">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                        </svg>
+                                                    </button>
 
-                                            <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                                </svg>
-                                            </button>
-                                            @endif
-
-                                            @if ($appointment->status === 'Faltou')
-                                            <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                </svg>
-                                            </button>
-                                            <button title="Não é mais possível excluir este agendamento" class="opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </button>
-
-                                            @else
-                                            <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="mr-3 ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                </svg>
-                                            </button>
-
-                                            <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
-                                                wire:loading.attr='disabled'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                    stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
-                                            </button>
-                                            @endif
+                                                    {{-- <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
+                                                        wire:loading.attr='disabled'>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
+                                                            stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                        </svg>
+                                                    </button> --}}
+                                                    <div x-data="{ title: 'Deletar agendamento' }">
+                                                        <button
+                                                            title="Excluir agendamento"
+                                                            class="mt-1"
+                                                            x-on:confirm="{
+                                                                title,
+                                                                description: 'Tem certeza de que deseja excluir este agendamento?',
+                                                                icon: 'error',
+                                                                method: 'deleteScheduling',
+                                                                params: {{ $appointment->id }},
+                                                                acceptLabel: 'Excluir',
+                                                                rejectLabel: 'Cancelar',
+                                                            }">
+                                                            <x-delete-icon />
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             @endisset
                                         </div>
 
@@ -339,73 +363,7 @@
         </div>
     </div>
 
-    <!-- Delete Scheduling Confirmation Modal -->
-    <x-jet-confirmation-modal wire:model="confirmingSchedulingDeletion">
-        <x-slot name="title">
-            {{ __('Deletar agendamento') }}
-        </x-slot>
 
-        <x-slot name="content">
-            {{ __('Tem certeza de que deseja excluir este agendamento?') }}
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingSchedulingDeletion', false)" wire:loading.attr="disabled">
-                {{ __('Cancelar') }}
-            </x-jet-secondary-button>
-
-            <x-jet-danger-button class="ml-3" wire:click="deleteScheduling({{ $confirmingSchedulingDeletion }})" wire:loading.attr="disabled">
-                {{ __('Deletar') }}
-            </x-jet-danger-button>
-        </x-slot>
-    </x-jet-confirmation-modal>
-
-
-    <!-- Change Status to Oh Hold - confirming that the assisted arrived -->
-    <x-jet-confirmation-modal wire:model="confirmingArrivalOfTheAssisted">
-        <x-slot name="title">
-            {{ __('Confirmar chegada do assistido') }}
-        </x-slot>
-
-        <x-slot name="content">
-            {{ __('Deseja realmente confirmar a chegada do assistido?') }}
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingArrivalOfTheAssisted', false)" wire:loading.attr="disabled">
-                {{ __('Cancelar') }}
-            </x-jet-secondary-button>
-
-            <x-jet-button class="ml-3" wire:click="changeStatusToArrived({{ $confirmingArrivalOfTheAssisted }})"
-                wire:loading.attr="disabled">
-                {{ __('Confirmar') }}
-            </x-jet-button>
-        </x-slot>
-    </x-jet-confirmation-modal>
-
-
-
-    <!-- Change Status to Absent - confirming that the assisted was absent -->
-    <x-jet-confirmation-modal wire:model="confirmingAbsentAssisted">
-        <x-slot name="title">
-            {{ __('Confirmar falta do assistido') }}
-        </x-slot>
-
-        <x-slot name="content">
-            {{ __('Deseja realmente confirmar que o assistido faltou ao atendimento?') }}
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingAbsentAssisted', false)" wire:loading.attr="disabled">
-                {{ __('Cancelar') }}
-            </x-jet-secondary-button>
-
-            <x-jet-button class="ml-3" wire:click="changeStatusToAbsent({{ $confirmingAbsentAssisted }})"
-                wire:loading.attr="disabled">
-                {{ __('Confirmar') }}
-            </x-jet-button>
-        </x-slot>
-    </x-jet-confirmation-modal>
 
 
     <!-- Add Scheduling Modal -->
@@ -481,7 +439,6 @@
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
-
 
 
 
@@ -846,4 +803,6 @@
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
+
+    <x-dialog />
 </div>
