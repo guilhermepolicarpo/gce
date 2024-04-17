@@ -58,15 +58,21 @@
 
             {{-- Loagind Spinner --}}
             <div class="flex items-center mb-2 ml-3">
-                <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading wire:target='q, date, status, treatmentType' ></div>
+                <div class="w-6 h-6 border-4 border-gray-300 rounded-full animate-spin border-t-indigo-600" wire:loading></div>
             </div>
         </div>
 
 
-        <!-- Add new scheduling button -->
+        {{-- <!-- Add new scheduling button -->
         <div class="order-1 mr-2 sm:order-2 justify-self-end">
             <x-jet-button wire:click="confirmSchedulingAddition" title="Inserir agendamento">
                 {{ __('Novo agendamento') }}
+            </x-jet-button>
+        </div> --}}
+        {{-- Add new scheduling button --}}
+        <div class="order-1 mr-2 sm:order-2 justify-self-end">
+            <x-jet-button onclick="$openModal('saveModal')" title="Inserir agendamento">
+                Novo agendamento
             </x-jet-button>
         </div>
     </div>
@@ -124,30 +130,6 @@
                                                 <div class="text-base font-medium text-gray-900 align-middle whitespace-nowrap">
                                                     {{ Str::words($appointment->patient->name, 5, '...') }}
                                                 </div>
-                                                {{-- <div class="text-xs text-gray-500">
-                                                    @php
-                                                        $fullAddress = trim($appointment->patient->address->address);
-                                                        $fullAddress .= ($appointment->patient->address->number) ? ', '.trim($appointment->patient->address->number) : '';
-                                                        $fullAddress .= ($appointment->patient->address->neighborhood) ? ', '.trim($appointment->patient->address->neighborhood) : '';
-                                                        $cityAndState = ($appointment->patient->address->city) ? trim($appointment->patient->address->city) : '';
-                                                        $cityAndState .= ($appointment->patient->address->state) ? ' - ' . trim($appointment->patient->address->state) : '';
-                                                    @endphp
-                                                    @if ($fullAddress)
-                                                    {{ Str::words($fullAddress, 6, '...') }} <br/>
-                                                    @endif
-                                                    @if ($fullAddress)
-                                                    {{ Str::words($cityAndState, 6, '...') }} <br />
-                                                    @endif
-                                                    @if ($appointment->patient->birth)
-                                                        @if (now()->parse($appointment->patient->birth)->diffInYears(now()) == 0)
-                                                            {{ now()->parse($appointment->patient->birth)->diffInMonths(now()) }}
-                                                            {{ (now()->parse($appointment->patient->birth)->diffInMonths(now()) == 1) ? 'mes': 'meses' }}
-                                                        @else
-                                                            {{ now()->parse($appointment->patient->birth)->diffInYears(now()) }} {{
-                                                            (now()->parse($appointment->patient->birth)->diffInYears(now()) == 1) ? "ano" : "anos" }}
-                                                        @endif
-                                                    @endif
-                                                </div> --}}
                                             </div>
                                         </div>
                                     </td>
@@ -164,6 +146,7 @@
                                     <td class="px-4 py-6 text-base text-gray-900">
                                        {{ $appointment->treatment_mode }}
                                     </td>
+                                    {{-- Status --}}
                                     <td class="px-4 py-6 whitespace-nowrap ">
                                         @switch($appointment->status)
                                             @case('Atendido')
@@ -189,8 +172,14 @@
                                     <td >
                                         <div class="flex flex-row items-center content-center justify-end pr-4">
                                             @isset($appointment->treatment_id)
-
-                                                @livewire('treatments.view-treatment', ['treatmentId' => $appointment->treatment_id], key('view-treatment-'.$appointment->treatment_id))
+                                                <div>
+                                                    <a
+                                                        href="{{ route('treatmentView', ['treatmentId' => $appointment->treatment_id]) }}"
+                                                        title="Ver atendimento"
+                                                        class="inline-flex items-center px-4 py-2 bg-white border border-indigo-300 rounded-md font-semibold text-[11px] text-indigo-700 uppercase tracking-widest shadow-sm hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-indigo-200 active:text-indigo-800 active:bg-indigo-50 disabled:opacity-25 text-nowrap">
+                                                        {{ __('Ver atend.') }}
+                                                    </a>
+                                                </div>
 
                                                 <button title="Não é mais possível informar que o assistido faltou" class="ml-3 mr-3 opacity-50">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -201,19 +190,11 @@
                                                 </button>
 
                                                 <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                    </svg>
+                                                    <x-edit-icon />
                                                 </button>
 
                                                 <button title="Não é mais possível excluir este agendamento" class="opacity-50">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                        stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                    </svg>
+                                                    <x-delete-icon />
                                                 </button>
 
                                                 @else
@@ -257,7 +238,7 @@
                                                             x-on:confirm="{
                                                                 title,
                                                                 description: 'Deseja realmente confirmar que o assistido faltou ao atendimento?',
-                                                                icon: 'question',
+                                                                icon: 'error',
                                                                 method: 'changeStatusToAbsent',
                                                                 params: {{ $appointment->id }},
                                                                 acceptLabel: 'Confirmar',
@@ -282,40 +263,20 @@
 
                                                 @if ($appointment->status === 'Faltou')
                                                     <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
+                                                        <x-edit-icon />
                                                     </button>
                                                     <button title="Não é mais possível excluir este agendamento" class="opacity-50">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                            stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
+                                                        <x-delete-icon />
                                                     </button>
                                                 @else
-                                                    <button title="Editar agendamento" wire:click="confirmSchedulingEditing({{ $appointment->id }})" class="mr-3 ">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="w-5 h-5 stroke-indigo-600 hover:stroke-indigo-900">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
+                                                    <button title="Editar agendamento" onclick="$openModal('saveModal')" wire:click="getAppointment({{ $appointment->id }})" class="mr-3 ">
+                                                        <x-edit-icon />
                                                     </button>
 
-                                                    {{-- <button title="Excluir agendamento" wire:click="confirmSchedulingDeletion({{ $appointment->id }})"
-                                                        wire:loading.attr='disabled'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke-red-600
-                                                            stroke="currentColor" class="w-5 h-5 stroke-red-600 hover:stroke-red-900">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
-                                                    </button> --}}
                                                     <div x-data="{ title: 'Deletar agendamento' }">
                                                         <button
                                                             title="Excluir agendamento"
-                                                            class="mt-1"
+                                                            class="mt-1 stroke-red-600 hover:stroke-red-900"
                                                             x-on:confirm="{
                                                                 title,
                                                                 description: 'Tem certeza de que deseja excluir este agendamento?',
@@ -366,80 +327,78 @@
 
 
 
-    <!-- Add Scheduling Modal -->
-    <x-jet-dialog-modal wire:model="confirmingSchedulingAddition" maxWidth="lg" >
-        <x-slot name="title">
-            {{ ($this->action == 'adding') ? __('Adicionar agendamento') : __('Editar agendamento') }}
-        </x-slot>
 
-        <x-slot name="content">
-            <div class="mb-10 sm:mb-3">
-                <div class="md:col-span-2">
-                    <div class="grid grid-cols-6 gap-3">
 
-                        <div class="col-span-6 sm:col-span-4">
-                            <label for="modo">{{ __('Tipo de Atendimento') }}</label>
-                            <select name="modo" id="modo" wire:model.defer="state.treatment_type_id" wire:keydown.enter="saveScheduling()" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
-                                <option value="">Selecione</option>
-                                @foreach ($typesOfTreatment as $typeOfTreatment)
-                                    <option value="{{ $typeOfTreatment->id }}">{{ $typeOfTreatment->name }}</option>
-                                @endforeach
-                            </select>
-                            <x-jet-input-error for="state.treatment_type_id" class="mt-2" />
-                        </div>
 
-                        <div class="col-span-6 sm:col-span-2">
-                            <label for="modo">{{ __('Modo') }}</label>
-                            <select name="modo" id="modo" wire:model.defer="state.treatment_mode" wire:keydown.enter="saveScheduling()" class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
-                                <option value="">Selecione</option>
-                                <option value="Presencial">Presencial</option>
-                                <option value="A distância">A distância</option>
-                            </select>
-                            <x-jet-input-error for="state.treatment_mode" class="mt-2" />
-                        </div>
 
-                        <div class="col-span-6 sm:col-span-6">
-                            <x-select
-                                label="{{ __('Assistido') }}"
-                                placeholder="Selecione um assistido"
-                                :async-data="route('searchPatient')"
-                                option-label="name"
-                                option-value="id"
-                                option-description="full_address"
-                                wire:model.defer="state.patient_id"
-                                class="block w-full mt-1"
-                            />
+    {{-- Create or Update Modal --}}
+    <x-modal.card title="Agendamento" blur wire:model.defer="saveModal" maxWidth="lg" spacing="p-10"
+        x-on:close="$wire.resetData()">
+        <div class="relative">
+            {{-- Loagind Spinner --}}
+            <div class="absolute z-10 transform translate-x-1/2 translate-y-1/2 right-1/2 bottom-1/2">
+                <div class="w-20 h-20 border-4 border-indigo-600 border-solid rounded-full border-t-transparent animate-spin"
+                    wire:loading wire:target='getAppointment'></div>
+            </div>
 
-                        </div>
+            <div wire:loading.class='invisible' wire:target='getAppointment'>
+                <div class="grid grid-cols-6 gap-3">
 
-                        <div class="col-span-6 p-5 rounded-lg sm:col-span-6 bg-gray-50">
-                            <x-datetime-picker label="Data" id="date" placeholder="Selecione uma data" wire:model="state.date" wire:keydown.enter="saveScheduling()"
-                                :min="now()" without-time />
+                    <div class="col-span-6 sm:col-span-4">
+                        <label for="modo">{{ __('Tipo de Atendimento') }}</label>
+                        <select name="modo" id="modo" wire:model.defer="state.treatment_type_id" wire:keydown.enter="saveScheduling()"
+                            class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                            <option value="">Selecione</option>
+                            @foreach ($typesOfTreatment as $typeOfTreatment)
+                            <option value="{{ $typeOfTreatment->id }}">{{ $typeOfTreatment->name }}</option>
+                            @endforeach
+                        </select>
+                        <x-jet-input-error for="state.treatment_type_id" class="mt-2" />
+                    </div>
 
-                            {{-- <x-jet-label for="date" value="{{ __('Data') }}" />
-                            <x-jet-input id="date" type="date" wire:model.defer="state.date" wire:keydown.enter="saveScheduling()" class="block w-full mt-1 text-gray-500 border-gray-300 sm:text-sm focus:outline-none focus:border-indigo-500/7" />
-                            <x-jet-input-error for="state.date" class="mt-2" /> --}}
-                        </div>
+                    <div class="col-span-6 sm:col-span-2">
+                        <label for="modo">{{ __('Modo') }}</label>
+                        <select name="modo" id="modo" wire:model.defer="state.treatment_mode" wire:keydown.enter="saveScheduling()"
+                            class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                            <option value="">Selecione</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="A distância">A distância</option>
+                        </select>
+                        <x-jet-input-error for="state.treatment_mode" class="mt-2" />
+                    </div>
 
-                        <div class="col-span-6 sm:col-span-6">
-                            <x-textarea label="Observações" placeholder="Se necessário, digite aqui as observações" wire:model.defer="state.notes" />
-                        </div>
+                    <div class="col-span-6 sm:col-span-6">
+                        <x-select label="{{ __('Assistido') }}" placeholder="Selecione um assistido"
+                            :async-data="route('searchPatient')" option-label="name" option-value="id" option-description="full_address"
+                            wire:model.defer="state.patient_id" class="block w-full mt-1" />
+
+                    </div>
+
+                    <div class="col-span-6 p-5 rounded-lg sm:col-span-6 bg-gray-50">
+                        <x-datetime-picker label="Data" id="date" placeholder="Selecione uma data" wire:model="state.date"
+                            wire:keydown.enter="saveScheduling()" :min="now()" without-time />
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-6">
+                        <x-textarea label="Observações" placeholder="Se necessário, digite aqui as observações"
+                            wire:model.defer="state.notes" />
                     </div>
                 </div>
             </div>
-        </x-slot>
+        </div>
 
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('confirmingSchedulingAddition', false)" wire:loading.attr="disabled">
-                {{ __('Cancelar') }}
-            </x-jet-secondary-button>
+            <div class="flex justify-end">
+                <x-jet-secondary-button x-on:click="close" wire:loading.attr="disabled">
+                    {{ __('Cancelar') }}
+                </x-jet-secondary-button>
 
-            <x-jet-button class="ml-3" wire:click="saveScheduling()" wire:loading.attr="disabled">
-                {{ ($this->action == 'adding') ? __('Adicionar') : __('Editar') }}
-            </x-jet-button>
+                <x-jet-button class="ml-3" wire:click="saveScheduling()" wire:loading.attr="disabled">
+                    {{ __('Salvar') }}
+                </x-jet-button>
+            </div>
         </x-slot>
-    </x-jet-dialog-modal>
-
+    </x-modal.card>
 
 
 

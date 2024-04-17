@@ -19,6 +19,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/assistidos', 'patients')->name('patients');
     Route::view('/agendamento', 'schedule')->name('schedule');
     Route::view('/mentores', 'mentors')->name('mentors');
+    Route::get('/atendimento/{treatmentId}', function ($treatmentId) {
+        return view('view-treatment', ['treatmentId' => $treatmentId]);
+    })->name('treatmentView');
+    Route::get('/atendimentos/{patientId}', function ($patientId) {
+        return view('treatments', ['patientId' => $patientId]);
+    })->name('patientTreatments');
 
     // Library
     Route::view('/biblioteca/categorias', 'categories')->name('categories');

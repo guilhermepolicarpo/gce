@@ -1526,9 +1526,6 @@ select {
 .h-9 {
   height: 2.25rem;
 }
-.h-\[70vh\] {
-  height: 70vh;
-}
 .h-full {
   height: 100%;
 }
@@ -2377,10 +2374,6 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
-.bg-gray-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
 .bg-green-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(220 252 231 / var(--tw-bg-opacity));
@@ -2869,6 +2862,9 @@ select {
 }
 .pt-8 {
   padding-top: 2rem;
+}
+.pb-10 {
+  padding-bottom: 2.5rem;
 }
 .text-left {
   text-align: left;
@@ -5770,6 +5766,10 @@ input[type="number"].appearance-number-none {
 
   .sm\:p-0 {
     padding: 0px;
+  }
+
+  .sm\:p-10 {
+    padding: 2.5rem;
   }
 
   .sm\:p-4 {

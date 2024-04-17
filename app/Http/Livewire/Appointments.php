@@ -43,12 +43,14 @@ class Appointments extends Component
         'magnetized_water_frequency' => null,
     ];
 
+    public $saveModal;
+    public $viewTreatmentModal;
     public $treatment;
+    public $patientTtreatment;
     public $patient;
     public $q;
     public $sortBy = 'id';
     public $sortDesc = true;
-    public $action;
     public $date;
     public $status = "";
     public $treatmentMode;
@@ -57,6 +59,7 @@ class Appointments extends Component
     public $confirmingTreatmentAddition = false;
     public $dateFormat;
     public $typesOfTreatment;
+    public $healingTouches;
 
     protected $queryString = [
         'q' => ['except' => ''],
@@ -68,17 +71,20 @@ class Appointments extends Component
     ];
 
     protected $rules = [
-        'state.patient_id' => 'required|numeric',
-        'state.date' => 'required|date',
+        'state.patient_id' => 'required|numeric|exists:patients,id',
+        'state.date' => 'required|date|after:yesterday',
         'state.treatment_type_id' => 'required|numeric',
-        'state.treatment_mode' => 'required|string',
-        'state.notes' => 'nullable|string',
+        'state.treatment_mode' => 'required|string|max:255',
+        'state.notes' => 'nullable|string|max:65535',
     ];
 
     protected $messages = [
         'state.patient_id.required' => 'Por favor, selecione um assistido',
+        'state.patient_id.exists' => 'Por favor, selecione um assistido',
         'state.date.required' => 'Por favor, informe uma data de agendamento',
+        'state.date.date' => 'Por favor, informe uma data de agendamento',
         'state.treatment_type_id.required' => 'Por favor, selecione um tipo de atendimento',
+        'state.treatment_type_id.exists' => 'Por favor, selecione um tipo de atendimento',
         'state.treatment_mode.required' => 'Por favor, selecione um modo de atendimento',
         'treatmentState.mentor_id.required' => 'Por favor, informe o mentor que realizou o atendimento',
         'treatmentState.return_date.after' => 'Por favor, informe uma data maior que a data atual',
@@ -89,6 +95,7 @@ class Appointments extends Component
 
     public function mount()
     {
+        $this->healingTouches = typeOfTreatment::where('is_the_healing_touch', true)->get(['id', 'name']);
         $this->typesOfTreatment = TypeOfTreatment::orderBy('name', 'asc')->get();
         $this->dateFormat = now();
 
@@ -123,11 +130,9 @@ class Appointments extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
             ->paginate(15);
 
-        $healingTouchesList = typeOfTreatment::where('is_the_healing_touch', true)->get(['id', 'name']);
 
         return view('livewire.scheduling', [
             'appointments' => $appointments,
-            'healingTouches' => $healingTouchesList
         ]);
     }
 
@@ -144,28 +149,9 @@ class Appointments extends Component
         $appointment->delete();
     }
 
-    public function confirmSchedulingAddition()
-    {
-        $this->reset(['state']);
-        $this->resetValidation();
-        $this->action = 'adding';
-        $this->confirmingSchedulingAddition = true;
-    }
-
     public function saveScheduling()
     {
         $this->validate();
-
-        $appointment = Appointment::where('id', $this->state['id'])->first();
-
-        if (!empty($appointment->date) && !empty($this->state['date'])) {
-            if ($appointment->date !== $this->state['date'] && $appointment->status !== 'Não atendido') {
-                $appointment->status = 'Não atendido';
-                $appointment->save();
-            }
-        }
-
-
 
         Appointment::updateOrCreate([
             'id' => $this->state['id'],
@@ -178,16 +164,13 @@ class Appointments extends Component
             'status' => ($this->state['treatment_mode'] === 'A distância') ? 'Em espera' : 'Não atendido',
         ]);
 
-        $this->confirmingSchedulingAddition = false;
+        $this->saveModal = false;
     }
 
-    public function confirmSchedulingEditing(Appointment $appointment)
+
+    public function getAppointment(Appointment $appointment)
     {
-        $this->reset(['state']);
-        $this->state = $appointment;
-        $this->action = 'editing';
-        $this->confirmingSchedulingAddition = true;
-        $this->resetValidation();
+        $this->state = $appointment->toArray();
     }
 
     public function changeStatusToArrived(Appointment $appointment)
@@ -202,7 +185,11 @@ class Appointments extends Component
         $appointment->save();
     }
 
-
+    public function resetData(): void
+    {
+        $this->reset(['state']);
+        $this->resetValidation();
+    }
 
     public function updatingQ()
     {
@@ -358,7 +345,6 @@ class Appointments extends Component
             DB::commit();
 
             $this->confirmingTreatmentAddition = false;
-
         } catch (\Exception $e) {
 
             DB::rollback();

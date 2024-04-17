@@ -89,19 +89,17 @@
                                            -
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <button title="Prontuário do Assistido" wire:click='openTreatmentsModal({{ $patient->id }})' class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                    <td class="flex content-center h-full px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                        <a href="{{ route('patientTreatments', $patient->id) }}" title="Prontuário do Assistido" class="mr-3 text-indigo-600 hover:text-indigo-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>
-                                        </button>
-                                        {{-- <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                            Tooltip content
-                                            <div class="tooltip-arrow" data-popper-arrow></div>
-                                        </div> --}}
+                                        </a>
+
                                         <button title='Editar' wire:click="confirmPatientEditing({{ $patient->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
                                             <x-edit-icon />
                                         </button>
+
                                         <button title="Excluir" wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
                                             <x-delete-icon />
                                         </button>
@@ -272,7 +270,7 @@
 
 
     {{-- Patient's treatments --}}
-    <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
+    {{-- <x-jet-dialog-modal wire:model="openingTreatmentsModal" maxWidth="4xl" >
         <x-slot name="title">
             {{ __('Prontuário do assistido') }}
         </x-slot>
@@ -413,5 +411,5 @@
                 {{ __('Fechar') }}
             </x-jet-button>
         </x-slot>
-    </x-jet-dialog-modal>
+    </x-jet-dialog-modal> --}}
 </div>

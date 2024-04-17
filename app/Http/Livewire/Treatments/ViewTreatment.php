@@ -10,18 +10,17 @@ class ViewTreatment extends Component
 {
     use PhoneNumberFormater;
 
-    public ?Treatment $treatment;
-    public $treatmentId;
+    public $treatment;
+
+    public function mount($treatmentId)
+    {
+        $this->treatment = Treatment::with('patient.address', 'treatmentType')
+            ->where('id', $treatmentId)
+            ->first();
+    }
 
     public function render()
     {
         return view('livewire.treatments.view-treatment');
-    }
-
-    public function getTreatmentData()
-    {
-        if (empty($this->treatment)) {
-            $this->treatment = Treatment::with('patient.address', 'treatmentType')->where('id', $this->treatmentId)->first();
-        }
     }
 }
