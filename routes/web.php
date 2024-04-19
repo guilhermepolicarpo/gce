@@ -25,6 +25,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/atendimentos/{patientId}', function ($patientId) {
         return view('treatments', ['patientId' => $patientId]);
     })->name('patientTreatments');
+    Route::get('/atendimento/{appointmentId}/create', function ($appointmentId) {
+        return view('create-treatment', ['appointmentId' => $appointmentId]);
+    })->name('TreatmentCreate');
 
     // Library
     Route::view('/biblioteca/categorias', 'categories')->name('categories');
