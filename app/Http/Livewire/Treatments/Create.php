@@ -66,7 +66,8 @@ class Create extends Component
     {
         $this->treatment = Appointment::with(['patient.address', 'typeOfTreatment'])->where('id', $appointmentId)->first();
 
-        if ($this->treatment->treatment_id) {
+        
+        if (!is_null($this->treatment->treatment_id) ) {
             return redirect()->route('schedule');
         }
 
@@ -98,7 +99,7 @@ class Create extends Component
         $this->treatmentState['treatment_mode'] = $this->treatment->treatment_mode;
 
         $this->validate();
-        
+
         foreach ($this->treatmentState['healing_touches'] as $key => $value) {
             if ($value['healing_touch'] == null) {
                 unset($this->treatmentState['healing_touches'][$key]);
