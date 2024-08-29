@@ -15,6 +15,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Dashboard and basic views
     Route::view('/', 'welcome');
+    Route::redirect('/', '/agendamento');
     Route::view('/painel', 'dashboard')->name('dashboard');
     Route::view('/assistidos', 'patients')->name('patients');
     Route::view('/agendamento', 'schedule')->name('schedule');
