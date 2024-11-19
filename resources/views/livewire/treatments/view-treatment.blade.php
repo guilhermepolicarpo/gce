@@ -50,8 +50,14 @@
                             }}</time>
                         <div class="text-lg font-semibold text-black dark:text-gray-300">{{
                             $treatment->treatmentType->name }} <span class="text-sm font-normal">({{
-                                $treatment->treatment_mode }})</span></div>
+                                $treatment->treatment_mode }})</span>
+                        </div>
                     </div>
+                    @if ($appointment->notes)
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-500"><span class="font-semibold">Observações do agendamento</span>: <br>{{ $appointment->notes }}</p>
+                    </div>
+                    @endif
                     @if (!$treatment->treatmentType->is_the_healing_touch)
                     @if (count($treatment->medicines) !== 0)
                     <h6 class="text-black">Fluídicos</h6>
@@ -143,8 +149,12 @@
 
 
     <div class="flex justify-end gap-x-4">
-        <a href="{{ url()->previous() }}" title="Ver atendimento"
-            class="items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition bg-indigo-600 border border-transparent rounded-md nline-flex hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300 disabled:opacity-25">
+        <a href="{{ route('patientTreatments', $treatment->patient_id) }}" title="Ver todos atendimentos"
+            class="items-center px-4 py-2 text-xs font-semibold tracking-widest text-indigo-500 uppercase transition border border-indigo-500 rounded-md hover:text-white hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300 disabled:opacity-25">
+            {{ __('Ver todos atendimentos') }}
+        </a>
+        <a href="{{ url()->previous() }}" title="Voltar"
+            class="items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300 disabled:opacity-25">
             {{ __('Voltar') }}
         </a>
     </div>
