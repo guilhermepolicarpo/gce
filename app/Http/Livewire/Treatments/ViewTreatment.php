@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Traits\PhoneNumberFormater;
+use Illuminate\Support\Facades\DB;
 
 class ViewTreatment extends Component
 {
@@ -13,6 +14,7 @@ class ViewTreatment extends Component
 
     public $treatment;
     public $appointment;
+    public $confirmingTreatmentDeletion = false;
 
     public function mount($treatmentId)
     {
@@ -26,5 +28,33 @@ class ViewTreatment extends Component
     public function render()
     {
         return view('livewire.treatments.view-treatment');
+    }
+
+    public function confirmTreatmentDeletion()
+    {
+        $this->confirmingTreatmentDeletion = true;
+    }
+
+    public function deleteTreatment()
+    {
+        DB::transaction(function () {
+            $appointment = Appointment::where('treatment_id', $this->treatment->id)->first();
+
+            if ($appointment) {
+                $appointment->update([
+                    'treatment_id' => null,
+                    'status' => $appointment->treatment_mode === 'A distância' ? 'Em espera' : 'Não atendido',
+                ]);
+            }
+
+            $this->treatment->medicines()->detach();
+            $this->treatment->orientations()->detach();
+            $this->treatment->attachments()->delete();
+            $this->treatment->delete();
+        });
+
+        $this->confirmingTreatmentDeletion = false;
+
+        return redirect()->route('patientTreatments', $this->treatment->patient_id);
     }
 }

@@ -74,7 +74,7 @@
                                         <x-jet-input id="medicine_frequency" type="text"
                                             wire:model.defer="treatmentState.magnetized_water_frequency"
                                             class="mt-2 text-black border-gray-300 w-28 sm:text-sm focus:outline-none focus:border-indigo-500/75"
-                                            placeholder="3x ao dia" />
+                                            placeholder="Ex.: 3x ao dia" />
                                         <x-jet-input-error for="treatmentState.magnetized_water_frequency" class="mt-2" />
                                     </div>
                                 </div>

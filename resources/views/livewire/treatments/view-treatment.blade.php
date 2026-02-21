@@ -4,7 +4,7 @@
 
         <p class="text-lg font-semibold">
             @isset($treatment->patient->name)
-                {{ $treatment->patient->name }}
+            {{ $treatment->patient->name }}
             @endisset
         </p>
 
@@ -145,17 +145,23 @@
     </div>
 
 
-
-
-
     <div class="flex justify-end gap-x-4">
-        <a href="{{ route('patientTreatments', $treatment->patient_id) }}" title="Ver todos atendimentos"
-            class="items-center px-4 py-2 text-xs font-semibold tracking-widest text-indigo-500 uppercase transition border border-indigo-500 rounded-md hover:text-white hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300 disabled:opacity-25">
-            {{ __('Ver todos atendimentos') }}
-        </a>
-        <a href="{{ url()->previous() }}" title="Voltar"
-            class="items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300 disabled:opacity-25">
-            {{ __('Voltar') }}
-        </a>
+        <x-button href="{{ url()->previous() }}" outline primary label="Voltar" class="uppercase" />
+        <x-button href="{{ route('patientTreatments', $treatment->patient_id) }}" outline primary label="Ver todos atendimentos" class="uppercase" />
+        <x-button outline negative label="Deletar Atendimento" class="uppercase" wire:click="confirmTreatmentDeletion" />
+        <x-button href="{{ route('editTreatment', $treatment->id) }}" outline primary label="Editar Atendimento" class="uppercase" />
     </div>
+
+    <x-modal.card title="Deletar atendimento" blur wire:model.defer="confirmingTreatmentDeletion">
+        <div class="text-sm text-gray-600">
+            Tem certeza de que deseja excluir este atendimento?
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                <x-button flat label="Cancelar" x-on:click="close" />
+                <x-button flat negative label="Deletar" wire:click="deleteTreatment" />
+            </div>
+        </x-slot>
+    </x-modal.card>
 </div>

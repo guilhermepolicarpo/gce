@@ -23,6 +23,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/atendimento/{treatmentId}', function ($treatmentId) {
         return view('view-treatment', ['treatmentId' => $treatmentId]);
     })->name('treatmentView');
+    Route::get('/atendimento/{treatmentId}/editar', function ($treatmentId) {
+        return view('edit-treatment', ['treatmentId' => $treatmentId]);
+    })->name('editTreatment');
     Route::get('/atendimentos/{patientId}', function ($patientId) {
         return view('treatments', ['patientId' => $patientId]);
     })->name('patientTreatments');
