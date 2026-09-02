@@ -265,35 +265,26 @@
                                                     </button>
                                                 @endif
 
-                                                @if ($appointment->status === 'Faltou')
-                                                    <button title="Não é mais possível editar este agendamento" class="mr-3 opacity-50 ">
-                                                        <x-edit-icon />
-                                                    </button>
-                                                    <button title="Não é mais possível excluir este agendamento" class="opacity-50">
+                                                <button title="Editar agendamento" onclick="$openModal('saveModal')" wire:click="getAppointment({{ $appointment->id }})" class="mr-3 ">
+                                                    <x-edit-icon />
+                                                </button>
+
+                                                <div x-data="{ title: 'Deletar agendamento' }">
+                                                    <button
+                                                        title="Excluir agendamento"
+                                                        class="mt-1 stroke-red-600 hover:stroke-red-900"
+                                                        x-on:confirm="{
+                                                            title,
+                                                            description: 'Tem certeza de que deseja excluir este agendamento?',
+                                                            icon: 'error',
+                                                            method: 'deleteScheduling',
+                                                            params: {{ $appointment->id }},
+                                                            acceptLabel: 'Excluir',
+                                                            rejectLabel: 'Cancelar',
+                                                        }">
                                                         <x-delete-icon />
                                                     </button>
-                                                @else
-                                                    <button title="Editar agendamento" onclick="$openModal('saveModal')" wire:click="getAppointment({{ $appointment->id }})" class="mr-3 ">
-                                                        <x-edit-icon />
-                                                    </button>
-
-                                                    <div x-data="{ title: 'Deletar agendamento' }">
-                                                        <button
-                                                            title="Excluir agendamento"
-                                                            class="mt-1 stroke-red-600 hover:stroke-red-900"
-                                                            x-on:confirm="{
-                                                                title,
-                                                                description: 'Tem certeza de que deseja excluir este agendamento?',
-                                                                icon: 'error',
-                                                                method: 'deleteScheduling',
-                                                                params: {{ $appointment->id }},
-                                                                acceptLabel: 'Excluir',
-                                                                rejectLabel: 'Cancelar',
-                                                            }">
-                                                            <x-delete-icon />
-                                                        </button>
-                                                    </div>
-                                                @endif
+                                                </div>
                                             @endisset
                                         </div>
 
@@ -365,6 +356,19 @@
                         </select>
                         <x-jet-input-error for="state.treatment_mode" class="mt-2" />
                     </div>
+
+                    @if ($state['id'])
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="appointment_status">{{ __('Status') }}</label>
+                            <select name="appointment_status" id="appointment_status" wire:model.defer="state.status" wire:keydown.enter="saveScheduling()"
+                                class="w-full text-sm bg-white border-gray-300 rounded-lg border-1 focus:outline-none focus:border-indigo-500/75">
+                                <option value="Não atendido">Não atendido</option>
+                                <option value="Em espera">Em espera</option>
+                                <option value="Faltou">Faltou</option>
+                            </select>
+                            <x-jet-input-error for="state.status" class="mt-2" />
+                        </div>
+                    @endif
 
                     <div class="col-span-6 sm:col-span-6">
                         <x-select label="{{ __('Assistido') }}" placeholder="Selecione um assistido"

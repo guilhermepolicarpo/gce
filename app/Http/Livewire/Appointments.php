@@ -22,6 +22,7 @@ class Appointments extends Component
         'treatment_type_id' => '',
         'treatment_mode' => 'Presencial',
         'notes' => '',
+        'status' => '',
     ];
 
     public $saveModal;
@@ -49,6 +50,7 @@ class Appointments extends Component
         'state.treatment_type_id' => 'required|numeric',
         'state.treatment_mode' => 'required|string|max:255',
         'state.notes' => 'nullable|string|max:65535',
+        'state.status' => 'nullable|in:Não atendido,Em espera,Faltou',
     ];
 
     protected $messages = [
@@ -127,7 +129,9 @@ class Appointments extends Component
             'treatment_type_id' => $this->state['treatment_type_id'],
             'treatment_mode' => $this->state['treatment_mode'],
             'notes' => $this->state['notes'],
-            'status' => ($this->state['treatment_mode'] === 'A distância') ? 'Em espera' : 'Não atendido',
+            'status' => $this->state['id']
+                ? $this->state['status']
+                : (($this->state['treatment_mode'] === 'A distância') ? 'Em espera' : 'Não atendido'),
         ]);
 
         $this->saveModal = false;
