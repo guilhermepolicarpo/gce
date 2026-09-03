@@ -14,7 +14,6 @@ class ViewTreatment extends Component
 
     public $treatment;
     public $appointment;
-    public $confirmingTreatmentDeletion = false;
 
     public function mount($treatmentId)
     {
@@ -28,11 +27,6 @@ class ViewTreatment extends Component
     public function render()
     {
         return view('livewire.treatments.view-treatment');
-    }
-
-    public function confirmTreatmentDeletion()
-    {
-        $this->confirmingTreatmentDeletion = true;
     }
 
     public function deleteTreatment()
@@ -52,8 +46,6 @@ class ViewTreatment extends Component
             $this->treatment->attachments()->delete();
             $this->treatment->delete();
         });
-
-        $this->confirmingTreatmentDeletion = false;
 
         return redirect()->route('patientTreatments', $this->treatment->patient_id);
     }

@@ -8,16 +8,15 @@
             </p>
 
             @isset($treatment->patient->birth)
-            <p>{{ "Idade: ". now()->parse($treatment->patient->birth)->diff(now())->y." anos" }} </p>
+            <p>{{ "Idade: ".$treatment->patient->age }} </p>
             @endisset
 
-            @isset($treatment->patient->address->address)
-            <p>{{ $treatment->patient->address->address.", ".$treatment->patient->address->number." -
-                ".$treatment->patient->address->neighborhood}}</p>
-            @endisset
-            @isset($treatment->patient->address->city)
-            <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
-            @endisset
+            @if (filled($treatment?->patient?->address?->street_line))
+                <p>{{ $treatment?->patient?->address?->street_line }}</p>
+            @endif
+            @if (filled($treatment?->patient?->address?->city_line))
+                <p>{{ $treatment?->patient?->address?->city_line }}</p>
+            @endif
             @isset($treatment->patient->phone)
             <p>{{ $this->formatPhoneNumber($treatment->patient->phone) }}</p>
             @endisset

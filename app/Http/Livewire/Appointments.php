@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Patient;
 use App\Models\Treatment;
 use App\Models\Appointment;
 use Livewire\WithPagination;
@@ -12,8 +13,7 @@ use App\Traits\PhoneNumberFormater;
 
 class Appointments extends Component
 {
-    use WithPagination;
-    use PhoneNumberFormater;
+    use WithPagination, PhoneNumberFormater;
 
     public $state = [
         'id' => '',
@@ -98,9 +98,13 @@ class Appointments extends Component
             ->orderBy($this->sortBy, $this->sortDesc ? 'DESC' : 'ASC')
             ->paginate(15);
 
+        $selectedPatient = $this->state['patient_id']
+            ? Patient::with('address')->find($this->state['patient_id'])
+            : null;
 
         return view('livewire.scheduling', [
             'appointments' => $appointments,
+            'selectedPatient' => $selectedPatient,
         ]);
     }
 

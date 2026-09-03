@@ -61,16 +61,16 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if ($patient->address->address !== '')
-                                            <div class="text-base text-gray-900 ">{{ $patient->address->address }}, {{$patient->address->number}} - {{ $patient->address->neighborhood }}</div>
-                                            <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
+                                        @if (filled($patient->address?->full_address))
+                                            <div class="text-base text-gray-900 ">{{ $patient->address->street_line }}</div>
+                                            <div class="text-base text-gray-500">{{ $patient->address->city_line }}</div>
                                         @else
                                             -
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if ($patient->birth)
-                                            <div class="text-base text-gray-900">{{ now()->parse($patient->birth)->diff(now())->y }} anos</div>
+                                            <div class="text-base text-gray-900">{{ $patient->age }}</div>
                                             <div class="text-base text-gray-500"> {{ now()->parse($patient->birth)->format('d/m/Y') }} </div>
                                         @else
                                             -
@@ -277,15 +277,15 @@
                                 </p>
 
                                 @isset($patientOfTheTreatment->birth)
-                                    <p>{{ "Idade: ".now()->parse($patientOfTheTreatment->birth)->diff(now())->y." anos" }} </p>
+                                    <p>{{ "Idade: ".$patientOfTheTreatment->age }} </p>
                                 @endisset
 
-                                @isset($patientOfTheTreatment->address->address)
-                                    <p>{{ $patientOfTheTreatment->address->address.", ".$patientOfTheTreatment->address->number." - ".$patientOfTheTreatment->address->neighborhood}}</p>
-                                @endisset
-                                @isset($patientOfTheTreatment->address->city)
-                                    <p>{{ $patientOfTheTreatment->address->city." - ".$patientOfTheTreatment->address->state}}</p>
-                                @endisset
+                                @if (filled($patientOfTheTreatment?->address?->street_line))
+                                    <p>{{ $patientOfTheTreatment?->address?->street_line }}</p>
+                                @endif
+                                @if (filled($patientOfTheTreatment?->address?->city_line))
+                                    <p>{{ $patientOfTheTreatment?->address?->city_line }}</p>
+                                @endif
                                 @isset($patientOfTheTreatment->phone)
                                     <p>{{ $this->formatPhoneNumber($patientOfTheTreatment->phone) }}</p>
                                 @endisset

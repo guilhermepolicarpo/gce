@@ -124,14 +124,14 @@
                                                 <div class="text-base font-medium text-gray-900 align-middle">
                                                     {{ $appointment->patient->name }}
                                                 </div>
-                                                @if ($appointment->patient->address && $appointment->patient->address->address !== '')
+                                                @if (filled($appointment->patient?->address?->full_address))
                                                     <div class="text-sm text-gray-500">
-                                                        {{ $appointment->patient->address->address }}, {{ $appointment->patient->address->number }} - {{ $appointment->patient->address->neighborhood }}, {{ $appointment->patient->address->city }} - {{ $appointment->patient->address->state }}
+                                                        {{ $appointment->patient?->address?->full_address }}
                                                     </div>
                                                 @endif
                                                 @if ($appointment->patient->birth)
                                                     <div class="text-sm text-gray-500">
-                                                        {{ now()->parse($appointment->patient->birth)->diff(now())->y }} anos
+                                                        {{ $appointment->patient->age }}
                                                     </div>
                                                 @endif
                                             </div>
@@ -324,7 +324,7 @@
 
 
     {{-- Create or Update Modal --}}
-    <x-modal.card title="Agendamento" blur wire:model.defer="saveModal" maxWidth="lg" spacing="p-10"
+    <x-modal.card title="Agendamento" blur wire:model.defer="saveModal" maxWidth="lg" align="center"
         x-on:close="$wire.resetData()">
         <div class="relative">
             {{-- Loagind Spinner --}}
@@ -374,10 +374,33 @@
 
                     <div class="col-span-6 sm:col-span-6">
                         <x-select label="{{ __('Assistido') }}" placeholder="Selecione um assistido"
-                            :async-data="route('searchPatient')" option-label="name" option-value="id" option-description="full_address"
-                            wire:model.defer="state.patient_id" class="block w-full mt-1" />
+                            :async-data="route('searchPatient')" option-label="name" option-value="id" option-description="description"
+                            wire:model="state.patient_id" class="block w-full mt-1" />
 
                     </div>
+
+                    @if ($selectedPatient)
+                        <div class="col-span-6 sm:col-span-6">
+                            <x-card shadow="shadow-xs" color="bg-gray-50">
+                                <p class="text-lg font-semibold">{{ $selectedPatient->name }}</p>
+
+                                @isset($selectedPatient->birth)
+                                <p>{{ "Idade: ".$selectedPatient->age }}</p>
+                                @endisset
+
+                                @if (filled($selectedPatient->address?->street_line))
+                                <p>{{ $selectedPatient->address->street_line }}</p>
+                                @endif
+                                @if (filled($selectedPatient->address?->city_line))
+                                <p>{{ $selectedPatient->address->city_line }}</p>
+                                @endif
+
+                                @isset($selectedPatient->phone)
+                                <p>{{ $this->formatPhoneNumber($selectedPatient->phone) }}</p>
+                                @endisset
+                            </x-card>
+                        </div>
+                    @endif
 
                     <div class="col-span-6 p-5 rounded-lg sm:col-span-6 bg-gray-50">
                         <x-datetime-picker label="Data" id="date" placeholder="Selecione uma data" wire:model="state.date"

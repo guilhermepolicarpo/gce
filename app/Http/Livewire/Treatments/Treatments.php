@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Treatments;
 
 use Livewire\Component;
 use App\Traits\PhoneNumberFormater;
+use App\Models\Patient;
 use App\Models\Treatment;
 
 class Treatments extends Component
@@ -20,7 +21,6 @@ class Treatments extends Component
     public function render()
     {
         $treatments = Treatment::with([
-            'patient',
             'mentor',
             'attachments',
             'treatmentType',
@@ -35,7 +35,7 @@ class Treatments extends Component
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
-        $patientOfTheTreatment = $treatments->isNotEmpty() ? $treatments->first()->patient : null;
+        $patientOfTheTreatment = Patient::with('address')->find($this->patientId);
 
         return view('livewire.treatments.treatments', [
             'treatments' => $treatments,

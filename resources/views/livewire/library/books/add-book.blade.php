@@ -7,7 +7,7 @@
     </div>
 
     {{-- Add Book Modal --}}
-    <x-modal.card title="Adicionar livro" blur wire:model.defer="addModal" maxWidth="4xl" spacing="p-10">
+    <x-modal.card title="Adicionar livro" blur wire:model.defer="addModal" maxWidth="4xl" align="center">
         <div class="flex flex-col p-3 sm:flex-row">
             <div class="relative w-1/4 h-full mb-3 sm:mb-0">
                 @if ($book['cover_image'])

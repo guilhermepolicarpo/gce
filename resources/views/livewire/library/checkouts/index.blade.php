@@ -187,7 +187,7 @@
 
 
     {{-- Create or Update Modal --}}
-    <x-modal.card title="Emprestar livro" blur wire:model.defer="openModal" maxWidth="2xl" spacing="p-10" x-on:close="$wire.resetData()">
+    <x-modal.card title="Emprestar livro" blur wire:model.defer="openModal" maxWidth="2xl" align="center" x-on:close="$wire.resetData()">
         <div class="relative grid grid-cols-1 gap-4 sm:grid-cols-2">
             {{-- Loagind Spinner --}}
             <div class="absolute z-10 transform translate-x-1/2 translate-y-1/2 right-1/2 bottom-1/2">

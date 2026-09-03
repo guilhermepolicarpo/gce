@@ -213,7 +213,6 @@ class Patients extends Component
     public function getTreatments($patientId): void
     {
         $this->treatments = Treatment::with([
-            'patient',
             'mentor',
             'attachments',
             'treatmentType',
@@ -227,6 +226,6 @@ class Patients extends Component
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $this->patientOfTheTreatment = $this->treatments->isNotEmpty() ? $this->treatments->first()->patient : null;
+        $this->patientOfTheTreatment = Patient::with('address')->find($patientId);
     }
 }

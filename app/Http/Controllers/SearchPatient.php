@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,7 +12,7 @@ class SearchPatient extends Controller
     public function __invoke(Request $request): Collection
     {
         return Patient::with('address')
-            ->select('id', 'name', 'address_id')
+            ->select('id', 'name', 'address_id', 'birth')
             ->orderBy('name')
             ->when(
                 $request->search,
@@ -27,7 +26,10 @@ class SearchPatient extends Controller
             )
             ->get()
             ->map(function (Patient $patient) {
-                $patient->full_address = Str::words($patient->address->address . ", " . $patient->address->number . " - " . $patient->address->neighborhood . ", " . $patient->address->city . " " . $patient->address->state, 10, '...');
+                $patient->full_address = $patient->address?->full_address ?? '';
+                $patient->description = collect([$patient->full_address, $patient->age])
+                    ->filter(fn ($part) => filled($part))
+                    ->join('<br>');
 
                 return $patient;
             });
