@@ -39,12 +39,6 @@
                                             <x-sort-icon sortField="birth" :sort-by="$sortBy" :sort-desc="$sortDesc" />
                                         </div>
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        <div class="flex items-center">
-                                            <button wire:click="sortBy('phone')" class="uppercase">{{ __('Telefone') }}</button>
-                                            <x-sort-icon sortField="phone" :sort-by="$sortBy" :sort-desc="$sortDesc" />
-                                        </div>
-                                    </th>
                                     <th scope="col" class="relative px-6 py-3">
 
                                     </th>
@@ -54,11 +48,11 @@
 
                                 @forelse ($patients as $patient)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap max-w-[31ch] overflow-hidden">
+                                    <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
-                                                    {{Str::words($patient->name, 4, '...')}}
+                                                    {{ $patient->name }}
                                                 </div>
                                                 <div class="text-base text-gray-500">
                                                     {{$patient->email}}
@@ -66,9 +60,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap max-w-[40ch] overflow-hidden">
+                                    <td class="px-6 py-4">
                                         @if ($patient->address->address !== '')
-                                            <div class="text-base text-gray-900 ">{{ Str::words($patient->address->address, 4, '...') }}, {{$patient->address->number}} - {{Str::words($patient->address->neighborhood, 2, '...')}}</div>
+                                            <div class="text-base text-gray-900 ">{{ $patient->address->address }}, {{$patient->address->number}} - {{ $patient->address->neighborhood }}</div>
                                             <div class="text-base text-gray-500">{{$patient->address->city}} - {{$patient->address->state}}</div>
                                         @else
                                             -
@@ -80,13 +74,6 @@
                                             <div class="text-base text-gray-500"> {{ now()->parse($patient->birth)->format('d/m/Y') }} </div>
                                         @else
                                             -
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-base text-gray-900 whitespace-nowrap">
-                                        @if ($patient->phone)
-                                        {{ $this->formatPhoneNumber($patient->phone) }}
-                                        @else
-                                           -
                                         @endif
                                     </td>
                                     <td class="flex content-center h-full px-6 py-4 text-sm font-medium whitespace-nowrap">
