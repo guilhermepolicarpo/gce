@@ -9,17 +9,16 @@
         </p>
 
         @isset($treatment->patient->birth)
-        <p>{{ "Idade: ".now()->parse($treatment->patient->birth)->diff(now())->y." anos" }}
+        <p>{{ "Idade: ".$treatment->patient->age }}
         </p>
         @endisset
 
-        @isset($treatment->patient->address->address)
-        <p>{{ $treatment->patient->address->address.", ".$treatment->patient->address->number." -
-            ".$treatment->patient->address->neighborhood}}</p>
-        @endisset
-        @isset($treatment->patient->address->city)
-        <p>{{ $treatment->patient->address->city." - ".$treatment->patient->address->state}}</p>
-        @endisset
+        @if (filled($treatment?->patient?->address?->street_line))
+            <p>{{ $treatment?->patient?->address?->street_line }}</p>
+        @endif
+        @if (filled($treatment?->patient?->address?->city_line))
+            <p>{{ $treatment?->patient?->address?->city_line }}</p>
+        @endif
         @isset($treatment->patient->phone)
         <p>{{ $this->formatPhoneNumber($treatment->patient->phone) }}</p>
         @endisset
@@ -148,20 +147,16 @@
     <div class="flex justify-end gap-x-4">
         <x-button href="{{ url()->previous() }}" outline primary label="Voltar" class="uppercase" />
         <x-button href="{{ route('patientTreatments', $treatment->patient_id) }}" outline primary label="Ver todos atendimentos" class="uppercase" />
-        <x-button outline negative label="Deletar Atendimento" class="uppercase" wire:click="confirmTreatmentDeletion" />
+        <x-button outline negative label="Deletar Atendimento" class="uppercase"
+            x-on:confirm="{
+                title: 'Deletar atendimento',
+                description: 'Tem certeza de que deseja excluir este atendimento?',
+                icon: 'error',
+                acceptLabel: 'Deletar',
+                rejectLabel: 'Cancelar',
+                method: 'deleteTreatment',
+            }"
+        />
         <x-button href="{{ route('editTreatment', $treatment->id) }}" outline primary label="Editar Atendimento" class="uppercase" />
     </div>
-
-    <x-modal.card title="Deletar atendimento" blur wire:model.defer="confirmingTreatmentDeletion">
-        <div class="text-sm text-gray-600">
-            Tem certeza de que deseja excluir este atendimento?
-        </div>
-
-        <x-slot name="footer">
-            <div class="flex justify-end gap-x-4">
-                <x-button flat label="Cancelar" x-on:click="close" />
-                <x-button flat negative label="Deletar" wire:click="deleteTreatment" />
-            </div>
-        </x-slot>
-    </x-modal.card>
 </div>

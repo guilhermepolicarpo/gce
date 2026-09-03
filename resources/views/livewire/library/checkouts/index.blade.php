@@ -280,6 +280,4 @@
             </div>
         </x-slot>
     </x-modal.card>
-
-    <x-dialog />
 </div>
