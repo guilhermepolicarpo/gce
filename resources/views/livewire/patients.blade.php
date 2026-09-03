@@ -48,7 +48,7 @@
 
                                 @forelse ($patients as $patient)
                                 <tr>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900">
@@ -60,7 +60,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4 whitespace-nowrap">
                                         @if (filled($patient->address?->full_address))
                                             <div class="text-base text-gray-900 ">{{ $patient->address->street_line }}</div>
                                             <div class="text-base text-gray-500">{{ $patient->address->city_line }}</div>
@@ -68,7 +68,7 @@
                                             -
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="p-4 whitespace-nowrap">
                                         @if ($patient->birth)
                                             <div class="text-base text-gray-900">{{ $patient->age }}</div>
                                             <div class="text-base text-gray-500"> {{ now()->parse($patient->birth)->format('d/m/Y') }} </div>
@@ -76,20 +76,22 @@
                                             -
                                         @endif
                                     </td>
-                                    <td class="flex content-center h-full px-6 py-4 text-sm font-medium whitespace-nowrap">
-                                        <a href="{{ route('patientTreatments', $patient->id) }}" title="Prontuário do Assistido" class="mr-3 text-indigo-600 hover:text-indigo-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                            </svg>
-                                        </a>
+                                    <td class="p-4 text-sm font-medium align-middle whitespace-nowrap">
+                                        <div class="flex items-center justify-end">
+                                            <a href="{{ route('patientTreatments', $patient->id) }}" title="Prontuário do Assistido" class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                </svg>
+                                            </a>
 
-                                        <button title='Editar' wire:click="confirmPatientEditing({{ $patient->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
-                                            <x-edit-icon />
-                                        </button>
+                                            <button title='Editar' wire:click="confirmPatientEditing({{ $patient->id }})" class="mr-3 text-indigo-600 hover:text-indigo-900">
+                                                <x-edit-icon />
+                                            </button>
 
-                                        <button title="Excluir" wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
-                                            <x-delete-icon />
-                                        </button>
+                                            <button title="Excluir" wire:click="confirmPatientDeletion({{ $patient->id }})" wire:loading.attr='disabled' class="text-red-600 hover:text-red-900">
+                                                <x-delete-icon />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty

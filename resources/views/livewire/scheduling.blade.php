@@ -118,7 +118,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($appointments as $appointment)
                                 <tr>
-                                    <td class="w-full px-4 py-6">
+                                    <td class="w-full p-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div>
                                                 <div class="text-base font-medium text-gray-900 align-middle">
@@ -137,19 +137,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="w-px px-4 py-6 whitespace-nowrap">
+                                    <td class="w-px p-4 whitespace-nowrap">
                                         <div class="text-base text-gray-900">{{ $appointment->typeOfTreatment->name }}</div>
                                         <div class="text-sm text-gray-500">{{ $appointment->treatment_mode }}</div>
                                     </td>
                                     @if (!$date)
-                                    <td class="w-px px-4 py-6 whitespace-nowrap">
+                                    <td class="w-px p-4 whitespace-nowrap">
                                         <div class="text-base text-gray-900">
                                             {{ now()->parse($appointment->date)->format('d/m/Y') }}
                                         </div>
                                     </td>
                                     @endif
                                     {{-- Status --}}
-                                    <td class="w-px px-4 py-6 whitespace-nowrap">
+                                    <td class="w-px p-4 whitespace-nowrap">
                                         @switch($appointment->status)
                                             @case('Atendido')
                                                 <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"> {{
